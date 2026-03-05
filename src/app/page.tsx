@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import DemoMockup from "./components/DemoMockup";
+import TextHighlightSection from "./components/TextHighlightSection";
 
 function GrainOverlay() {
   return (
@@ -28,18 +29,25 @@ function HeroSection() {
     offset: ["start start", "end start"],
   });
 
-  // Headline fades out early
-  const headlineOpacity = useTransform(scrollYProgress, [0.03, 0.18], [1, 0]);
-  const headlineY = useTransform(scrollYProgress, [0.03, 0.18], [0, -60]);
+  // Phase 1: Headline fades out
+  const headlineOpacity = useTransform(scrollYProgress, [0.04, 0.22], [1, 0]);
+  const headlineY = useTransform(scrollYProgress, [0.04, 0.22], [0, -60]);
 
-  // Demo: grows and lifts to vertical center, then holds
-  const demoWidth = useTransform(scrollYProgress, [0.08, 0.32], ["80%", "94%"]);
-  const demoHeight = useTransform(scrollYProgress, [0.08, 0.32], ["25vh", "78vh"]);
-  // Lift from bottom to center: (100vh - 78vh) / 2 = 11vh upward
-  const demoY = useTransform(scrollYProgress, [0.08, 0.32], ["0vh", "-11vh"]);
+  // Phase 2: Demo enlarges and lifts to vertical center
+  const demoWidth = useTransform(scrollYProgress, [0.10, 0.40], ["80%", "84%"]);
+  const demoHeight = useTransform(scrollYProgress, [0.10, 0.40], ["25vh", "78vh"]);
+  // Lift during entry, hold, then drift up during exit
+  const demoY = useTransform(
+    scrollYProgress,
+    [0.10, 0.40, 0.60, 0.86],
+    ["0vh", "-11vh", "-11vh", "-16vh"]
+  );
+
+  // Phase 3: Demo fades out smoothly
+  const demoOpacity = useTransform(scrollYProgress, [0.60, 0.86], [1, 0]);
 
   return (
-    <section ref={sectionRef} className="relative" style={{ height: "350vh" }}>
+    <section ref={sectionRef} className="relative" style={{ height: "250vh" }}>
       {/* Background — fixed */}
       <div className="pointer-events-none fixed inset-0 bg-white z-0">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_30%,rgba(200,190,175,0.08),transparent)]" />
@@ -50,7 +58,7 @@ function HeroSection() {
       <div className="sticky top-0 h-screen overflow-hidden z-10">
         {/* Headline + copy + CTA */}
         <motion.div
-          className="absolute inset-0 flex flex-col items-center text-center px-6 justify-center z-20"
+          className="absolute inset-0 flex flex-col items-center text-center px-6 justify-center z-20 pointer-events-none"
           style={{ opacity: headlineOpacity, y: headlineY, paddingBottom: "18vh" }}
         >
           <motion.h1
@@ -93,7 +101,7 @@ function HeroSection() {
           >
             <a
               href="#"
-              className="group inline-flex items-center gap-2 rounded-full bg-[#09090b] px-6 py-3 text-[15px] font-medium text-white transition-all hover:bg-zinc-800"
+              className="pointer-events-auto group inline-flex items-center gap-2 rounded-full bg-[#09090b] px-6 py-3 text-[15px] font-medium text-white transition-all hover:bg-zinc-800"
             >
               Get Early Access
               <svg
@@ -113,7 +121,7 @@ function HeroSection() {
           </motion.div>
         </motion.div>
 
-        {/* Demo — clip window at bottom, reveals more as user scrolls */}
+        {/* Demo — page-load entrance */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -122,18 +130,26 @@ function HeroSection() {
             delay: 0.4,
             ease: [0.25, 0.1, 0.25, 1],
           }}
-          className="absolute bottom-0 left-0 right-0 z-10 flex justify-center"
-          style={{ y: demoY }}
+          className="absolute bottom-0 left-0 right-0 z-10"
         >
-          {/* Clip window — grows from 25vh to 100vh */}
+          {/* Scroll-driven position + exit fade */}
           <motion.div
-            className="relative"
-            style={{
-              width: demoWidth,
-              height: demoHeight,
-            }}
+            className="flex justify-center"
+            style={{ y: demoY, opacity: demoOpacity }}
           >
-            <DemoMockup />
+            {/* Clip window — grows from 25vh to 78vh, content always full-size */}
+            <motion.div
+              className="relative overflow-hidden"
+              style={{
+                width: demoWidth,
+                height: demoHeight,
+                borderRadius: "14px",
+              }}
+            >
+              <div style={{ height: "78vh", width: "100%" }}>
+                <DemoMockup />
+              </div>
+            </motion.div>
           </motion.div>
         </motion.div>
       </div>
@@ -146,6 +162,7 @@ export default function Home() {
     <div className="min-h-screen bg-white">
       <GrainOverlay />
       <HeroSection />
+      <TextHighlightSection />
     </div>
   );
 }

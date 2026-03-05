@@ -26,6 +26,13 @@ const colors = {
   hoverBg: "rgba(60,70,50,0.03)",
 };
 
+const sourceAccentColors: Record<string, string> = {
+  email: "rgba(180,120,60,0.5)",
+  linkedin: "rgba(100,120,140,0.45)",
+  memory: "rgba(160,140,60,0.5)",
+  news: "rgba(120,100,80,0.4)",
+  quiet: "rgba(140,130,110,0.35)",
+};
 
 // ─────────────────────────────────────────────────────
 // Demo Data
@@ -57,8 +64,13 @@ interface DemoProfile {
   knownFor: string;
   alignment: string;
   email: string;
+  phone?: string;
   refId: string;
   proximity: "close" | "known" | "new";
+  remember?: string[];
+  traits?: string[];
+  circle?: { relation: string; name: string; detail?: string }[];
+  lastInteraction?: string;
 }
 
 const DEMO_PROFILES: Record<string, DemoProfile> = {
@@ -72,8 +84,21 @@ const DEMO_PROFILES: Record<string, DemoProfile> = {
     alignment:
       "Portfolio company. Series A prep underway. Key proof point for Fund I thesis on India B2B SaaS.",
     email: "arjun@nexaflow.in",
+    phone: "+91 98765 43210",
     refId: "BRC-AM-0247",
     proximity: "close",
+    remember: [
+      "Wife Meera is expecting in April \u2014 ask about preparations",
+      "Runs 5K every morning at Cubbon Park",
+      "Prefers Third Wave Coffee over Starbucks",
+    ],
+    traits: ["IIT Bombay \u201912", "Supply Chain AI", "Seed to $5M ARR in 18mo"],
+    circle: [
+      { relation: "co-founder", name: "Vikram Rao", detail: "NexaFlow, CTO" },
+      { relation: "advisor", name: "Kunal Shah", detail: "CRED, Founder" },
+      { relation: "wife", name: "Meera Mehta", detail: "Google, Product Lead" },
+    ],
+    lastInteraction: "Board call \u2014 Feb 28, 2026",
   },
   "priya-venkatesh": {
     id: "priya-venkatesh",
@@ -87,6 +112,12 @@ const DEMO_PROFILES: Record<string, DemoProfile> = {
     email: "priya@karyafinance.com",
     refId: "BRC-PV-0389",
     proximity: "new",
+    traits: ["YC W23", "Fintech Infra", "Ex-Razorpay #30"],
+    circle: [
+      { relation: "co-founder", name: "Sneha Iyer", detail: "Karya, CTO" },
+      { relation: "mentor", name: "Arjun Mehta", detail: "NexaFlow, CEO" },
+    ],
+    lastInteraction: "Coffee at Third Wave \u2014 Feb 12, 2026",
   },
   "kavya-iyer": {
     id: "kavya-iyer",
@@ -100,6 +131,16 @@ const DEMO_PROFILES: Record<string, DemoProfile> = {
     email: "kavya@sundaramcapital.com",
     refId: "BRC-KI-0156",
     proximity: "known",
+    remember: [
+      "Daughter at Harvard \u2014 proud of legacy admission",
+      "Passionate about climate tech \u2014 good Fund II angle",
+    ],
+    traits: ["Harvard MBA", "Family Office", "Climate Allocator"],
+    circle: [
+      { relation: "husband", name: "Ravi Iyer", detail: "Sundaram Group, Chairman" },
+      { relation: "colleague", name: "Anita Rao", detail: "Sundaram, Partner" },
+    ],
+    lastInteraction: "LP meet \u2014 Oct 14, 2024",
   },
   "rajan-anand": {
     id: "rajan-anand",
@@ -111,8 +152,19 @@ const DEMO_PROFILES: Record<string, DemoProfile> = {
     alignment:
       "Key co-investment partner. Deal flow sharing in supply chain & logistics.",
     email: "rajan@elevarcapital.com",
+    phone: "+91 99887 76655",
     refId: "BRC-RA-0312",
     proximity: "close",
+    remember: [
+      "IIT Delhi batch of \u201997 \u2014 same hostel as you",
+      "Weekend trekker \u2014 just did Hampta Pass",
+    ],
+    traits: ["IIT Delhi \u201997", "India SaaS", "2x co-investor"],
+    circle: [
+      { relation: "partner", name: "Sandeep Murthy", detail: "Elevar, GP" },
+      { relation: "portfolio", name: "ShipKart team", detail: "Logistics SaaS" },
+    ],
+    lastInteraction: "Chai at Chaayos \u2014 Jan 15, 2026",
   },
 };
 
@@ -236,10 +288,6 @@ Also \u2014 should we start thinking about Series A timing? Metrics are at a pla
   },
 ];
 
-const DEMO_GROUPS = [
-  { id: "for-you", label: "Truly For You", isSystem: true },
-];
-
 // ─────────────────────────────────────────────────────
 // Source icon helper
 // ─────────────────────────────────────────────────────
@@ -329,7 +377,6 @@ function SourceIcon({ source, size = 13 }: { source: string; size?: number }) {
         <circle cx="10.5" cy="8" r="0.8" fill={c} opacity="0.5" />
       </svg>
     );
-  // fallback
   return (
     <svg width={s} height={s} viewBox="0 0 16 16" fill="none">
       <circle cx="8" cy="8" r="6" stroke={c} strokeWidth="1.2" />
@@ -354,90 +401,52 @@ function PaperGrain({ opacity = 0.035 }: { opacity?: number }) {
 }
 
 // ─────────────────────────────────────────────────────
-// Section Heading (BECAUSE / AND / SO / ACTION labels)
-// ─────────────────────────────────────────────────────
-function SectionLabel({
-  label,
-  accent,
-}: {
-  label: string;
-  accent?: boolean;
-}) {
-  const gradientColor = accent ? colors.accentGreen : colors.border;
-  return (
-    <div className="flex items-center gap-2 mb-1.5">
-      <span
-        style={{
-          color: accent ? colors.accentGreenStrong : colors.textMuted,
-          fontFamily: fonts.mono,
-          fontWeight: 600,
-          fontSize: "10px",
-          letterSpacing: "0.14em",
-          textTransform: "uppercase",
-        }}
-      >
-        {label}
-      </span>
-      <div
-        className="flex-1 h-px"
-        style={{
-          background: `linear-gradient(90deg, ${gradientColor} 0%, transparent 100%)`,
-        }}
-      />
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────────────
-// DemoSignalInbox (left panel)
+// DemoSignalInbox (left panel) — enriched 2-line rows
 // ─────────────────────────────────────────────────────
 function DemoSignalInbox({
   signals,
   selectedId,
-  activeGroupId,
   onSelect,
-  onGroupChange,
 }: {
   signals: DemoSignal[];
   selectedId: string;
-  activeGroupId: string;
   onSelect: (id: string) => void;
-  onGroupChange: (id: string) => void;
 }) {
   return (
     <div
-      className="h-full flex flex-col relative overflow-hidden rounded-md"
+      className="h-full flex flex-col relative overflow-hidden"
       style={{
         background: "linear-gradient(168deg, #f3f5ed 0%, #e7ead9 100%)",
+        borderRadius: "3px",
         boxShadow:
           "0 1px 0 rgba(255,255,255,0.7) inset, 0 2px 4px rgba(0,0,0,0.04), 0 8px 16px -8px rgba(0,0,0,0.1)",
       }}
     >
       <PaperGrain />
       <div className="relative z-10 h-full p-4 flex flex-col">
-        {/* Group tabs */}
-        <div className="flex items-baseline gap-4 mb-2">
-          {DEMO_GROUPS.map((g) => {
-            const active = g.id === activeGroupId;
-            return (
-              <button
-                key={g.id}
-                onClick={() => onGroupChange(g.id)}
-                className="cursor-pointer bg-transparent border-none p-0"
-                style={{
-                  fontSize: active ? "16px" : "11px",
-                  color: active
-                    ? "rgba(35,45,30,0.9)"
-                    : "rgba(60,70,50,0.38)",
-                  fontFamily: active ? fonts.serif : fonts.mono,
-                  fontStyle: active ? "italic" : "normal",
-                  letterSpacing: active ? "0.01em" : "0.04em",
-                }}
-              >
-                {g.label}
-              </button>
-            );
-          })}
+        {/* Header */}
+        <div className="flex items-baseline justify-between mb-2">
+          <span
+            style={{
+              fontSize: "11px",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "rgba(35,45,30,0.5)",
+              fontFamily: fonts.mono,
+              fontWeight: 600,
+            }}
+          >
+            For You
+          </span>
+          <span
+            style={{
+              fontSize: "9px",
+              color: colors.textFaint,
+              fontFamily: fonts.mono,
+            }}
+          >
+            {signals.length} signals
+          </span>
         </div>
 
         {/* Divider */}
@@ -449,96 +458,126 @@ function DemoSignalInbox({
           }}
         />
 
-        {/* Signal list */}
+        {/* Signal list — 2-line rows */}
         <div className="flex-1 overflow-hidden min-h-0">
           {signals.map((signal) => {
             const isSelected = signal.id === selectedId;
+            const accentColor = sourceAccentColors[signal.source] || colors.textMuted;
             return (
               <div
                 key={signal.id}
                 onClick={() => onSelect(signal.id)}
                 className="cursor-pointer transition-all duration-200"
                 style={{
-                  padding: "7px 4px",
+                  padding: "8px 6px 8px 0",
                   backgroundColor: isSelected
                     ? colors.selectedBg
                     : "transparent",
                   borderBottom: `1px solid ${colors.borderSubtle}`,
-                  opacity:
-                    selectedId && !isSelected ? 0.45 : 1,
-                  filter:
-                    selectedId && !isSelected
-                      ? "blur(0.5px)"
-                      : "none",
+                  opacity: selectedId && !isSelected ? 0.6 : 1,
                   transition: "all 0.3s ease",
+                  display: "flex",
+                  gap: "8px",
                 }}
               >
-                <div className="flex items-center gap-2">
-                  {/* Follow-up mark */}
-                  {signal.isFollowUp && (
-                    <div
-                      style={{
-                        width: 6,
-                        height: 6,
-                        borderRadius: "50%",
-                        border: `1.5px solid ${colors.accentGreen}`,
-                        flexShrink: 0,
-                      }}
-                    />
-                  )}
-                  {!signal.isFollowUp && <div style={{ width: 6 }} />}
+                {/* Left accent bar */}
+                <div
+                  style={{
+                    width: "2.5px",
+                    flexShrink: 0,
+                    borderRadius: "1px",
+                    backgroundColor: isSelected ? accentColor : "transparent",
+                    transition: "background-color 0.3s ease",
+                  }}
+                />
 
-                  {/* Source icon */}
-                  <div className="flex-shrink-0">
-                    <SourceIcon source={signal.source} size={14} />
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  {/* Row 1: source icon + name + preview + time */}
+                  <div className="flex items-center gap-2">
+                    {/* Follow-up mark */}
+                    {signal.isFollowUp && (
+                      <div
+                        style={{
+                          width: 6,
+                          height: 6,
+                          borderRadius: "50%",
+                          border: `1.5px solid ${colors.accentGreen}`,
+                          flexShrink: 0,
+                        }}
+                      />
+                    )}
+                    {!signal.isFollowUp && <div style={{ width: 6 }} />}
+
+                    {/* Source icon */}
+                    <div className="flex-shrink-0">
+                      <SourceIcon source={signal.source} size={13} />
+                    </div>
+
+                    {/* Person name */}
+                    <span
+                      className="flex-shrink-0 truncate"
+                      style={{
+                        width: "100px",
+                        fontSize: "12px",
+                        color: isSelected ? "rgba(35,40,30,0.92)" : "rgba(35,40,30,0.75)",
+                        fontFamily: fonts.mono,
+                        fontWeight: isSelected ? 600 : 400,
+                      }}
+                    >
+                      {signal.personName}
+                    </span>
+
+                    {/* Content preview */}
+                    <span
+                      className="truncate flex-1 min-w-0"
+                      style={{
+                        fontSize: "11px",
+                        fontFamily: fonts.mono,
+                      }}
+                    >
+                      {signal.isFollowUp && signal.followUpContext && (
+                        <span style={{ color: colors.textMuted }}>
+                          re: {signal.followUpContext}
+                          <span style={{ margin: "0 3px", opacity: 0.5 }}>
+                            &middot;
+                          </span>
+                        </span>
+                      )}
+                      <span style={{ color: "rgba(35,40,30,0.45)" }}>
+                        {signal.content}
+                      </span>
+                    </span>
+
+                    {/* Timestamp */}
+                    <span
+                      className="flex-shrink-0"
+                      style={{
+                        fontSize: "10px",
+                        color: colors.textFaint,
+                        fontFamily: fonts.mono,
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {signal.timestamp}
+                    </span>
                   </div>
 
-                  {/* Person name */}
-                  <span
-                    className="flex-shrink-0 truncate"
+                  {/* Row 2: insight preview */}
+                  <div
+                    className="truncate"
                     style={{
-                      width: "110px",
-                      fontSize: "12px",
-                      color: "rgba(35,40,30,0.85)",
-                      fontFamily: fonts.mono,
+                      marginTop: "3px",
+                      marginLeft: "28px",
+                      fontSize: "11px",
+                      fontFamily: fonts.serif,
+                      fontStyle: "italic",
+                      color: isSelected ? "rgba(80,100,60,0.7)" : "rgba(80,50,30,0.3)",
+                      transition: "color 0.3s ease",
                     }}
                   >
-                    {signal.personName}
-                  </span>
-
-                  {/* Content preview */}
-                  <span
-                    className="truncate flex-1 min-w-0"
-                    style={{
-                      fontSize: "12px",
-                      fontFamily: fonts.mono,
-                    }}
-                  >
-                    {signal.isFollowUp && signal.followUpContext && (
-                      <span style={{ color: colors.textMuted }}>
-                        re: {signal.followUpContext}
-                        <span style={{ margin: "0 3px", opacity: 0.5 }}>
-                          &middot;
-                        </span>
-                      </span>
-                    )}
-                    <span style={{ color: "rgba(35,40,30,0.5)" }}>
-                      {signal.content}
-                    </span>
-                  </span>
-
-                  {/* Timestamp */}
-                  <span
-                    className="flex-shrink-0"
-                    style={{
-                      fontSize: "10px",
-                      color: colors.textMuted,
-                      fontFamily: fonts.mono,
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {signal.timestamp}
-                  </span>
+                    {signal.insight}
+                  </div>
                 </div>
               </div>
             );
@@ -583,7 +622,7 @@ function DemoSignalInbox({
 }
 
 // ─────────────────────────────────────────────────────
-// DemoSignalDetail (center panel)
+// DemoSignalDetail (center panel) — action-forward
 // ─────────────────────────────────────────────────────
 function DemoSignalDetail({
   signal,
@@ -596,112 +635,180 @@ function DemoSignalDetail({
 }) {
   return (
     <div
-      className="h-full flex flex-col relative overflow-hidden rounded-md"
+      className="h-full flex flex-col relative overflow-hidden"
       style={{
         background: "linear-gradient(168deg, #f3f5ed 0%, #e7ead9 100%)",
+        borderRadius: "3px",
         boxShadow:
-          "0 1px 0 rgba(255,255,255,0.7) inset, 0 2px 4px rgba(0,0,0,0.04), 0 8px 16px -8px rgba(0,0,0,0.1)",
+          "0 1px 0 rgba(255,255,255,0.7) inset, 0 2px 6px rgba(0,0,0,0.06), 0 12px 24px -8px rgba(0,0,0,0.12)",
       }}
     >
       <PaperGrain />
-      <div className="relative z-10 p-4 flex flex-col h-full overflow-hidden">
-        {/* Source stamp */}
+      <div className="relative z-10 p-6 flex flex-col h-full overflow-hidden">
+        {/* Source stamp — quieter */}
         <div className="mb-3">
           <span
             style={{
               fontSize: "10px",
-              letterSpacing: "0.14em",
+              letterSpacing: "0.12em",
               textTransform: "uppercase",
-              color: colors.textMuted,
+              color: colors.textFaint,
               fontFamily: fonts.mono,
             }}
           >
-            {signal.source.toUpperCase()} &middot;{" "}
-            {signal.timestamp.toUpperCase()}
+            {signal.source} &middot; {signal.timestamp}
           </span>
         </div>
 
-        {/* Headline */}
+        {/* Insight headline — hero text */}
         <h3
           style={{
-            fontSize: "17px",
-            lineHeight: "1.35",
+            fontSize: "24px",
+            lineHeight: "1.3",
             color: colors.textPrimary,
             fontFamily: fonts.serif,
             fontWeight: 400,
-            margin: "0 0 16px 0",
+            margin: "0 0 28px 0",
           }}
         >
           {signal.insight}
         </h3>
 
-        {/* Reasoning: BECAUSE / AND / SO */}
-        <div className="space-y-3 mb-4">
-          <div>
-            <SectionLabel label="BECAUSE" />
-            <p
+        {/* Reasoning: inline BECAUSE / AND / SO */}
+        <div
+          style={{
+            paddingLeft: "14px",
+            borderLeft: `2px solid ${colors.border}`,
+          }}
+        >
+          <div style={{ marginBottom: "14px" }}>
+            <span
               style={{
-                fontSize: "12px",
-                lineHeight: "1.5",
+                fontSize: "10px",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: colors.textMuted,
+                fontFamily: fonts.mono,
+                fontWeight: 600,
+                marginRight: "8px",
+              }}
+            >
+              because
+            </span>
+            <span
+              style={{
+                fontSize: "14px",
+                lineHeight: "1.55",
                 color: colors.textSecondary,
                 fontFamily: fonts.serif,
                 fontStyle: "italic",
-                margin: 0,
               }}
             >
               {signal.because}
-            </p>
+            </span>
           </div>
-          <div>
-            <SectionLabel label="AND" />
-            <p
+          <div style={{ marginBottom: "14px" }}>
+            <span
               style={{
-                fontSize: "12px",
-                lineHeight: "1.5",
+                fontSize: "10px",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: colors.textMuted,
+                fontFamily: fonts.mono,
+                fontWeight: 600,
+                marginRight: "8px",
+              }}
+            >
+              and
+            </span>
+            <span
+              style={{
+                fontSize: "14px",
+                lineHeight: "1.55",
                 color: colors.textSecondary,
                 fontFamily: fonts.serif,
                 fontStyle: "italic",
-                margin: 0,
               }}
             >
               {signal.and}
-            </p>
+            </span>
           </div>
           <div>
-            <SectionLabel label="SO" />
-            <p
+            <span
               style={{
-                fontSize: "12px",
-                lineHeight: "1.5",
+                fontSize: "10px",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: colors.textMuted,
+                fontFamily: fonts.mono,
+                fontWeight: 600,
+                marginRight: "8px",
+              }}
+            >
+              so
+            </span>
+            <span
+              style={{
+                fontSize: "14px",
+                lineHeight: "1.55",
                 color: colors.textSecondary,
                 fontFamily: fonts.serif,
                 fontStyle: "italic",
-                margin: 0,
               }}
             >
               {signal.so}
-            </p>
+            </span>
           </div>
         </div>
 
-        {/* ACTION section */}
-        <div>
-          <SectionLabel label="ACTION" accent />
+        {/* Flexible space between reasoning and action */}
+        <div className="flex-1" />
 
-          {/* Suggested reply */}
+        {/* ACTION — elevated, card-within-card feel */}
+        <div
+          style={{
+            padding: "16px",
+            background: "rgba(255,255,255,0.35)",
+            border: `1px solid ${colors.border}`,
+            borderRadius: "3px",
+          }}
+        >
+          {/* Action label */}
+          <div className="flex items-center gap-2 mb-3">
+            <span
+              style={{
+                fontSize: "10px",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: colors.accentGreenStrong,
+                fontFamily: fonts.mono,
+                fontWeight: 600,
+              }}
+            >
+              suggested {signal.actionChannel}
+            </span>
+            <div
+              className="flex-1 h-px"
+              style={{
+                background: `linear-gradient(90deg, ${colors.accentGreen} 0%, transparent 100%)`,
+              }}
+            />
+          </div>
+
+          {/* Suggested text — styled like a draft message */}
           <div
-            className="mb-3"
             style={{
-              padding: "8px",
-              border: `1px solid ${colors.border}`,
-              borderRadius: "2px",
-              background: "rgba(255,255,255,0.3)",
+              padding: "12px 14px",
+              marginBottom: "14px",
+              background: "rgba(255,255,255,0.4)",
+              borderLeft: `2.5px solid ${colors.accentGreen}`,
+              borderRadius: "0 2px 2px 0",
             }}
           >
             <p
               style={{
-                fontSize: "12px",
-                lineHeight: "1.55",
+                fontSize: "14px",
+                lineHeight: "1.6",
                 color: colors.textPrimary,
                 fontFamily: fonts.serif,
                 margin: 0,
@@ -712,68 +819,58 @@ function DemoSignalDetail({
             </p>
           </div>
 
-          {/* Send button */}
-          <div className="flex items-center justify-between">
+          {/* Send button + refine — integrated row */}
+          <div className="flex items-center gap-3">
             <button
               onClick={onSend}
               disabled={sendState !== "idle"}
               className="cursor-pointer border-none"
               style={{
-                padding: "5px 14px",
-                fontSize: "11px",
+                padding: "8px 22px",
+                fontSize: "13px",
                 fontFamily: fonts.mono,
-                letterSpacing: "0.06em",
+                fontWeight: 600,
+                letterSpacing: "0.04em",
                 color:
                   sendState === "sent"
                     ? colors.accentGreenStrong
                     : sendState === "sending"
                       ? colors.textMuted
-                      : colors.textPrimary,
+                      : "rgba(255,255,255,0.95)",
                 background:
                   sendState === "idle"
-                    ? "rgba(80,100,60,0.08)"
-                    : "transparent",
+                    ? "rgba(55,70,45,0.75)"
+                    : sendState === "sending"
+                      ? "rgba(80,100,60,0.12)"
+                      : "rgba(80,100,60,0.08)",
                 borderRadius: "2px",
-                transition: "all 0.2s ease",
+                transition: "all 0.25s ease",
               }}
             >
               {sendState === "idle"
                 ? `${signal.actionLabel} \u2192`
                 : sendState === "sending"
-                  ? "sending..."
+                  ? "sending\u2026"
                   : "sent \u2713"}
             </button>
-          </div>
 
-          {/* REFINE */}
-          <div className="mt-3">
-            <span
-              style={{
-                fontSize: "9px",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                color: colors.textFaint,
-                fontFamily: fonts.mono,
-                display: "block",
-                marginBottom: "4px",
-              }}
-            >
-              REFINE
-            </span>
-            <input
-              type="text"
-              placeholder="make it shorter, add context..."
-              className="w-full outline-none"
-              style={{
-                padding: "5px 8px",
-                fontSize: "11px",
-                fontFamily: fonts.mono,
-                color: colors.textSecondary,
-                background: "rgba(255,255,255,0.25)",
-                border: `1px solid ${colors.borderSubtle}`,
-                borderRadius: "2px",
-              }}
-            />
+            {/* Refine input — inline with action */}
+            <div className="flex-1 relative">
+              <input
+                type="text"
+                placeholder="refine: make shorter, add context\u2026"
+                className="w-full outline-none"
+                style={{
+                  padding: "7px 10px",
+                  fontSize: "11.5px",
+                  fontFamily: fonts.mono,
+                  color: colors.textSecondary,
+                  background: "rgba(255,255,255,0.3)",
+                  border: `1px solid ${colors.borderSubtle}`,
+                  borderRadius: "2px",
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -782,9 +879,15 @@ function DemoSignalDetail({
 }
 
 // ─────────────────────────────────────────────────────
-// DemoRolodexCard (right panel)
+// DemoRolodexCard (right panel) — restructured
 // ─────────────────────────────────────────────────────
 function DemoRolodexCard({ profile }: { profile: DemoProfile }) {
+  const proximityLabel =
+    profile.proximity === "close"
+      ? "close"
+      : profile.proximity === "known"
+        ? "known"
+        : "new";
   const proximityColor =
     profile.proximity === "close"
       ? "rgba(180,160,60,0.7)"
@@ -794,9 +897,10 @@ function DemoRolodexCard({ profile }: { profile: DemoProfile }) {
 
   return (
     <div
-      className="h-full flex flex-col relative overflow-hidden rounded-md"
+      className="h-full flex flex-col relative overflow-hidden"
       style={{
         background: "linear-gradient(168deg, #f5ebe3 0%, #e8ddd1 100%)",
+        borderRadius: "3px",
         boxShadow:
           "0 1px 0 rgba(255,255,255,0.7) inset, 0 2px 4px rgba(0,0,0,0.04), 0 8px 16px -8px rgba(0,0,0,0.1)",
       }}
@@ -807,10 +911,10 @@ function DemoRolodexCard({ profile }: { profile: DemoProfile }) {
       <div
         className="absolute z-20"
         style={{
-          top: "10px",
-          left: "10px",
-          width: "10px",
-          height: "10px",
+          top: "12px",
+          left: "12px",
+          width: "12px",
+          height: "12px",
           borderRadius: "50%",
           background:
             "radial-gradient(circle at 40% 35%, rgba(255,255,255,0.5) 0%, rgba(0,0,0,0.08) 60%, rgba(0,0,0,0.15) 100%)",
@@ -819,151 +923,121 @@ function DemoRolodexCard({ profile }: { profile: DemoProfile }) {
         }}
       />
 
-      {/* Proximity mark */}
+      {/* Proximity mark with label */}
       <div
-        className="absolute z-20"
+        className="absolute z-20 flex items-center gap-1.5"
         style={{
-          top: "12px",
-          right: "12px",
-          width: "7px",
-          height: "7px",
-          borderRadius: "50%",
-          backgroundColor: proximityColor,
-          boxShadow: `0 0 4px ${proximityColor}`,
+          top: "13px",
+          right: "14px",
         }}
-      />
+      >
+        <span
+          style={{
+            fontSize: "9px",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: colors.textFaint,
+            fontFamily: fonts.mono,
+          }}
+        >
+          {proximityLabel}
+        </span>
+        <div
+          style={{
+            width: "7px",
+            height: "7px",
+            borderRadius: "50%",
+            backgroundColor: proximityColor,
+            boxShadow: `0 0 4px ${proximityColor}`,
+          }}
+        />
+      </div>
 
-      <div className="relative z-10 p-4 pt-6 flex flex-col h-full overflow-hidden">
+      <div className="relative z-10 p-4 pt-7 flex flex-col h-full overflow-hidden">
         {/* Name */}
         <h3
           style={{
             fontSize: "16px",
             color: colors.textPrimary,
-            fontFamily: fonts.mono,
-            fontWeight: 500,
-            margin: "0 0 4px 0",
+            fontFamily: fonts.serif,
+            fontWeight: 400,
+            margin: "0 0 2px 0",
+            letterSpacing: "0.01em",
           }}
         >
           {profile.name}
         </h3>
+
+        {/* Role */}
+        <span
+          style={{
+            fontSize: "11px",
+            color: colors.textSecondary,
+            fontFamily: fonts.mono,
+            display: "block",
+            marginBottom: "6px",
+          }}
+        >
+          {profile.role}
+        </span>
+
+        {/* Traits tags */}
+        {profile.traits && (
+          <div className="flex flex-wrap gap-1.5 mb-3">
+            {profile.traits.map((trait) => (
+              <span
+                key={trait}
+                style={{
+                  fontSize: "9px",
+                  letterSpacing: "0.04em",
+                  color: colors.textSecondary,
+                  fontFamily: fonts.mono,
+                  padding: "2px 6px",
+                  border: `1px solid ${colors.border}`,
+                  borderRadius: "1px",
+                }}
+              >
+                {trait}
+              </span>
+            ))}
+          </div>
+        )}
+
         <div
           className="h-px mb-3"
           style={{
             background:
-              "linear-gradient(90deg, rgba(60,70,50,0.15) 0%, transparent 100%)",
+              "linear-gradient(90deg, rgba(60,70,50,0.12) 0%, transparent 100%)",
           }}
         />
 
-        {/* DOES */}
-        <div className="mb-3">
-          <span
-            style={{
-              fontSize: "10px",
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: colors.textMuted,
-              fontFamily: fonts.mono,
-              fontWeight: 600,
-            }}
-          >
-            DOES
-          </span>
-          <p
-            style={{
-              fontSize: "12px",
-              lineHeight: "1.45",
-              color: colors.textSecondary,
-              fontFamily: fonts.mono,
-              margin: "3px 0 0",
-            }}
-          >
-            {profile.role}
-          </p>
-        </div>
-
-        {/* MET */}
-        <div className="mb-3">
-          <span
-            style={{
-              fontSize: "10px",
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: colors.textMuted,
-              fontFamily: fonts.mono,
-              fontWeight: 600,
-            }}
-          >
-            MET
-          </span>
-          <p
-            style={{
-              fontSize: "12px",
-              lineHeight: "1.45",
-              color: colors.textSecondary,
-              fontFamily: fonts.serif,
-              fontStyle: "italic",
-              margin: "3px 0 0",
-            }}
-          >
-            {profile.metAt}
-          </p>
-        </div>
-
-        {/* KNOWN FOR */}
-        <div className="mb-3">
-          <span
-            style={{
-              fontSize: "10px",
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: colors.textMuted,
-              fontFamily: fonts.mono,
-              fontWeight: 600,
-            }}
-          >
-            KNOWN FOR
-          </span>
-          <p
-            style={{
-              fontSize: "12px",
-              lineHeight: "1.45",
-              color: colors.textPrimary,
-              fontFamily: fonts.mono,
-              fontWeight: 500,
-              margin: "3px 0 0",
-            }}
-          >
-            {profile.knownFor}
-          </p>
-        </div>
-
-        {/* ALIGNMENT */}
+        {/* ALIGNMENT — promoted, highlighted */}
         <div
-          className="mb-3"
           style={{
-            padding: "6px 8px",
-            border: `1px solid ${colors.border}`,
+            padding: "7px 9px",
+            marginBottom: "10px",
+            background: "rgba(80,100,60,0.03)",
+            border: `1px solid rgba(80,100,60,0.1)`,
             borderRadius: "2px",
           }}
         >
           <span
             style={{
-              fontSize: "10px",
-              letterSpacing: "0.14em",
+              fontSize: "9px",
+              letterSpacing: "0.12em",
               textTransform: "uppercase",
-              color: colors.textMuted,
+              color: colors.accentGreen,
               fontFamily: fonts.mono,
-              fontWeight: 600,
               display: "block",
               marginBottom: "3px",
             }}
           >
-            ALIGNMENT
+            why they matter
           </span>
           <p
             style={{
-              fontSize: "12px",
-              lineHeight: "1.45",
+              fontSize: "11.5px",
+              lineHeight: "1.5",
               color: colors.textSecondary,
               fontFamily: fonts.serif,
               fontStyle: "italic",
@@ -974,59 +1048,212 @@ function DemoRolodexCard({ profile }: { profile: DemoProfile }) {
           </p>
         </div>
 
-        {/* CONTACT */}
+        {/* KNOWN FOR */}
         <div className="mb-3">
           <span
             style={{
-              fontSize: "10px",
-              letterSpacing: "0.14em",
+              fontSize: "9px",
+              letterSpacing: "0.12em",
               textTransform: "uppercase",
               color: colors.textMuted,
               fontFamily: fonts.mono,
-              fontWeight: 600,
-              display: "block",
-              marginBottom: "3px",
             }}
           >
-            CONTACT
+            known for
           </span>
+          <p
+            style={{
+              fontSize: "11px",
+              lineHeight: "1.5",
+              color: colors.textSecondary,
+              fontFamily: fonts.mono,
+              margin: "3px 0 0",
+            }}
+          >
+            {profile.knownFor}
+          </p>
+        </div>
+
+        {/* MET */}
+        <div
+          className="mb-3"
+          style={{
+            padding: "6px 8px",
+            background: "rgba(120,80,40,0.025)",
+            borderRadius: "2px",
+          }}
+        >
+          <span
+            style={{
+              fontSize: "9px",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: colors.textMuted,
+              fontFamily: fonts.mono,
+            }}
+          >
+            met
+          </span>
+          <p
+            style={{
+              fontSize: "11px",
+              lineHeight: "1.45",
+              color: colors.textSecondary,
+              fontFamily: fonts.serif,
+              fontStyle: "italic",
+              margin: "2px 0 0",
+            }}
+          >
+            {profile.metAt}
+          </p>
+        </div>
+
+        {/* REMEMBER — personal notes */}
+        {profile.remember && profile.remember.length > 0 && (
+          <div className="mb-3">
+            <span
+              style={{
+                fontSize: "9px",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: colors.textMuted,
+                fontFamily: fonts.mono,
+              }}
+            >
+              remember
+            </span>
+            <div style={{ marginTop: "3px" }}>
+              {profile.remember.map((item, i) => (
+                <div
+                  key={i}
+                  className="flex items-start gap-1.5"
+                  style={{ marginBottom: i < profile.remember!.length - 1 ? "2px" : 0 }}
+                >
+                  <span
+                    style={{
+                      width: "3px",
+                      height: "3px",
+                      borderRadius: "50%",
+                      background: colors.textMuted,
+                      flexShrink: 0,
+                      marginTop: "5px",
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontSize: "10.5px",
+                      lineHeight: "1.4",
+                      color: colors.textSecondary,
+                      fontFamily: fonts.serif,
+                      fontStyle: "italic",
+                    }}
+                  >
+                    {item}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* CIRCLE — key people in their network */}
+        {profile.circle && profile.circle.length > 0 && (
+          <div className="mb-3">
+            <span
+              style={{
+                fontSize: "9px",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: colors.textMuted,
+                fontFamily: fonts.mono,
+              }}
+            >
+              circle
+            </span>
+            <div style={{ marginTop: "3px" }}>
+              {profile.circle.map((person, i) => (
+                <div
+                  key={i}
+                  className="flex items-baseline gap-1.5"
+                  style={{ marginBottom: i < profile.circle!.length - 1 ? "2px" : 0 }}
+                >
+                  <span
+                    style={{
+                      fontSize: "10.5px",
+                      color: colors.textSecondary,
+                      fontFamily: fonts.mono,
+                    }}
+                  >
+                    {person.name}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "9px",
+                      color: colors.textMuted,
+                      fontFamily: fonts.serif,
+                      fontStyle: "italic",
+                    }}
+                  >
+                    {person.relation}{person.detail ? ` \u00B7 ${person.detail}` : ""}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* CONTACT */}
+        <div
+          className="mt-auto pt-2"
+          style={{ borderTop: `1px solid ${colors.border}` }}
+        >
           <span
             style={{
               fontSize: "11px",
               color: colors.textSecondary,
               fontFamily: fonts.mono,
+              display: "block",
             }}
           >
             {profile.email}
           </span>
-        </div>
-
-        {/* Ref ID footer */}
-        <div
-          className="pt-2 flex items-center justify-between"
-          style={{ borderTop: `1px solid ${colors.borderSubtle}` }}
-        >
-          <span
-            style={{
-              fontSize: "8px",
-              letterSpacing: "0.1em",
-              color: colors.textFaint,
-              fontFamily: fonts.mono,
-            }}
-          >
-            {profile.refId}
-          </span>
-          <span
-            style={{
-              fontSize: "8px",
-              letterSpacing: "0.1em",
-              color: colors.textFaint,
-              fontFamily: fonts.mono,
-              textTransform: "uppercase",
-            }}
-          >
-            private
-          </span>
+          {profile.lastInteraction && (
+            <span
+              style={{
+                fontSize: "9.5px",
+                color: colors.textMuted,
+                fontFamily: fonts.serif,
+                fontStyle: "italic",
+                display: "block",
+                marginTop: "2px",
+              }}
+            >
+              Last: {profile.lastInteraction}
+            </span>
+          )}
+          <div className="flex items-center justify-between mt-2">
+            <span
+              style={{
+                fontSize: "8px",
+                letterSpacing: "0.1em",
+                color: colors.textFaint,
+                fontFamily: fonts.mono,
+              }}
+            >
+              {profile.refId}
+            </span>
+            <span
+              style={{
+                fontSize: "8px",
+                letterSpacing: "0.1em",
+                color: colors.textFaint,
+                fontFamily: fonts.mono,
+                textTransform: "uppercase",
+              }}
+            >
+              private
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -1038,7 +1265,6 @@ function DemoRolodexCard({ profile }: { profile: DemoProfile }) {
 // ─────────────────────────────────────────────────────
 export default function DemoMockup() {
   const [selectedId, setSelectedId] = useState("s2");
-  const [activeGroupId, setActiveGroupId] = useState("for-you");
   const [sendState, setSendState] = useState<"idle" | "sending" | "sent">(
     "idle"
   );
@@ -1069,23 +1295,21 @@ export default function DemoMockup() {
       style={{
         display: "flex",
         alignItems: "stretch",
-        gap: "14px",
+        gap: "18px",
         height: "100%",
       }}
     >
       {/* Left: Signal Inbox */}
-      <div style={{ flex: "0.8 1 0", minWidth: 0, height: "100%" }}>
+      <div style={{ flex: "0.77 1 0", minWidth: 0, height: "100%" }}>
         <DemoSignalInbox
           signals={DEMO_SIGNALS}
           selectedId={selectedId}
-          activeGroupId={activeGroupId}
           onSelect={handleSelect}
-          onGroupChange={setActiveGroupId}
         />
       </div>
 
-      {/* Center: Signal Detail */}
-      <div style={{ flex: "1.2 1 0", minWidth: 0, height: "100%" }}>
+      {/* Center: Signal Detail — dominant */}
+      <div style={{ flex: "1.18 1 0", minWidth: 0, height: "100%" }}>
         <DemoSignalDetail
           signal={selectedSignal}
           sendState={sendState}
@@ -1094,12 +1318,9 @@ export default function DemoMockup() {
       </div>
 
       {/* Right: Rolodex Card */}
-      <div style={{ flex: "0.85 1 0", minWidth: 0, height: "100%", display: "flex", justifyContent: "center" }}>
-        <div style={{ width: "100%", height: "100%" }}>
-          <DemoRolodexCard profile={selectedProfile} />
-        </div>
+      <div style={{ flex: "0.85 1 0", minWidth: 0, height: "100%" }}>
+        <DemoRolodexCard profile={selectedProfile} />
       </div>
     </div>
   );
 }
-
