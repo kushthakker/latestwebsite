@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import DemoMockup from "./components/DemoMockup";
-import TextHighlightSection from "./components/TextHighlightSection";
+import SignalNoise from "./components/SignalNoise";
 
 function GrainOverlay() {
   return (
@@ -162,7 +162,7 @@ export default function Home() {
     <div className="min-h-screen bg-white">
       <GrainOverlay />
       <HeroSection />
-      <TextHighlightSection />
+      <SignalNoise />
     </div>
   );
 }
