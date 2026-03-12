@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import DemoMockup from "./components/DemoMockup";
 import SignalNoise from "./components/SignalNoise";
 
+
 function GrainOverlay() {
   return (
     <svg className="pointer-events-none fixed inset-0 z-40 h-full w-full opacity-[0.035]">
@@ -34,13 +35,13 @@ function HeroSection() {
   const headlineY = useTransform(scrollYProgress, [0.04, 0.22], [0, -60]);
 
   // Phase 2: Demo enlarges and lifts to vertical center
-  const demoWidth = useTransform(scrollYProgress, [0.10, 0.40], ["80%", "84%"]);
-  const demoHeight = useTransform(scrollYProgress, [0.10, 0.40], ["25vh", "78vh"]);
+  const demoWidth = useTransform(scrollYProgress, [0.10, 0.40], ["80%", "92%"]);
+  const demoHeight = useTransform(scrollYProgress, [0.10, 0.40], ["25vh", "86vh"]);
   // Lift during entry, hold, then drift up during exit
   const demoY = useTransform(
     scrollYProgress,
     [0.10, 0.40, 0.60, 0.86],
-    ["0vh", "-11vh", "-11vh", "-16vh"]
+    ["0vh", "-7vh", "-7vh", "-12vh"]
   );
 
   // Phase 3: Demo fades out smoothly
@@ -144,9 +145,10 @@ function HeroSection() {
                 width: demoWidth,
                 height: demoHeight,
                 borderRadius: "14px",
+                background: "#fff",
               }}
             >
-              <div style={{ height: "78vh", width: "100%" }}>
+              <div style={{ height: "86vh", width: "100%" }}>
                 <DemoMockup />
               </div>
             </motion.div>
