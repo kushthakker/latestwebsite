@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import DemoMockup from "./components/DemoMockup";
 import SignalNoise from "./components/SignalNoise";
+import NetworkSection from "./components/NetworkSection";
 
 
 function GrainOverlay() {
@@ -165,6 +166,7 @@ export default function Home() {
       <GrainOverlay />
       <HeroSection />
       <SignalNoise />
+      <NetworkSection />
     </div>
   );
 }
