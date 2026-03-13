@@ -564,68 +564,68 @@ export default function OnePercentClub() {
   // Cinematic blur & opacity curves
   const phase1Op = useTransform(
     scrollYProgress,
-    [0.06, 0.12, 0.22, 0.28],
+    [0.05, 0.12, 0.30, 0.36],
     [0, 1, 1, 0],
   );
   const phase1Blur = useTransform(
     scrollYProgress,
-    [0.06, 0.12, 0.22, 0.28],
+    [0.05, 0.12, 0.30, 0.36],
     ["blur(12px)", "blur(0px)", "blur(0px)", "blur(12px)"],
   );
   const phase1Y = useTransform(
     scrollYProgress,
-    [0.06, 0.12, 0.22, 0.28],
+    [0.05, 0.12, 0.30, 0.36],
     [40, 0, 0, -40],
   );
 
   const phase2Op = useTransform(
     scrollYProgress,
-    [0.28, 0.34, 0.44, 0.5],
+    [0.36, 0.42, 0.52, 0.58],
     [0, 1, 1, 0],
   );
   const phase2Blur = useTransform(
     scrollYProgress,
-    [0.28, 0.34, 0.44, 0.5],
+    [0.36, 0.42, 0.52, 0.58],
     ["blur(12px)", "blur(0px)", "blur(0px)", "blur(12px)"],
   );
   const phase2Y = useTransform(
     scrollYProgress,
-    [0.28, 0.34, 0.44, 0.5],
+    [0.36, 0.42, 0.52, 0.58],
     [40, 0, 0, -40],
   );
 
   const phase3Op = useTransform(
     scrollYProgress,
-    [0.5, 0.56, 0.66, 0.72],
+    [0.58, 0.64, 0.74, 0.80],
     [0, 1, 1, 0],
   );
   const phase3Blur = useTransform(
     scrollYProgress,
-    [0.5, 0.56, 0.66, 0.72],
+    [0.58, 0.64, 0.74, 0.80],
     ["blur(12px)", "blur(0px)", "blur(0px)", "blur(12px)"],
   );
   const phase3Y = useTransform(
     scrollYProgress,
-    [0.5, 0.56, 0.66, 0.72],
+    [0.58, 0.64, 0.74, 0.80],
     [40, 0, 0, -40],
   );
 
-  const phase4Op = useTransform(scrollYProgress, [0.72, 0.8], [0, 1]);
+  const phase4Op = useTransform(scrollYProgress, [0.80, 0.88], [0, 1]);
   const phase4Blur = useTransform(
     scrollYProgress,
-    [0.72, 0.8],
+    [0.80, 0.88],
     ["blur(12px)", "blur(0px)"],
   );
-  const phase4Y = useTransform(scrollYProgress, [0.72, 0.8], [40, 0]);
+  const phase4Y = useTransform(scrollYProgress, [0.80, 0.88], [40, 0]);
 
-  const ctaOp = useTransform(scrollYProgress, [0.82, 0.9], [0, 1]);
-  const ctaY = useTransform(scrollYProgress, [0.82, 0.9], [20, 0]);
+  const ctaOp = useTransform(scrollYProgress, [0.88, 0.95], [0, 1]);
+  const ctaY = useTransform(scrollYProgress, [0.88, 0.95], [20, 0]);
 
   return (
     <section
       ref={sectionRef}
       className="relative font-sans"
-      style={{ height: "400vh" }}
+      style={{ height: "500vh" }}
     >
       {/* Background Transition */}
       <motion.div

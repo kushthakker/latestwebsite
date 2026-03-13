@@ -207,66 +207,6 @@ const insights = {
   },
 };
 
-// ─── Nudge Data ─────────────────────────────────────────────────────────
-
-interface NudgeData {
-  person: { name: string; initials: string; role: string };
-  type: string;
-  badge: string;
-  badgeColor: string;
-  badgeBg: string;
-  accentColor: string;
-  whyNow: string;
-  suggested: string;
-}
-
-const nudges: NudgeData[] = [
-  {
-    person: {
-      name: "Kavya Iyer",
-      initials: "KI",
-      role: "Partner, Sequoia Capital",
-    },
-    type: "reconnect",
-    badge: "3mo silent",
-    badgeColor: "#854d0e",
-    badgeBg: "#fef08a",
-    accentColor: "#ca8a04",
-    whyNow:
-      "Back from Davos. Posted about Fund II closing. Good moment to reconnect.",
-    suggested:
-      "Congrats on Fund II — saw the news from Davos. Would love to hear how the thesis is evolving. Coffee next week?",
-  },
-  {
-    person: {
-      name: "Arjun Mehta",
-      initials: "AM",
-      role: "Co-founder & CEO, NexaFlow",
-    },
-    type: "celebrate",
-    badge: "milestone",
-    badgeColor: "#1e3a8a",
-    badgeBg: "#dbeafe",
-    accentColor: "#2563eb",
-    whyNow:
-      "NexaFlow just hit $5M ARR. He posted about it yesterday. This is a moment worth celebrating.",
-    suggested:
-      "Just saw the $5M milestone — incredible execution. Remember when you were still figuring out pricing at Nasscom? Look how far you've come.",
-  },
-  {
-    person: { name: "Marcus Chen", initials: "MC", role: "VP Product, Ramp" },
-    type: "help",
-    badge: "new role",
-    badgeColor: "#14532d",
-    badgeBg: "#dcfce7",
-    accentColor: "#16a34a",
-    whyNow:
-      "Marcus just started at Ramp — first week. You went through the same transition at Stripe. Offer what you learned.",
-    suggested:
-      "Saw the Ramp move — massive. First 90 days in product at a rocketship are wild. Happy to share what worked for me at Stripe if useful.",
-  },
-];
-
 // ═══════════════════════════════════════════════════════════════════════════
 // UTILITY
 // ═══════════════════════════════════════════════════════════════════════════
@@ -303,12 +243,12 @@ function FounderCard({
   const rotate = useTransform(scrollYProgress, [0.0, 0.04], [-4, 0]);
   const opacity = useTransform(
     scrollYProgress,
-    [0.0, 0.03, 0.31, 0.35],
+    [0.0, 0.03, 0.33, 0.37],
     [0, 1, 1, 0],
   );
   const scale = useTransform(
     scrollYProgress,
-    [0.0, 0.03, 0.27, 0.31],
+    [0.0, 0.03, 0.29, 0.33],
     [0.94, 1, 1, 0.94],
   );
   const y = useTransform(scrollYProgress, [0.0, 0.03], [30, 0]);
@@ -405,7 +345,7 @@ function PersonPill({
 
   const pillOpacity = useTransform(
     scrollYProgress,
-    [enterAt, entryEnd, 0.31, 0.35],
+    [enterAt, entryEnd, 0.33, 0.37],
     [0, 1, 1, 0],
   );
   const pillScale = useTransform(
@@ -491,7 +431,7 @@ function ConnectingLine({
 
   const lineOpacity = useTransform(
     scrollYProgress,
-    [enterAt - 0.004, enterAt + 0.012, 0.31, 0.35],
+    [enterAt - 0.004, enterAt + 0.012, 0.33, 0.37],
     [0, 0.35, 0.35, 0],
   );
   const dashOffset = useTransform(
@@ -539,7 +479,7 @@ function GroupLabel({
 
   const labelOpacity = useTransform(
     scrollYProgress,
-    [0.23, 0.26, 0.31, 0.35],
+    [0.23, 0.26, 0.33, 0.37],
     [0, 1, 1, 0],
   );
   const labelY = useTransform(scrollYProgress, [0.23, 0.26], [10, 0]);
@@ -578,108 +518,26 @@ function GroupLabel({
 // INSIGHTS COMPONENTS
 // ═══════════════════════════════════════════════════════════════════════════
 
-function StaggeredItem({
-  scrollYProgress,
-  baseEnter,
-  index,
-  color,
-  children,
-}: {
-  scrollYProgress: MotionValue<number>;
-  baseEnter: number;
-  index: number;
-  color: string;
-  children: React.ReactNode;
-}) {
-  const enterAt = baseEnter + index * 0.008;
-  const opacity = useTransform(
-    scrollYProgress,
-    [enterAt, enterAt + 0.012],
-    [0, 1],
-  );
-  const y = useTransform(scrollYProgress, [enterAt, enterAt + 0.012], [8, 0]);
-  const x = useTransform(scrollYProgress, [enterAt, enterAt + 0.012], [-4, 0]);
-
-  return (
-    <motion.div style={{ opacity, y, x }} className="flex gap-3 group">
-      <div
-        className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 opacity-80"
-        style={{ backgroundColor: color }}
-      />
-      <span
-        style={{ fontFamily: fonts.sans }}
-        className="text-[13px] text-zinc-600 leading-snug"
-      >
-        {children}
-      </span>
-    </motion.div>
-  );
-}
-
-function IntelligenceLayer({
-  label,
-  color,
-  children,
-  scrollYProgress,
-  enterRange,
-}: {
-  label: string;
-  color: string;
-  children: React.ReactNode;
-  scrollYProgress: MotionValue<number>;
-  enterRange: [number, number];
-}) {
-  const opacity = useTransform(scrollYProgress, enterRange, [0, 1]);
-  const y = useTransform(scrollYProgress, enterRange, [20, 0]);
-
-  return (
-    <motion.div
-      style={{ opacity, y }}
-      className="relative bg-[rgba(242,242,247,0.88)] backdrop-blur-2xl border border-white/45 rounded-xl p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.5)]"
-    >
-      <div className="flex items-center gap-2 mb-3">
-        <svg
-          width="12"
-          height="12"
-          viewBox="0 0 12 12"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <circle cx="6" cy="6" r="4" fill={color} fillOpacity="0.2" />
-          <circle cx="6" cy="6" r="2" fill={color} />
-        </svg>
-        <span
-          style={{ fontFamily: fonts.mono, color: color }}
-          className="text-[10px] font-bold tracking-[0.15em] uppercase"
-        >
-          {label}
-        </span>
-      </div>
-      {children}
-    </motion.div>
-  );
-}
-
 function InsightsMovementA({
   scrollYProgress,
 }: {
   scrollYProgress: MotionValue<number>;
 }) {
-  const cardOpacity = useTransform(scrollYProgress, [0.38, 0.41], [0, 1]);
+  const cardOpacity = useTransform(scrollYProgress, [0.40, 0.43], [0, 1]);
   const cardScale = useTransform(
     scrollYProgress,
-    [0.38, 0.41, 0.5, 0.53],
+    [0.40, 0.43, 0.54, 0.57],
     [0.95, 1, 1, 0.95],
   );
-  const cardY = useTransform(scrollYProgress, [0.38, 0.41], [40, 0]);
-  const exitOpacity = useTransform(scrollYProgress, [0.51, 0.54], [1, 0]);
+  const cardY = useTransform(scrollYProgress, [0.40, 0.43], [40, 0]);
+  const exitOpacity = useTransform(scrollYProgress, [0.55, 0.58], [1, 0]);
 
-  const signalsOpacity = useTransform(scrollYProgress, [0.4, 0.43], [0, 1]);
-  const signalsY = useTransform(scrollYProgress, [0.4, 0.43], [16, 0]);
-  const personalOpacity = useTransform(scrollYProgress, [0.44, 0.47], [0, 1]);
-  const personalY = useTransform(scrollYProgress, [0.44, 0.47], [16, 0]);
-  const strategyOpacity = useTransform(scrollYProgress, [0.48, 0.51], [0, 1]);
-  const strategyY = useTransform(scrollYProgress, [0.48, 0.51], [16, 0]);
+  const signalsOpacity = useTransform(scrollYProgress, [0.42, 0.45], [0, 1]);
+  const signalsY = useTransform(scrollYProgress, [0.42, 0.45], [16, 0]);
+  const personalOpacity = useTransform(scrollYProgress, [0.46, 0.49], [0, 1]);
+  const personalY = useTransform(scrollYProgress, [0.46, 0.49], [16, 0]);
+  const strategyOpacity = useTransform(scrollYProgress, [0.50, 0.53], [0, 1]);
+  const strategyY = useTransform(scrollYProgress, [0.50, 0.53], [16, 0]);
 
   return (
     <motion.div
@@ -881,26 +739,25 @@ function InsightsMovementB({
 }) {
   const moveOpacity = useTransform(
     scrollYProgress,
-    [0.52, 0.55, 0.65, 0.68],
+    [0.56, 0.59, 0.72, 0.75],
     [0, 1, 1, 0],
   );
-  const enterY = useTransform(scrollYProgress, [0.52, 0.55], [30, 0]);
+  const enterY = useTransform(scrollYProgress, [0.56, 0.59], [30, 0]);
 
-  const coldOpacity = useTransform(scrollYProgress, [0.55, 0.58], [0, 1]);
-  const coldLabelOpacity = useTransform(scrollYProgress, [0.56, 0.58], [0, 1]);
+  const coldOpacity = useTransform(scrollYProgress, [0.59, 0.62], [0, 1]);
+  const coldLabelOpacity = useTransform(scrollYProgress, [0.60, 0.62], [0, 1]);
 
-  const warmOpacity = useTransform(scrollYProgress, [0.58, 0.61], [0, 1]);
-  const warmLeg1Dash = useTransform(scrollYProgress, [0.58, 0.61], [1, 0]);
-  const warmLeg2Dash = useTransform(scrollYProgress, [0.59, 0.62], [1, 0]);
-  const warmLabel1Opacity = useTransform(scrollYProgress, [0.6, 0.62], [0, 1]);
-  const warmLabel2Opacity = useTransform(scrollYProgress, [0.61, 0.63], [0, 1]);
+  const warmOpacity = useTransform(scrollYProgress, [0.62, 0.65], [0, 1]);
+  const warmLeg1Dash = useTransform(scrollYProgress, [0.62, 0.65], [1, 0]);
+  const warmLeg2Dash = useTransform(scrollYProgress, [0.63, 0.66], [1, 0]);
+  const warmLabel1Opacity = useTransform(scrollYProgress, [0.64, 0.66], [0, 1]);
+  const warmLabel2Opacity = useTransform(scrollYProgress, [0.65, 0.67], [0, 1]);
 
-  const insightOpacity = useTransform(scrollYProgress, [0.62, 0.64], [0, 1]);
-  const insightY = useTransform(scrollYProgress, [0.62, 0.64], [16, 0]);
-  const recommendOpacity = useTransform(scrollYProgress, [0.64, 0.66], [0, 1]);
-  const recommendY = useTransform(scrollYProgress, [0.64, 0.66], [16, 0]);
+  const insightOpacity = useTransform(scrollYProgress, [0.66, 0.68], [0, 1]);
+  const insightY = useTransform(scrollYProgress, [0.66, 0.68], [16, 0]);
+  const recommendOpacity = useTransform(scrollYProgress, [0.68, 0.70], [0, 1]);
+  const recommendY = useTransform(scrollYProgress, [0.68, 0.70], [16, 0]);
 
-  // Using a 100x100 coord system ensures flawless responsive scaling
   const youX = -14,
     youY = -8;
   const targetX = 14,
@@ -1071,7 +928,10 @@ function InsightsMovementB({
           <div className="h-px mx-5 bg-gradient-to-r from-transparent via-zinc-200/60 to-transparent" />
 
           {/* Recommendation body */}
-          <motion.div style={{ opacity: recommendOpacity, y: recommendY }} className="p-5">
+          <motion.div
+            style={{ opacity: recommendOpacity, y: recommendY }}
+            className="p-5"
+          >
             <div className="flex items-center gap-2 mb-3">
               <svg
                 className="w-4 h-4 text-emerald-600"
@@ -1103,7 +963,8 @@ function InsightsMovementB({
                 {insights.path.intermediary.name}
               </span>{" "}
               for an intro to {insights.path.target.name}. They were in the same
-              IIT batch. She introduced you to two others in his circle last year.
+              IIT batch. She introduced you to two others in his circle last
+              year.
             </div>
 
             <div className="mt-4 flex items-center gap-2">
@@ -1123,263 +984,168 @@ function InsightsMovementB({
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// KEEP UP COMPONENTS
+// NEW APPLE LIQUID GLASS KEEP UP SECTION
 // ═══════════════════════════════════════════════════════════════════════════
 
-function NudgeCard({
-  nudge,
+function LiquidKeepUpSection({
   scrollYProgress,
-  enterRange,
-  exitRange,
 }: {
-  nudge: NudgeData;
   scrollYProgress: MotionValue<number>;
-  enterRange: [number, number];
-  exitRange: [number, number];
 }) {
-  const opacity = useTransform(
+  const enterOp = useTransform(scrollYProgress, [0.76, 0.80], [0, 1]);
+  const enterY = useTransform(scrollYProgress, [0.76, 0.80], [40, 0]);
+  const exitOp = useTransform(scrollYProgress, [0.94, 0.98], [1, 0]);
+  const exitY = useTransform(scrollYProgress, [0.94, 0.98], [0, -20]);
+
+  const opacity = useTransform(scrollYProgress, (v) => {
+    if (v < 0.76) return 0;
+    if (v > 0.98) return 0;
+    if (v >= 0.80 && v <= 0.94) return 1;
+    if (v < 0.80) return enterOp.get();
+    return exitOp.get();
+  });
+
+  const y = useTransform(scrollYProgress, (v) => {
+    if (v < 0.80) return enterY.get();
+    if (v > 0.94) return exitY.get();
+    return 0;
+  });
+
+  const scale = useTransform(
     scrollYProgress,
-    [enterRange[0], enterRange[1], exitRange[0], exitRange[1]],
-    [0, 1, 1, 0],
-  );
-  const y = useTransform(
-    scrollYProgress,
-    [enterRange[0], enterRange[1], exitRange[0], exitRange[1]],
-    [30, 0, 0, -20],
-  );
-  const cardScale = useTransform(
-    scrollYProgress,
-    [enterRange[0], enterRange[1], exitRange[0], exitRange[1]],
-    [0.97, 1, 1, 0.97],
-  );
-  const rotate = useTransform(
-    scrollYProgress,
-    [enterRange[0], enterRange[1], exitRange[0], exitRange[1]],
-    [1.5, 0, 0, -1],
+    [0.76, 0.80, 0.94, 0.98],
+    [0.95, 1, 1, 0.95],
   );
 
-  const msgEnter = enterRange[1] + 0.008;
-  const msgOpacity = useTransform(
-    scrollYProgress,
-    [msgEnter, msgEnter + 0.015, exitRange[0], exitRange[1]],
-    [0, 1, 1, 0],
-  );
-  const msgY = useTransform(
-    scrollYProgress,
-    [msgEnter, msgEnter + 0.015],
-    [12, 0],
-  );
+  // The Brace intervention animates in slightly later to highlight the "save"
+  const nudgeOp = useTransform(scrollYProgress, [0.80, 0.84], [0, 1]);
+  const nudgeY = useTransform(scrollYProgress, [0.80, 0.84], [20, 0]);
 
-  const btnEnter = msgEnter + 0.015;
-  const btnOpacity = useTransform(
-    scrollYProgress,
-    [btnEnter, btnEnter + 0.012, exitRange[0], exitRange[1]],
-    [0, 1, 1, 0],
-  );
+  const nudge = {
+    person: {
+      name: "Kavya Iyer",
+      initials: "KI",
+      role: "Partner, Sequoia Capital",
+    },
+    suggested:
+      "Congrats on Fund II — saw the news from Davos. Would love to hear how the thesis is evolving. Coffee next week?",
+  };
 
   return (
     <motion.div
-      style={{ opacity, y, scale: cardScale, rotate }}
+      style={{ opacity, y, scale }}
       className="absolute inset-0 flex items-center justify-center pointer-events-none z-30"
     >
-      <div className="w-[min(400px,28vw)] pointer-events-auto">
-        <div className="relative overflow-hidden bg-[rgba(242,242,247,0.88)] backdrop-blur-2xl border border-white/45 rounded-2xl p-6 shadow-[0_4px_16px_rgba(0,0,0,0.05),0_12px_40px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.5)]">
-          {/* Top shimmer accent */}
-          <div
-            className="absolute top-0 left-0 right-0 h-px"
-            style={{ background: `linear-gradient(90deg, transparent, ${nudge.accentColor}40, transparent)` }}
-          />
+      <div className="w-[min(440px,32vw)] pointer-events-auto relative group">
+        {/* Animated Liquid Orbs Behind the Glass */}
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, 90, 0],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -top-[10%] -right-[10%] w-[60%] h-[60%] bg-amber-400/30 rounded-full blur-[40px] pointer-events-none"
+        />
+        <motion.div
+          animate={{
+            scale: [1, 1.4, 1],
+            rotate: [0, -90, 0],
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -bottom-[10%] -left-[10%] w-[70%] h-[70%] bg-rose-400/20 rounded-full blur-[40px] pointer-events-none"
+        />
 
-          <PaperGrain id={`nudge-${nudge.type}`} opacity={0.03} />
+        {/* Premium Frosted Glass Card */}
+        <div className="relative overflow-hidden rounded-[2rem] bg-white/40 backdrop-blur-[40px] border border-white/70 shadow-[0_8px_32px_rgba(0,0,0,0.04),0_24px_64px_rgba(0,0,0,0.06),inset_0_2px_4px_rgba(255,255,255,0.8)] p-8">
+          <PaperGrain id="liquid-glass-grain" opacity={0.04} />
 
-          <div className="flex items-center justify-between mb-5">
-            <div className="flex items-center gap-3">
+          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80" />
+
+          <div className="flex items-center gap-4 mb-8 relative z-10">
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-white to-zinc-100 border border-white shadow-md flex items-center justify-center text-zinc-600 font-mono text-lg font-semibold backdrop-blur-md">
+              {nudge.person.initials}
+            </div>
+            <div>
               <div
-                className="w-10 h-10 rounded-full flex items-center justify-center border backdrop-blur-md shadow-sm"
-                style={{
-                  backgroundColor: nudge.badgeBg,
-                  borderColor: nudge.accentColor + "25",
-                  color: nudge.accentColor,
-                }}
+                className="text-[20px] font-semibold text-zinc-900 tracking-tight leading-none mb-1.5"
+                style={{ fontFamily: fonts.sans }}
               >
-                <span
-                  style={{ fontFamily: fonts.mono }}
-                  className="text-[11px] font-bold tracking-wider"
+                {nudge.person.name}
+              </div>
+              <div
+                className="text-[13px] text-zinc-500 font-medium"
+                style={{ fontFamily: fonts.mono }}
+              >
+                {nudge.person.role}
+              </div>
+            </div>
+          </div>
+
+          {/* The "Silence" State */}
+          <div className="relative pl-4 border-l-2 border-red-200 mb-8 z-10">
+            <div className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.6)] animate-pulse" />
+            <div className="text-[10px] font-mono font-bold tracking-[0.15em] uppercase text-red-500 mb-2">
+              Fading Connection
+            </div>
+            <div
+              className="text-[14px] text-zinc-600 leading-relaxed"
+              style={{ fontFamily: fonts.sans }}
+            >
+              No contact for 3 months. She usually allocates capital in Q1.
+            </div>
+          </div>
+
+          {/* The AI "Intervention" */}
+          <motion.div
+            style={{ opacity: nudgeOp, y: nudgeY }}
+            className="relative z-10"
+          >
+            <div className="relative overflow-hidden bg-white/60 backdrop-blur-xl rounded-2xl p-5 border border-white/80 shadow-[0_8px_24px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,1)]">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-300 to-orange-400" />
+              <div className="flex items-center gap-2 mb-3">
+                <svg
+                  className="w-3.5 h-3.5 text-amber-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
                 >
-                  {nudge.person.initials}
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+                  />
+                </svg>
+                <span className="text-[10px] font-mono font-bold tracking-[0.12em] uppercase text-amber-600">
+                  Brace Suggestion
                 </span>
               </div>
-              <div>
-                <div
-                  style={{ fontFamily: fonts.sans }}
-                  className="text-[15px] font-semibold text-zinc-800 tracking-tight leading-none mb-1"
-                >
-                  {nudge.person.name}
-                </div>
-                <div
-                  style={{ fontFamily: fonts.mono }}
-                  className="text-[11px] text-zinc-500"
-                >
-                  {nudge.person.role}
-                </div>
-              </div>
-            </div>
-            <div className="px-3 py-1.5 rounded-full bg-[rgba(242,242,247,0.8)] backdrop-blur-xl border border-white/40 shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.4)]">
-              <span
-                style={{
-                  fontFamily: fonts.mono,
-                  color: nudge.badgeColor,
-                }}
-                className="text-[9px] font-bold uppercase tracking-wider"
-              >
-                {nudge.badge}
-              </span>
-            </div>
-          </div>
-
-          {/* Divider */}
-          <div className="h-px w-full bg-gradient-to-r from-zinc-200/60 via-zinc-200/30 to-transparent mb-5" />
-
-          <div className="mb-5">
-            <div
-              style={{ fontFamily: fonts.mono }}
-              className="text-[9px] tracking-[0.15em] uppercase text-zinc-400 font-bold mb-2"
-            >
-              Context
-            </div>
-            <div
-              style={{ fontFamily: fonts.sans }}
-              className="text-[13px] text-zinc-600 leading-relaxed"
-            >
-              {nudge.whyNow}
-            </div>
-          </div>
-
-          <motion.div
-            style={{ opacity: msgOpacity, y: msgY }}
-            className="mb-5"
-          >
-            <div
-              style={{ fontFamily: fonts.mono }}
-              className="text-[9px] tracking-[0.15em] uppercase text-zinc-400 font-bold mb-2"
-            >
-              Draft
-            </div>
-            <div className="relative overflow-hidden rounded-xl bg-white/50 backdrop-blur-xl border border-white/60 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] py-3 px-4">
-              <div
-                className="absolute left-0 top-0 bottom-0 w-0.5 rounded-full"
-                style={{ backgroundColor: nudge.accentColor, opacity: 0.5 }}
-              />
-              <div
-                style={{ fontFamily: fonts.serif }}
-                className="text-[13px] italic text-zinc-700 leading-relaxed pl-2"
-              >
+              <p className="text-[13px] font-serif italic text-zinc-800 leading-relaxed mb-4">
                 &ldquo;{nudge.suggested}&rdquo;
-              </div>
+              </p>
+              <button className="w-full bg-zinc-900 text-white rounded-xl py-3 text-[13px] font-medium shadow-md hover:bg-zinc-800 transition-colors flex items-center justify-center gap-2">
+                Review Draft
+                <svg
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  />
+                </svg>
+              </button>
             </div>
-          </motion.div>
-
-          <motion.div
-            style={{ opacity: btnOpacity }}
-            className="flex gap-2"
-          >
-            <button
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[13px] font-semibold transition-all hover:brightness-105 active:scale-[0.97] bg-[rgba(242,242,247,0.8)] backdrop-blur-xl border border-white/50 shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.4)]"
-              style={{
-                fontFamily: fonts.sans,
-                color: nudge.accentColor,
-              }}
-            >
-              Review & Send
-              <svg
-                className="w-3.5 h-3.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M14 5l7 7m0 0l-7 7m7-7H3"
-                />
-              </svg>
-            </button>
-            <button
-              style={{ fontFamily: fonts.sans }}
-              className="px-4 py-2 rounded-xl text-[13px] font-medium text-zinc-500 bg-white/40 backdrop-blur-xl border border-white/40 transition-all hover:bg-white/60 active:scale-[0.97]"
-            >
-              Dismiss
-            </button>
           </motion.div>
         </div>
-
-        {/* Card stack shadows for depth */}
-        <div className="mx-3 h-2 -mt-1 rounded-b-xl bg-[rgba(242,242,247,0.5)] backdrop-blur-lg border-x border-b border-white/30 shadow-[0_4px_12px_rgba(0,0,0,0.03)]" />
-        <div className="mx-6 h-1.5 -mt-0.5 rounded-b-lg bg-[rgba(242,242,247,0.3)] backdrop-blur-md border-x border-b border-white/20 shadow-[0_4px_8px_rgba(0,0,0,0.02)]" />
       </div>
     </motion.div>
-  );
-}
-
-function KeepUpSection({
-  scrollYProgress,
-}: {
-  scrollYProgress: MotionValue<number>;
-}) {
-  const cardRanges: { enter: [number, number]; exit: [number, number] }[] = [
-    { enter: [0.74, 0.78], exit: [0.81, 0.83] },
-    { enter: [0.83, 0.87], exit: [0.89, 0.91] },
-    { enter: [0.91, 0.94], exit: [0.96, 0.98] },
-  ];
-
-  const dot0 = useTransform(
-    scrollYProgress,
-    [0.74, 0.78, 0.81, 0.83],
-    [0.3, 1, 1, 0.3],
-  );
-  const dot1 = useTransform(
-    scrollYProgress,
-    [0.83, 0.87, 0.89, 0.91],
-    [0.3, 1, 1, 0.3],
-  );
-  const dot2 = useTransform(
-    scrollYProgress,
-    [0.91, 0.94, 0.96, 0.98],
-    [0.3, 1, 1, 0.3],
-  );
-  const dotOpacities = [dot0, dot1, dot2];
-  const dotsContainerOpacity = useTransform(
-    scrollYProgress,
-    [0.74, 0.78, 0.96, 0.98],
-    [0, 1, 1, 0],
-  );
-
-  return (
-    <>
-      {nudges.map((nudge, i) => (
-        <NudgeCard
-          key={nudge.type}
-          nudge={nudge}
-          scrollYProgress={scrollYProgress}
-          enterRange={cardRanges[i].enter}
-          exitRange={cardRanges[i].exit}
-        />
-      ))}
-
-      <motion.div
-        style={{ opacity: dotsContainerOpacity }}
-        className="absolute left-1/2 bottom-[10vh] -translate-x-1/2 flex gap-2.5 z-40"
-      >
-        {dotOpacities.map((dotOp, i) => (
-          <motion.div
-            key={i}
-            style={{ opacity: dotOp }}
-            className="w-1.5 h-1.5 rounded-full bg-zinc-400"
-          />
-        ))}
-      </motion.div>
-    </>
   );
 }
 
@@ -1397,48 +1163,48 @@ export default function NetworkSection() {
   // ── Left Panel: Section labels (3 crossfading) ──
   const label01Opacity = useTransform(
     scrollYProgress,
-    [0.01, 0.04, 0.31, 0.35],
+    [0.01, 0.04, 0.33, 0.37],
     [0, 1, 1, 0],
   );
   const label02Opacity = useTransform(
     scrollYProgress,
-    [0.35, 0.39, 0.64, 0.68],
+    [0.37, 0.41, 0.72, 0.75],
     [0, 1, 1, 0],
   );
   const label03Opacity = useTransform(
     scrollYProgress,
-    [0.68, 0.72, 0.93, 0.96],
+    [0.75, 0.79, 0.96, 0.98],
     [0, 1, 1, 0],
   );
 
   // ── Left Panel: Headlines (4 crossfading) ──
   const h1Opacity = useTransform(
     scrollYProgress,
-    [0.01, 0.04, 0.31, 0.35],
+    [0.01, 0.04, 0.33, 0.37],
     [0, 1, 1, 0],
   );
   const h1Y = useTransform(scrollYProgress, [0.01, 0.04], [20, 0]);
 
   const h2Opacity = useTransform(
     scrollYProgress,
-    [0.35, 0.39, 0.51, 0.54],
+    [0.37, 0.41, 0.55, 0.58],
     [0, 1, 1, 0],
   );
-  const h2Y = useTransform(scrollYProgress, [0.35, 0.39], [20, 0]);
+  const h2Y = useTransform(scrollYProgress, [0.37, 0.41], [20, 0]);
 
   const h3Opacity = useTransform(
     scrollYProgress,
-    [0.52, 0.56, 0.64, 0.68],
+    [0.56, 0.60, 0.72, 0.75],
     [0, 1, 1, 0],
   );
-  const h3Y = useTransform(scrollYProgress, [0.52, 0.56], [20, 0]);
+  const h3Y = useTransform(scrollYProgress, [0.56, 0.60], [20, 0]);
 
   const h4Opacity = useTransform(
     scrollYProgress,
-    [0.68, 0.72, 0.93, 0.96],
+    [0.75, 0.79, 0.96, 0.98],
     [0, 1, 1, 0],
   );
-  const h4Y = useTransform(scrollYProgress, [0.68, 0.72], [20, 0]);
+  const h4Y = useTransform(scrollYProgress, [0.75, 0.79], [20, 0]);
 
   // ── Left Panel: Subtexts (5 crossfading) ──
   const sub1Opacity = useTransform(
@@ -1448,22 +1214,22 @@ export default function NetworkSection() {
   );
   const sub2Opacity = useTransform(
     scrollYProgress,
-    [0.22, 0.26, 0.31, 0.35],
+    [0.22, 0.26, 0.33, 0.37],
     [0, 1, 1, 0],
   );
   const sub3Opacity = useTransform(
     scrollYProgress,
-    [0.39, 0.43, 0.51, 0.54],
+    [0.41, 0.45, 0.55, 0.58],
     [0, 1, 1, 0],
   );
   const sub4Opacity = useTransform(
     scrollYProgress,
-    [0.54, 0.58, 0.64, 0.68],
+    [0.58, 0.62, 0.72, 0.75],
     [0, 1, 1, 0],
   );
   const sub5Opacity = useTransform(
     scrollYProgress,
-    [0.72, 0.76, 0.93, 0.96],
+    [0.79, 0.83, 0.96, 0.98],
     [0, 1, 1, 0],
   );
 
@@ -1480,7 +1246,7 @@ export default function NetworkSection() {
     <section
       ref={sectionRef}
       className="relative bg-white"
-      style={{ height: "1200vh" }}
+      style={{ height: "1500vh" }}
     >
       <motion.div
         className="sticky top-0 h-screen overflow-hidden flex bg-white/50 backdrop-blur-2xl"
@@ -1641,8 +1407,8 @@ export default function NetworkSection() {
           {/* ── Insights Movement B (52% – 68%) ── */}
           <InsightsMovementB scrollYProgress={scrollYProgress} />
 
-          {/* ── Keep Up (72% – 94%) ── */}
-          <KeepUpSection scrollYProgress={scrollYProgress} />
+          {/* ── Keep Up (72% – 98%) ── */}
+          <LiquidKeepUpSection scrollYProgress={scrollYProgress} />
         </div>
       </motion.div>
     </section>
