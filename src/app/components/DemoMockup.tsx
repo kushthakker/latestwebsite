@@ -1,7 +1,17 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useCallback, useState, type ReactNode } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+
+// ─────────────────────────────────────────────────────
+// Design Tokens
+// ─────────────────────────────────────────────────────
+
+const fonts = {
+  sans: "var(--font-geist-sans), system-ui, -apple-system, sans-serif",
+  mono: "var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+  serif: "ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif",
+};
 
 // ─────────────────────────────────────────────────────
 // Types & Data
@@ -241,8 +251,157 @@ const DEMO_SIGNALS: DemoSignal[] = [
 ];
 
 // ─────────────────────────────────────────────────────
+// UI Themes
+// ─────────────────────────────────────────────────────
+
+const SOURCE_THEMES: Record<
+  string,
+  {
+    label: string;
+    color: string;
+    bg: string;
+    border: string;
+    soft: string;
+  }
+> = {
+  email: {
+    label: "Email",
+    color: "#2c7be5",
+    bg: "rgba(44,123,229,0.10)",
+    border: "rgba(44,123,229,0.18)",
+    soft: "rgba(44,123,229,0.16)",
+  },
+  linkedin: {
+    label: "LinkedIn",
+    color: "#5856d6",
+    bg: "rgba(88,86,214,0.10)",
+    border: "rgba(88,86,214,0.18)",
+    soft: "rgba(88,86,214,0.15)",
+  },
+  memory: {
+    label: "Memory",
+    color: "#b3601e",
+    bg: "rgba(179,96,30,0.09)",
+    border: "rgba(179,96,30,0.18)",
+    soft: "rgba(179,96,30,0.13)",
+  },
+  news: {
+    label: "News",
+    color: "#c2410c",
+    bg: "rgba(194,65,12,0.09)",
+    border: "rgba(194,65,12,0.18)",
+    soft: "rgba(194,65,12,0.14)",
+  },
+  quiet: {
+    label: "Quiet",
+    color: "#2d7d4f",
+    bg: "rgba(45,125,79,0.10)",
+    border: "rgba(45,125,79,0.18)",
+    soft: "rgba(45,125,79,0.14)",
+  },
+};
+
+const PROXIMITY_THEMES = {
+  close: {
+    label: "inner circle",
+    color: "#2d7d4f",
+    bg: "rgba(45,125,79,0.10)",
+    border: "rgba(45,125,79,0.16)",
+  },
+  known: {
+    label: "known",
+    color: "#2c7be5",
+    bg: "rgba(44,123,229,0.10)",
+    border: "rgba(44,123,229,0.16)",
+  },
+  new: {
+    label: "new",
+    color: "#71717a",
+    bg: "rgba(113,113,122,0.10)",
+    border: "rgba(113,113,122,0.16)",
+  },
+} as const;
+
+const CHANNEL_LABELS: Record<string, string> = {
+  email: "email",
+  linkedin: "LinkedIn comment",
+  dm: "direct message",
+};
+
+// ─────────────────────────────────────────────────────
 // Helpers & Icons
 // ─────────────────────────────────────────────────────
+
+function getInitials(name: string) {
+  return name
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+}
+
+function PaperGrain({ id, opacity = 0.03 }: { id: string; opacity?: number }) {
+  return (
+    <svg
+      className="pointer-events-none absolute inset-0 h-full w-full mix-blend-overlay"
+      style={{ opacity }}
+    >
+      <filter id={id}>
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.8"
+          numOctaves="4"
+          stitchTiles="stitch"
+        />
+        <feColorMatrix type="saturate" values="0" />
+      </filter>
+      <rect width="100%" height="100%" filter={`url(#${id})`} />
+    </svg>
+  );
+}
+
+function GlassSurface({
+  children,
+  className = "",
+  grainId,
+}: {
+  children: ReactNode;
+  className?: string;
+  grainId: string;
+}) {
+  return (
+    <div
+      className={`relative min-h-0 overflow-hidden rounded-[30px] border border-white/55 bg-[rgba(242,242,247,0.72)] backdrop-blur-[28px] shadow-[0_4px_16px_rgba(0,0,0,0.05),0_18px_60px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.72)] ${className}`}
+    >
+      <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-90" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.28),rgba(255,255,255,0.04)_34%,rgba(255,255,255,0.12)_100%)]" />
+      <PaperGrain id={grainId} opacity={0.028} />
+      {children}
+    </div>
+  );
+}
+
+function SectionEyebrow({
+  label,
+  color = "#71717a",
+}: {
+  label: string;
+  color?: string;
+}) {
+  return (
+    <span
+      style={{ fontFamily: fonts.mono, color }}
+      className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em]"
+    >
+      <span
+        className="h-1.5 w-1.5 rounded-full"
+        style={{ backgroundColor: color }}
+      />
+      {label}
+    </span>
+  );
+}
 
 function SourceIcon({
   source,
@@ -251,7 +410,8 @@ function SourceIcon({
   source: string;
   className?: string;
 }) {
-  const baseClasses = "text-zinc-500 w-4 h-4 " + className;
+  const baseClasses = "h-4 w-4 " + className;
+
   switch (source) {
     case "email":
       return (
@@ -370,74 +530,158 @@ function DemoSignalInbox({
   onSelect: (id: string) => void;
 }) {
   return (
-    <div className="flex flex-col h-full bg-white rounded-2xl border border-black/5 shadow-[0_4px_24px_rgba(0,0,0,0.02)] overflow-hidden">
-      <div className="px-5 py-4 border-b border-black/5 flex items-center justify-between bg-zinc-50/50">
-        <span className="text-[11px] font-mono tracking-widest text-zinc-400 uppercase font-medium">
-          For You
-        </span>
-        <span className="text-[11px] font-mono text-zinc-400">
-          {signals.length} signals
-        </span>
-      </div>
-
-      <div className="flex-1 overflow-y-auto min-h-0 p-2 space-y-1">
-        {signals.map((signal) => {
-          const isSelected = signal.id === selectedId;
-          return (
-            <motion.div
-              key={signal.id}
-              onClick={() => onSelect(signal.id)}
-              whileHover={{ scale: 0.99 }}
-              whileTap={{ scale: 0.98 }}
-              className={`relative cursor-pointer rounded-xl p-3 transition-colors duration-200 flex gap-3 ${
-                isSelected ? "bg-zinc-100/80 shadow-sm" : "hover:bg-zinc-50"
-              }`}
+    <GlassSurface grainId="demo-inbox-grain" className="flex h-full min-h-0 flex-col">
+      <div className="relative border-b border-white/45 px-4 pb-3 pt-4">
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.28),rgba(255,255,255,0.08))]" />
+        <div className="relative flex items-start justify-between gap-3">
+          <div>
+            <SectionEyebrow label="For You" />
+            <div
+              style={{ fontFamily: fonts.sans }}
+              className="mt-1.5 text-[18px] font-medium tracking-tight text-zinc-900"
             >
-              {isSelected && (
-                <motion.div
-                  layoutId="active-indicator"
-                  className="absolute left-0 top-3 bottom-3 w-[3px] bg-black rounded-r-full"
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                />
-              )}
+              Relationship feed
+            </div>
+            <p
+              style={{ fontFamily: fonts.sans }}
+              className="mt-0.5 text-[12px] leading-snug text-zinc-500"
+            >
+              Signals ranked by urgency, context, and relationship value.
+            </p>
+          </div>
 
-              <div className="flex-shrink-0 pt-0.5">
-                <SourceIcon
-                  source={signal.source}
-                  className={isSelected ? "text-black" : "text-zinc-400"}
-                />
-              </div>
-
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between mb-1">
-                  <span
-                    className={`text-sm font-medium truncate ${isSelected ? "text-black" : "text-zinc-700"}`}
-                  >
-                    {signal.personName}
-                  </span>
-                  <span className="text-[10px] text-zinc-400 font-mono whitespace-nowrap ml-2">
-                    {signal.timestamp}
-                  </span>
-                </div>
-
-                <p className="text-xs text-zinc-500 line-clamp-1 pr-2 mb-1">
-                  {signal.isFollowUp && (
-                    <span className="text-blue-500 font-medium mr-1">re:</span>
-                  )}
-                  {signal.content}
-                </p>
-
-                <p
-                  className={`text-xs italic line-clamp-1 pr-2 ${isSelected ? "text-zinc-600" : "text-zinc-400"}`}
-                >
-                  {signal.insight}
-                </p>
-              </div>
-            </motion.div>
-          );
-        })}
+          <div className="rounded-full border border-white/60 bg-white/45 px-3 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.65)] backdrop-blur-xl">
+            <div
+              style={{ fontFamily: fonts.mono }}
+              className="text-[10px] uppercase tracking-[0.18em] text-zinc-500"
+            >
+              {signals.length} live
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+
+      <div className="demo-no-scrollbar min-h-0 flex-1 overflow-y-auto px-2 py-2.5">
+        <div className="space-y-1.5">
+          {signals.map((signal) => {
+            const isSelected = signal.id === selectedId;
+            const theme = SOURCE_THEMES[signal.source] ?? SOURCE_THEMES.email;
+
+            return (
+              <motion.button
+                key={signal.id}
+                type="button"
+                onClick={() => onSelect(signal.id)}
+                whileHover={{ y: -1, scale: 0.995 }}
+                whileTap={{ scale: 0.99 }}
+                transition={{ duration: 0.18, ease: "easeOut" }}
+                className="group relative w-full overflow-hidden rounded-[22px] text-left"
+              >
+                <div
+                  className={`relative border px-3.5 py-3.5 transition-all duration-250 ${
+                    isSelected
+                      ? "border-white/70 bg-white/60 shadow-[0_10px_30px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.72)]"
+                      : "border-white/45 bg-white/30 shadow-[0_4px_14px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.55)] group-hover:bg-white/42"
+                  }`}
+                >
+                  {isSelected && (
+                    <>
+                      <motion.div
+                        layoutId="demo-signal-active"
+                        className="absolute inset-0 rounded-[22px]"
+                        style={{
+                          boxShadow: `inset 0 0 0 1px ${theme.border}, 0 16px 34px ${theme.soft}`,
+                        }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 260,
+                          damping: 30,
+                        }}
+                      />
+                      <motion.div
+                        layoutId="demo-signal-rail"
+                        className="absolute bottom-3 top-3 left-0 w-[3px] rounded-r-full"
+                        style={{ backgroundColor: theme.color }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 260,
+                          damping: 30,
+                        }}
+                      />
+                    </>
+                  )}
+
+                  <div className="relative z-10 flex gap-3">
+                    <div
+                      className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.55)]"
+                      style={{
+                        backgroundColor: theme.bg,
+                        borderColor: theme.border,
+                        color: theme.color,
+                      }}
+                    >
+                      <SourceIcon
+                        source={signal.source}
+                        className="h-[15px] w-[15px]"
+                      />
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                      <div className="mb-1.5 flex items-start justify-between gap-2">
+                        <div className="min-w-0">
+                          <div
+                            style={{ fontFamily: fonts.sans }}
+                            className="truncate text-[14px] font-semibold tracking-tight text-zinc-900"
+                          >
+                            {signal.personName}
+                          </div>
+                          <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                            <span
+                              style={{
+                                fontFamily: fonts.mono,
+                                color: theme.color,
+                                backgroundColor: theme.bg,
+                                borderColor: theme.border,
+                              }}
+                              className="rounded-full border px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.16em]"
+                            >
+                              {SOURCE_THEMES[signal.source]?.label ??
+                                signal.source}
+                            </span>
+                            {signal.isFollowUp && (
+                              <span
+                                style={{ fontFamily: fonts.mono }}
+                                className="rounded-full border border-white/60 bg-white/55 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-zinc-500"
+                              >
+                                follow-up
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <span
+                          style={{ fontFamily: fonts.mono }}
+                          className="shrink-0 pt-0.5 text-[10px] text-zinc-400"
+                        >
+                          {signal.timestamp}
+                        </span>
+                      </div>
+
+                      <p
+                        style={{ fontFamily: fonts.sans }}
+                        className="line-clamp-2 pr-3 text-[12px] leading-relaxed text-zinc-500"
+                      >
+                        {signal.content}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </motion.button>
+            );
+          })}
+        </div>
+      </div>
+    </GlassSurface>
   );
 }
 
@@ -450,278 +694,466 @@ function DemoSignalDetail({
   sendState: "idle" | "sending" | "sent";
   onSend: () => void;
 }) {
+  const theme = SOURCE_THEMES[signal.source] ?? SOURCE_THEMES.email;
+
   return (
-    <div className="flex flex-col h-full bg-white rounded-2xl border border-black/5 shadow-[0_8px_32px_rgba(0,0,0,0.03)] overflow-hidden relative">
+    <GlassSurface grainId="demo-detail-grain" className="flex h-full min-h-0 flex-col">
+      <div
+        className="pointer-events-none absolute -left-[10%] top-[-8%] h-[42%] w-[60%] rounded-full blur-3xl"
+        style={{ backgroundColor: theme.soft }}
+      />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.45),transparent_32%)]" />
+
       <AnimatePresence mode="wait">
         <motion.div
           key={signal.id}
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
-          className="flex-1 flex flex-col h-full overflow-hidden"
+          exit={{ opacity: 0, y: -12 }}
+          transition={{ duration: 0.24, ease: "easeOut" }}
+          className="relative z-10 flex h-full min-h-0 flex-col"
         >
-          {/* Header */}
-          <div className="px-8 py-6 border-b border-black/5 bg-zinc-50/30">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 rounded-md text-[10px] font-mono tracking-wider text-zinc-500 uppercase">
-                <SourceIcon source={signal.source} className="w-3 h-3" />
-                {signal.source}
-              </span>
-              <span className="text-[10px] font-mono text-zinc-400">
-                {signal.timestamp}
-              </span>
-            </div>
-            <h2 className="text-[22px] leading-snug font-medium tracking-tight text-zinc-900">
-              {signal.insight}
-            </h2>
-          </div>
+          <div className="border-b border-white/45 px-5 pb-3 pt-4">
+            <div className="mb-2.5 flex items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <span
+                  style={{
+                    fontFamily: fonts.mono,
+                    color: theme.color,
+                    backgroundColor: theme.bg,
+                    borderColor: theme.border,
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] shadow-[inset_0_1px_0_rgba(255,255,255,0.55)]"
+                >
+                  <SourceIcon source={signal.source} className="h-3.5 w-3.5" />
+                  {SOURCE_THEMES[signal.source]?.label ?? signal.source}
+                </span>
 
-          {/* Reasoning Chain */}
-          <div className="flex-1 overflow-y-auto px-8 py-8">
-            <div className="relative pl-4 border-l-2 border-zinc-100 space-y-6">
-              {[
-                { label: "because", text: signal.because },
-                { label: "and", text: signal.and },
-                { label: "so", text: signal.so, isFinal: true },
-              ].map((step, i) => (
-                <div key={i} className="relative">
-                  <div
-                    className={`absolute -left-[21px] top-1.5 w-2.5 h-2.5 rounded-full border-2 border-white ${step.isFinal ? "bg-black" : "bg-zinc-300"}`}
-                  />
-                  <span className="block text-[10px] font-mono uppercase tracking-widest text-zinc-400 mb-1.5">
-                    {step.label}
+                <span
+                  style={{ fontFamily: fonts.mono }}
+                  className="rounded-full border border-white/60 bg-white/45 px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-zinc-500"
+                >
+                  {signal.timestamp}
+                </span>
+
+                {signal.isFollowUp && (
+                  <span
+                    style={{
+                      fontFamily: fonts.mono,
+                      color: theme.color,
+                      backgroundColor: theme.bg,
+                      borderColor: theme.border,
+                    }}
+                    className="rounded-full border px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.18em]"
+                  >
+                    Re: {signal.followUpContext}
                   </span>
-                  <p className="text-sm leading-relaxed text-zinc-600">
-                    {step.text}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
+                )}
+              </div>
 
-          {/* Action Footer */}
-          <div className="p-6 bg-[#FAFAFA] border-t border-black/5">
-            <div className="mb-3 flex items-center justify-between">
-              <span className="text-[10px] font-mono tracking-widest text-zinc-400 uppercase">
-                Suggested {signal.actionChannel}
+              <span
+                style={{ fontFamily: fonts.mono }}
+                className="text-[10px] uppercase tracking-[0.18em] text-zinc-400"
+              >
+                Action brief
               </span>
             </div>
 
-            <div className="bg-white border border-black/5 rounded-xl p-4 shadow-sm mb-4 relative overflow-hidden group">
-              <div className="absolute left-0 top-0 bottom-0 w-1 bg-black/10 group-hover:bg-black/20 transition-colors" />
-              <p className="text-sm text-zinc-800 leading-relaxed whitespace-pre-wrap font-sans">
-                {signal.suggestedText}
+            <div className="mb-2.5">
+              <SectionEyebrow label={signal.personName} color={theme.color} />
+              <h2
+                style={{ fontFamily: fonts.sans }}
+                className="mt-1.5 line-clamp-2 text-[18px] font-medium leading-snug tracking-[-0.03em] text-zinc-900"
+              >
+                {signal.insight}
+              </h2>
+            </div>
+
+            <div className="rounded-[18px] border border-white/55 bg-white/40 px-3 py-2.5 shadow-[0_6px_24px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.64)] backdrop-blur-xl">
+              <span
+                style={{ fontFamily: fonts.mono }}
+                className="mb-1 block text-[9px] font-semibold uppercase tracking-[0.18em] text-zinc-400"
+              >
+                Source snapshot
+              </span>
+              <p
+                style={{ fontFamily: fonts.sans }}
+                className="line-clamp-1 text-[13px] leading-snug text-zinc-700"
+              >
+                {signal.content}
               </p>
             </div>
+          </div>
 
-            <div className="flex items-center gap-3">
-              <button
-                onClick={onSend}
-                disabled={sendState !== "idle"}
-                className={`
-                  relative overflow-hidden flex items-center justify-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300
-                  ${sendState === "idle" ? "bg-black text-white hover:bg-zinc-800 shadow-md hover:shadow-lg hover:-translate-y-0.5" : ""}
-                  ${sendState === "sending" ? "bg-zinc-100 text-zinc-400 cursor-not-allowed" : ""}
-                  ${sendState === "sent" ? "bg-emerald-500 text-white shadow-md" : ""}
-                `}
-              >
-                <span className="block relative z-10 capitalize">
-                  {sendState === "idle"
-                    ? signal.actionLabel
-                    : sendState === "sending"
-                      ? "Sending..."
-                      : "Sent"}
+          <div className="flex min-h-0 flex-1 flex-col px-5 pb-4 pt-3">
+            <div className="min-h-0 flex flex-1 flex-col rounded-[22px] border border-white/50 bg-white/34 p-4 shadow-[0_6px_20px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.55)] backdrop-blur-xl">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <SectionEyebrow label="Why now" color={theme.color} />
+                <span
+                  style={{ fontFamily: fonts.mono }}
+                  className="text-[10px] uppercase tracking-[0.16em] text-zinc-400"
+                >
+                  reasoning chain
                 </span>
-                {sendState === "idle" && (
-                  <svg
-                    className="w-4 h-4 relative z-10"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M14 5l7 7m0 0l-7 7m7-7H3"
-                    />
-                  </svg>
-                )}
-                {sendState === "sent" && (
-                  <svg
-                    className="w-4 h-4 relative z-10"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                )}
-              </button>
+              </div>
 
-              <div className="flex-1 relative">
-                <input
-                  type="text"
-                  placeholder="Refine: make it shorter, add context..."
-                  className="w-full bg-white border border-black/5 rounded-full px-5 py-2.5 text-sm text-zinc-800 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black/10 transition-all shadow-sm"
+              <div className="demo-no-scrollbar min-h-0 flex-1 overflow-y-auto">
+                <div className="relative space-y-3.5 pl-4 pr-1">
+                  <div className="absolute bottom-2 left-[5px] top-2 w-px bg-gradient-to-b from-zinc-200 via-zinc-200 to-transparent" />
+                  {[
+                    { label: "because", text: signal.because, active: false },
+                    { label: "and", text: signal.and, active: false },
+                    { label: "so", text: signal.so, active: true },
+                  ].map((step) => (
+                    <div key={step.label} className="relative">
+                      <div
+                        className="absolute left-[-15px] top-[7px] h-[11px] w-[11px] rounded-full border-2 border-white shadow-sm"
+                        style={{
+                          backgroundColor: step.active ? theme.color : "#d4d4d8",
+                        }}
+                      />
+                      <div
+                        style={{ fontFamily: fonts.mono }}
+                        className="mb-0.5 text-[10px] uppercase tracking-[0.18em] text-zinc-400"
+                      >
+                        {step.label}
+                      </div>
+                      <p
+                        style={{
+                          fontFamily: step.active ? fonts.serif : fonts.sans,
+                        }}
+                        className={`text-[14px] leading-relaxed ${
+                          step.active ? "italic text-zinc-800" : "text-zinc-600"
+                        }`}
+                      >
+                        {step.text}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-3 rounded-[22px] border border-white/50 bg-white/34 p-4 shadow-[0_6px_20px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.55)] backdrop-blur-xl">
+              <div className="mb-2">
+                <SectionEyebrow
+                  label={`Suggested ${CHANNEL_LABELS[signal.actionChannel] ?? signal.actionChannel}`}
+                  color={theme.color}
                 />
+              </div>
+
+              <div className="mb-3 overflow-hidden rounded-[18px] border border-white/60 bg-white/46 px-3.5 py-3 shadow-[0_8px_28px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.68)] backdrop-blur-xl">
+                <div
+                  className="mb-2 h-px w-full"
+                  style={{
+                    background: `linear-gradient(90deg, ${theme.border}, transparent 65%)`,
+                  }}
+                />
+                <p
+                  style={{ fontFamily: fonts.sans }}
+                  className="line-clamp-2 text-[14px] leading-snug text-zinc-800"
+                >
+                  {signal.suggestedText}
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                <motion.button
+                  type="button"
+                  onClick={onSend}
+                  disabled={sendState !== "idle"}
+                  whileHover={sendState === "idle" ? { y: -1 } : undefined}
+                  whileTap={sendState === "idle" ? { scale: 0.985 } : undefined}
+                  className={`inline-flex h-[40px] items-center justify-center gap-2 rounded-full px-5 text-[14px] font-medium transition-all duration-300 ${
+                    sendState === "idle"
+                      ? "text-white shadow-[0_14px_28px_rgba(0,0,0,0.16)]"
+                      : sendState === "sending"
+                        ? "cursor-not-allowed bg-white/50 text-zinc-400"
+                        : "bg-emerald-500 text-white shadow-[0_14px_28px_rgba(16,185,129,0.25)]"
+                  }`}
+                  style={
+                    sendState === "idle"
+                      ? {
+                          fontFamily: fonts.sans,
+                          background: `linear-gradient(180deg, ${theme.color}, color-mix(in srgb, ${theme.color} 74%, black))`,
+                        }
+                      : { fontFamily: fonts.sans }
+                  }
+                >
+                  <span className="capitalize">
+                    {sendState === "idle"
+                      ? signal.actionLabel
+                      : sendState === "sending"
+                        ? "Sending..."
+                        : "Sent"}
+                  </span>
+
+                  {sendState === "idle" && (
+                    <svg
+                      className="h-3.5 w-3.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+                      />
+                    </svg>
+                  )}
+
+                  {sendState === "sent" && (
+                    <svg
+                      className="h-3.5 w-3.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  )}
+                </motion.button>
+
+                <div className="relative flex-1">
+                  <div className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center">
+                    <svg
+                      className="h-3.5 w-3.5 text-zinc-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="1.75"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 6v12m6-6H6"
+                      />
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Refine or add context..."
+                    className="h-[40px] w-full rounded-full border border-white/60 bg-white/48 pl-10 pr-4 text-[13px] text-zinc-800 placeholder:text-zinc-400 focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/50 shadow-[0_4px_14px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.58)] backdrop-blur-xl"
+                    style={{ fontFamily: fonts.sans }}
+                  />
+                </div>
               </div>
             </div>
           </div>
         </motion.div>
       </AnimatePresence>
-    </div>
+    </GlassSurface>
   );
 }
 
 function DemoRolodexCard({ profile }: { profile: DemoProfile }) {
-  const proximityColors = {
-    close: "bg-emerald-100 text-emerald-700 border-emerald-200",
-    known: "bg-blue-100 text-blue-700 border-blue-200",
-    new: "bg-zinc-100 text-zinc-600 border-zinc-200",
-  };
+  const proximity = PROXIMITY_THEMES[profile.proximity];
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-2xl border border-black/5 shadow-[0_4px_24px_rgba(0,0,0,0.02)] overflow-hidden">
-      {/* Header Profile Area */}
-      <div className="px-6 py-6 border-b border-black/5 bg-zinc-50/50 relative">
-        <div className="absolute top-6 right-6 flex items-center gap-2">
-          <span
-            className={`px-2.5 py-0.5 rounded-full border text-[10px] font-mono uppercase tracking-wider ${proximityColors[profile.proximity]}`}
-          >
-            {profile.proximity}
-          </span>
-        </div>
-
-        <div className="w-12 h-12 bg-gradient-to-br from-zinc-200 to-zinc-300 rounded-full flex items-center justify-center text-zinc-500 font-medium text-lg mb-4 shadow-sm border border-white">
-          {profile.name
-            .split(" ")
-            .map((n) => n[0])
-            .join("")}
-        </div>
-
-        <h3 className="text-xl font-medium tracking-tight text-zinc-900 mb-1">
-          {profile.name}
-        </h3>
-        <p className="text-sm text-zinc-500">{profile.role}</p>
-
-        {profile.traits && (
-          <div className="flex flex-wrap gap-2 mt-4">
-            {profile.traits.map((trait) => (
-              <span
-                key={trait}
-                className="px-2 py-1 bg-white border border-black/5 rounded-md text-[10px] font-mono text-zinc-500 shadow-sm"
-              >
-                {trait}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
-        {/* Alignment - Premium Dark Mode Highlight */}
-        <div className="bg-zinc-900 rounded-xl p-4 shadow-md text-white">
-          <span className="text-[10px] font-mono tracking-widest text-zinc-400 uppercase block mb-2">
-            Why They Matter
-          </span>
-          <p className="text-sm leading-relaxed text-zinc-200">
-            {profile.alignment}
-          </p>
-        </div>
-
-        {/* Info Blocks */}
-        <div className="space-y-4">
-          <div>
-            <span className="text-[10px] font-mono tracking-widest text-zinc-400 uppercase block mb-1">
-              Known For
-            </span>
-            <p className="text-sm text-zinc-700 leading-relaxed">
-              {profile.knownFor}
-            </p>
-          </div>
-
-          <div className="p-3 bg-zinc-50 rounded-xl border border-black/5">
-            <span className="text-[10px] font-mono tracking-widest text-zinc-400 uppercase block mb-1">
-              Met
-            </span>
-            <p className="text-sm text-zinc-700 italic">{profile.metAt}</p>
-          </div>
-
-          {profile.remember && profile.remember.length > 0 && (
-            <div>
-              <span className="text-[10px] font-mono tracking-widest text-zinc-400 uppercase block mb-2">
-                Remember
-              </span>
-              <ul className="space-y-2">
-                {profile.remember.map((item, i) => (
-                  <li
-                    key={i}
-                    className="flex items-start gap-2 text-sm text-zinc-600"
-                  >
-                    <span className="block w-1 h-1 rounded-full bg-zinc-300 mt-2 flex-shrink-0" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {profile.circle && profile.circle.length > 0 && (
-            <div>
-              <span className="text-[10px] font-mono tracking-widest text-zinc-400 uppercase block mb-2">
-                Circle
-              </span>
-              <div className="space-y-2">
-                {profile.circle.map((person, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center justify-between p-2 hover:bg-zinc-50 rounded-lg transition-colors border border-transparent hover:border-black/5"
-                  >
-                    <span className="text-sm text-zinc-800 font-medium">
-                      {person.name}
-                    </span>
-                    <span className="text-[10px] font-mono text-zinc-400 text-right">
-                      {person.relation} {person.detail && `· ${person.detail}`}
-                    </span>
-                  </div>
-                ))}
+    <GlassSurface grainId="demo-profile-grain" className="flex h-full min-h-0 flex-col">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={profile.id}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.22, ease: "easeOut" }}
+          className="relative z-10 flex h-full min-h-0 flex-col"
+        >
+          <div className="relative overflow-hidden border-b border-white/45 px-4 pb-4 pt-4">
+            <div
+              className="pointer-events-none absolute left-[-20%] top-[-35%] h-[72%] w-[80%] rounded-full blur-3xl"
+              style={{ backgroundColor: proximity.bg }}
+            />
+            <div className="relative z-10">
+              <div className="mb-3 flex items-center justify-between">
+                <SectionEyebrow label="Rolodex" color={proximity.color} />
+                <span
+                  style={{
+                    fontFamily: fonts.mono,
+                    color: proximity.color,
+                    backgroundColor: proximity.bg,
+                    borderColor: proximity.border,
+                  }}
+                  className="rounded-full border px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.18em]"
+                >
+                  {proximity.label}
+                </span>
               </div>
-            </div>
-          )}
-        </div>
-      </div>
 
-      {/* Footer Contact */}
-      <div className="px-6 py-4 bg-zinc-50/50 border-t border-black/5 mt-auto">
-        <div className="flex items-center justify-between mb-1">
-          <span className="text-xs font-mono text-zinc-600">
-            {profile.email}
-          </span>
-          {profile.phone && (
-            <span className="text-xs font-mono text-zinc-600">
-              {profile.phone}
-            </span>
-          )}
-        </div>
-        <div className="flex items-center justify-between mt-2">
-          <span className="text-[9px] font-mono text-zinc-400 uppercase tracking-widest">
-            {profile.refId}
-          </span>
-          {profile.lastInteraction && (
-            <span className="text-[10px] text-zinc-400 italic">
-              Last: {profile.lastInteraction}
-            </span>
-          )}
-        </div>
-      </div>
-    </div>
+              <div className="flex items-center gap-2.5">
+                <div
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border backdrop-blur-md shadow-[0_6px_20px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.65)]"
+                  style={{
+                    backgroundColor: proximity.bg,
+                    borderColor: proximity.border,
+                    color: proximity.color,
+                  }}
+                >
+                  <span
+                    style={{ fontFamily: fonts.mono }}
+                    className="text-[12px] font-semibold tracking-[0.14em]"
+                  >
+                    {getInitials(profile.name)}
+                  </span>
+                </div>
+
+                <div className="min-w-0">
+                  <h3
+                    style={{ fontFamily: fonts.sans }}
+                    className="truncate text-[16px] font-medium tracking-[-0.02em] text-zinc-900"
+                  >
+                    {profile.name}
+                  </h3>
+                  <p
+                    style={{ fontFamily: fonts.sans }}
+                    className="truncate text-[11px] leading-snug text-zinc-500"
+                  >
+                    {profile.role}
+                  </p>
+                </div>
+              </div>
+
+              {profile.traits && (
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {profile.traits.map((trait) => (
+                    <span
+                      key={trait}
+                      style={{ fontFamily: fonts.mono }}
+                      className="rounded-full border border-white/60 bg-white/46 px-2 py-1 text-[9px] text-zinc-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]"
+                    >
+                      {trait}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="demo-no-scrollbar min-h-0 flex-1 overflow-y-auto px-3.5 py-3">
+            <div className="space-y-2.5">
+              <div className="overflow-hidden rounded-[18px] bg-[linear-gradient(180deg,rgba(24,24,27,0.92),rgba(39,39,42,0.88))] px-3.5 py-3 text-white shadow-[0_12px_34px_rgba(0,0,0,0.18)]">
+                <span
+                  style={{ fontFamily: fonts.mono }}
+                  className="block text-[9px] uppercase tracking-[0.18em] text-zinc-400"
+                >
+                  Why they matter
+                </span>
+                <p
+                  style={{ fontFamily: fonts.sans }}
+                  className="mt-1.5 text-[12px] leading-snug text-zinc-100"
+                >
+                  {profile.alignment}
+                </p>
+              </div>
+
+              <div className="rounded-[16px] border border-white/55 bg-white/38 px-3.5 py-3 shadow-[0_6px_20px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.56)] backdrop-blur-xl">
+                <SectionEyebrow label="Known For" />
+                <p
+                  style={{ fontFamily: fonts.sans }}
+                  className="mt-1.5 text-[12px] leading-snug text-zinc-700"
+                >
+                  {profile.knownFor}
+                </p>
+              </div>
+
+              <div className="rounded-[16px] border border-white/55 bg-white/38 px-3.5 py-3 shadow-[0_6px_20px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.56)] backdrop-blur-xl">
+                <SectionEyebrow label="Met" />
+                <p
+                  style={{ fontFamily: fonts.serif }}
+                  className="mt-1.5 text-[12px] italic leading-snug text-zinc-700"
+                >
+                  {profile.metAt}
+                </p>
+              </div>
+
+              {profile.remember && profile.remember.length > 0 && (
+                <div className="rounded-[16px] border border-white/55 bg-white/38 px-3.5 py-3 shadow-[0_6px_20px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.56)] backdrop-blur-xl">
+                  <SectionEyebrow label="Remember" color={proximity.color} />
+                  <div className="mt-2 space-y-1.5">
+                    {profile.remember.map((item) => (
+                      <div key={item} className="flex items-start gap-2">
+                        <span
+                          className="mt-1.5 h-1 w-1 shrink-0 rounded-full"
+                          style={{ backgroundColor: proximity.color }}
+                        />
+                        <p
+                          style={{ fontFamily: fonts.sans }}
+                          className="text-[11px] leading-snug text-zinc-600"
+                        >
+                          {item}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {profile.circle && profile.circle.length > 0 && (
+                <div className="rounded-[16px] border border-white/55 bg-white/38 px-3.5 py-3 shadow-[0_6px_20px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.56)] backdrop-blur-xl">
+                  <SectionEyebrow label="Circle" />
+                  <div className="mt-2 space-y-1.5">
+                    {profile.circle.map((person) => (
+                      <div
+                        key={`${person.relation}-${person.name}`}
+                        className="flex items-center justify-between gap-2 rounded-[12px] border border-white/45 bg-white/40 px-2.5 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]"
+                      >
+                        <div className="min-w-0">
+                          <div
+                            style={{ fontFamily: fonts.sans }}
+                            className="truncate text-[11px] font-medium text-zinc-800"
+                          >
+                            {person.name}
+                          </div>
+                          {person.detail && (
+                            <div
+                              style={{ fontFamily: fonts.sans }}
+                              className="truncate text-[10px] text-zinc-500"
+                            >
+                              {person.detail}
+                            </div>
+                          )}
+                        </div>
+                        <span
+                          style={{ fontFamily: fonts.mono }}
+                          className="shrink-0 text-[8px] uppercase tracking-[0.16em] text-zinc-400"
+                        >
+                          {person.relation}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="border-t border-white/45 px-4 py-3">
+            <div className="flex items-center justify-between gap-2">
+              <span
+                style={{ fontFamily: fonts.mono }}
+                className="truncate text-[10px] text-zinc-500"
+              >
+                {profile.email}
+              </span>
+              <span
+                style={{ fontFamily: fonts.mono }}
+                className="shrink-0 text-[9px] uppercase tracking-[0.16em] text-zinc-400"
+              >
+                {profile.refId}
+              </span>
+            </div>
+          </div>
+        </motion.div>
+      </AnimatePresence>
+    </GlassSurface>
   );
 }
 
@@ -736,9 +1168,10 @@ export default function DemoMockup() {
   );
 
   const selectedSignal =
-    DEMO_SIGNALS.find((s) => s.id === selectedId) || DEMO_SIGNALS[0];
+    DEMO_SIGNALS.find((signal) => signal.id === selectedId) ?? DEMO_SIGNALS[0];
+
   const selectedProfile =
-    DEMO_PROFILES[selectedSignal.personId] || DEMO_PROFILES["arjun-mehta"];
+    DEMO_PROFILES[selectedSignal.personId] ?? DEMO_PROFILES["arjun-mehta"];
 
   const handleSelect = useCallback((id: string) => {
     setSelectedId(id);
@@ -752,25 +1185,27 @@ export default function DemoMockup() {
   }, []);
 
   return (
-    <div className="demo-no-scrollbar w-full h-full flex items-stretch gap-4 p-4 bg-[#F7F7F8] rounded-[24px] border border-black/5 shadow-inner">
-      <div className="w-[30%] min-w-0 h-full">
-        <DemoSignalInbox
-          signals={DEMO_SIGNALS}
-          selectedId={selectedId}
-          onSelect={handleSelect}
-        />
-      </div>
+    <div className="relative box-border h-full w-full px-4 py-4">
+      <div className="grid h-full min-h-0 w-full grid-cols-[6fr_9fr_5fr] gap-4">
+        <div className="min-h-0 min-w-0 h-full">
+          <DemoSignalInbox
+            signals={DEMO_SIGNALS}
+            selectedId={selectedId}
+            onSelect={handleSelect}
+          />
+        </div>
 
-      <div className="w-[45%] min-w-0 h-full">
-        <DemoSignalDetail
-          signal={selectedSignal}
-          sendState={sendState}
-          onSend={handleSend}
-        />
-      </div>
+        <div className="min-h-0 min-w-0 h-full">
+          <DemoSignalDetail
+            signal={selectedSignal}
+            sendState={sendState}
+            onSend={handleSend}
+          />
+        </div>
 
-      <div className="w-[25%] min-w-0 h-full">
-        <DemoRolodexCard profile={selectedProfile} />
+        <div className="min-h-0 min-w-0 h-full">
+          <DemoRolodexCard profile={selectedProfile} />
+        </div>
       </div>
     </div>
   );
