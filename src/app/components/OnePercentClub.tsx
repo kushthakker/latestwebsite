@@ -52,6 +52,7 @@ interface NodeData {
 interface EdgeData {
   from: number;
   to: number;
+  dist: number;
 }
 
 function generateConstellation(count: number): {
@@ -110,13 +111,13 @@ function generateConstellation(count: number): {
 
       // Connect to center with some probability
       if (Math.random() < 0.12) {
-        edges.push({ from: 0, to: idx });
+        edges.push({ from: 0, to: idx, dist: 0 });
       }
 
       // Connect within cluster
       if (i > 0 && Math.random() < 0.35) {
         const prev = idx - Math.floor(Math.random() * Math.min(i, 3)) - 1;
-        if (prev >= 1) edges.push({ from: prev, to: idx });
+        if (prev >= 1) edges.push({ from: prev, to: idx, dist: 0 });
       }
     }
   }
@@ -129,10 +130,27 @@ function generateConstellation(count: number): {
       const dx = nodes[a].x - nodes[b].x;
       const dy = nodes[a].y - nodes[b].y;
       if (Math.sqrt(dx * dx + dy * dy) < 3.5) {
-        edges.push({ from: a, to: b });
+        edges.push({ from: a, to: b, dist: 0 });
       }
     }
   }
+
+  // Compute edge distances for proximity-based reveal
+  for (const edge of edges) {
+    const a = nodes[edge.from];
+    const b = nodes[edge.to];
+    edge.dist = Math.sqrt(
+      (a.baseX - b.baseX) ** 2 + (a.baseY - b.baseY) ** 2,
+    );
+  }
+
+  // Sort: center connections first, then by proximity (short edges before long)
+  edges.sort((a, b) => {
+    const aCenter = a.from === 0 || a.to === 0 ? 0 : 1;
+    const bCenter = b.from === 0 || b.to === 0 ? 0 : 1;
+    if (aCenter !== bCenter) return aCenter - bCenter;
+    return a.dist - b.dist;
+  });
 
   return { nodes, edges };
 }
@@ -338,10 +356,7 @@ function useConstellation(
       const progress = scrollRef.current;
 
       const gatherProgress = Math.min(1, Math.max(0, (progress - 0.05) / 0.45));
-      const connectionAlpha = Math.min(
-        1,
-        Math.max(0, (progress - 0.25) / 0.25),
-      );
+      const edgeCount = s.edges.length;
       const centerGlow = Math.min(1, Math.max(0, (progress - 0.45) / 0.2));
       const interactivity = Math.min(1, Math.max(0, (progress - 0.6) / 0.15));
 
@@ -469,11 +484,26 @@ function useConstellation(
         const fromNode = s.nodes[edge.from];
         const toNode = s.nodes[edge.to];
 
-        linePos.setXYZ(i * 2, fromNode.x, fromNode.y, fromNode.z);
-        linePos.setXYZ(i * 2 + 1, toNode.x, toNode.y, toNode.z);
+        // Progressive reveal — sorted so center/short edges appear first
+        const edgeRatio = i / edgeCount;
+        const edgeStart = 0.06 + edgeRatio * 0.58;
+        const edgeAlpha = Math.min(1, Math.max(0, (progress - edgeStart) / 0.12));
 
-        // Determine if line connects to a hovered node
-        let edgeBrightness = 0.15; // default subtle line
+        // Line-draw effect: connection grows from "from" toward "to"
+        const drawT = Math.min(1, edgeAlpha * 2.5);
+        const eased = drawT * drawT * (3 - 2 * drawT); // smoothstep
+        const endX = fromNode.x + (toNode.x - fromNode.x) * eased;
+        const endY = fromNode.y + (toNode.y - fromNode.y) * eased;
+        const endZ = fromNode.z + (toNode.z - fromNode.z) * eased;
+
+        linePos.setXYZ(i * 2, fromNode.x, fromNode.y, fromNode.z);
+        linePos.setXYZ(i * 2 + 1, endX, endY, endZ);
+
+        // Distance-based brightness — closer connections glow brighter
+        const distFade = Math.max(0.25, 1 - edge.dist / 7);
+
+        // Hover highlight
+        let edgeBrightness = 0.15 * distFade;
         if (
           closestNode &&
           (edge.from === s.nodes.indexOf(closestNode.node) ||
@@ -482,8 +512,11 @@ function useConstellation(
           edgeBrightness = 0.8;
         }
 
+        // Brief pulse when connection first forms
+        const pulse = edgeAlpha < 0.4 ? 1 + (1 - edgeAlpha / 0.4) * 0.6 : 1;
+
         const sparkle = Math.sin(s.time * 3 + i * 11.3) > 0.98 ? 0.4 : 0;
-        const b = (edgeBrightness + sparkle) * connectionAlpha;
+        const b = (edgeBrightness + sparkle) * edgeAlpha * pulse;
 
         lineCol.setXYZ(
           i * 2,
@@ -696,26 +729,30 @@ export default function OnePercentClub() {
             </span>
           </motion.h3>
 
-          {/* Phase 4: The Reveal */}
-          <motion.div
-            style={{
-              opacity: phase4Op,
-              y: phase4Y,
-              filter: phase4Blur,
-            }}
-            className="absolute flex flex-col items-center text-center"
-          >
-            <h2 className="text-[clamp(3rem,6vw,5rem)] font-semibold tracking-tighter text-white leading-none">
-              Welcome to the 1%.
-            </h2>
-            <p className="mt-6 text-lg tracking-wide text-white/50 font-medium">
-              Brace — The intelligence layer for human relationships.
-            </p>
+        </div>
+
+        {/* Phase 4: The Reveal — bottom-anchored so constellation breathes */}
+        <motion.div
+          style={{ opacity: phase4Op, filter: phase4Blur }}
+          className="absolute inset-0 z-10 pointer-events-none"
+        >
+          {/* Gradient stage — solid at bottom, fades to transparent */}
+          <div className="absolute inset-x-0 bottom-0 h-[50%] bg-gradient-to-t from-[#030303] from-15% via-[#030303]/50 via-55% to-transparent" />
+
+          <div className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center pb-[8vh] px-6">
+            <motion.div style={{ y: phase4Y }}>
+              <h2 className="text-[clamp(2.5rem,5vw,4.5rem)] font-semibold tracking-tighter text-white leading-none">
+                Welcome to the 1%.
+              </h2>
+              <p className="mt-5 text-[clamp(0.9rem,1.1vw,1.1rem)] tracking-wide text-white/50 font-medium">
+                Brace — The intelligence layer for human relationships.
+              </p>
+            </motion.div>
 
             {/* Premium CTA */}
             <motion.div
               style={{ opacity: ctaOp, y: ctaY }}
-              className="pointer-events-auto mt-12"
+              className="pointer-events-auto mt-10"
             >
               <a
                 href="#"
@@ -737,8 +774,8 @@ export default function OnePercentClub() {
                 </svg>
               </a>
             </motion.div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
