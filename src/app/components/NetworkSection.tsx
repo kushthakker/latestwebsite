@@ -636,7 +636,7 @@ function IntelligenceLayer({
   return (
     <motion.div
       style={{ opacity, y }}
-      className="relative bg-white border border-zinc-100 rounded-xl p-5 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.04)]"
+      className="relative bg-[rgba(242,242,247,0.88)] backdrop-blur-2xl border border-white/45 rounded-xl p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.5)]"
     >
       <div className="flex items-center gap-2 mb-3">
         <svg
@@ -675,6 +675,21 @@ function InsightsMovementA({
   const cardY = useTransform(scrollYProgress, [0.38, 0.41], [40, 0]);
   const exitOpacity = useTransform(scrollYProgress, [0.51, 0.54], [1, 0]);
 
+  const signalsOpacity = useTransform(scrollYProgress, [0.4, 0.43], [0, 1]);
+  const signalsY = useTransform(scrollYProgress, [0.4, 0.43], [16, 0]);
+  const personalOpacity = useTransform(
+    scrollYProgress,
+    [0.44, 0.47],
+    [0, 1],
+  );
+  const personalY = useTransform(scrollYProgress, [0.44, 0.47], [16, 0]);
+  const strategyOpacity = useTransform(
+    scrollYProgress,
+    [0.48, 0.51],
+    [0, 1],
+  );
+  const strategyY = useTransform(scrollYProgress, [0.48, 0.51], [16, 0]);
+
   return (
     <motion.div
       style={{ opacity: exitOpacity }}
@@ -682,95 +697,140 @@ function InsightsMovementA({
     >
       <motion.div
         style={{ opacity: cardOpacity, scale: cardScale, y: cardY }}
-        className="w-[min(400px,32vw)] flex flex-col gap-4 pointer-events-auto"
+        className="w-[min(400px,30vw)] pointer-events-auto"
       >
-        {/* Identity Header */}
-        <div className="bg-zinc-900 text-white rounded-2xl p-6 shadow-xl relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
-          <PaperGrain id="insights-identity-grain" opacity={0.06} />
-
-          <div className="relative z-10">
-            <h3
-              style={{ fontFamily: fonts.sans }}
-              className="text-xl font-medium tracking-tight mb-1"
-            >
-              {founder.name}
-            </h3>
-            <p
-              style={{ fontFamily: fonts.mono }}
-              className="text-[12px] text-zinc-400 mb-3"
-            >
-              {founder.role}
-            </p>
-            <p
-              style={{ fontFamily: fonts.serif }}
-              className="text-[13px] italic text-zinc-300 leading-relaxed"
-            >
-              {founder.background}
-            </p>
+        <div className="bg-[rgba(242,242,247,0.92)] backdrop-blur-3xl border border-white/50 rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.05),0_12px_40px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.6)] overflow-hidden">
+          {/* Identity — compact row */}
+          <div className="px-6 pt-6 pb-5 border-b border-zinc-200/30">
+            <div className="flex items-center gap-3.5">
+              <div className="w-11 h-11 rounded-full bg-[rgba(30,30,32,0.88)] backdrop-blur-md flex items-center justify-center border border-white/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.2)]">
+                <span
+                  style={{ fontFamily: fonts.mono }}
+                  className="text-[13px] font-semibold text-white/90 tracking-wider"
+                >
+                  {founder.initials}
+                </span>
+              </div>
+              <div>
+                <div
+                  style={{ fontFamily: fonts.sans }}
+                  className="text-[20px] font-semibold text-zinc-900 tracking-tight leading-none"
+                >
+                  {founder.name}
+                </div>
+                <div
+                  style={{ fontFamily: fonts.mono }}
+                  className="text-[11px] text-zinc-500 mt-1.5"
+                >
+                  {founder.role}
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
 
-        {/* Signals Container */}
-        <div className="bg-zinc-50/80 backdrop-blur-md rounded-2xl p-2 border border-zinc-200/60 shadow-inner flex flex-col gap-2">
-          {/* Recent Signals */}
-          <IntelligenceLayer
-            label="Recent"
-            color="#2563eb"
-            scrollYProgress={scrollYProgress}
-            enterRange={[0.39, 0.42]}
+          {/* Signals — hero number + supporting lines */}
+          <motion.div
+            style={{ opacity: signalsOpacity, y: signalsY }}
+            className="px-6 pt-5 pb-4"
           >
-            <div className="flex flex-col gap-2.5">
-              {insights.recent.map((s, i) => (
-                <StaggeredItem
-                  key={i}
-                  scrollYProgress={scrollYProgress}
-                  baseEnter={0.4}
-                  index={i}
-                  color="#2563eb"
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-600/[0.08] border border-blue-600/[0.12] mb-3.5">
+              <div className="w-1 h-1 rounded-full bg-blue-600" />
+              <span
+                style={{ fontFamily: fonts.mono }}
+                className="text-[9px] tracking-[0.12em] uppercase font-bold text-blue-600"
+              >
+                What&apos;s New
+              </span>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <div
+                  style={{ fontFamily: fonts.sans }}
+                  className="text-[32px] font-bold text-zinc-900 tracking-tight leading-none"
                 >
-                  {s.text}
-                </StaggeredItem>
+                  $5M ARR
+                </div>
+                <div
+                  style={{ fontFamily: fonts.mono }}
+                  className="text-[11px] text-zinc-400 mt-1.5"
+                >
+                  LinkedIn &middot; 2 days ago
+                </div>
+              </div>
+              <div className="flex flex-col gap-1">
+                <div
+                  style={{ fontFamily: fonts.sans }}
+                  className="text-[13px] font-medium text-zinc-600"
+                >
+                  Featured in TechCrunch Series A roundup
+                </div>
+                <div
+                  style={{ fontFamily: fonts.sans }}
+                  className="text-[13px] font-medium text-zinc-600"
+                >
+                  Seeking enterprise design partners
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          <div className="mx-6 h-px bg-gradient-to-r from-zinc-300/50 to-transparent" />
+
+          {/* Personal — scannable chips */}
+          <motion.div
+            style={{ opacity: personalOpacity, y: personalY }}
+            className="px-6 pt-4 pb-4"
+          >
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-600/[0.08] border border-emerald-600/[0.12] mb-3">
+              <div className="w-1 h-1 rounded-full bg-emerald-600" />
+              <span
+                style={{ fontFamily: fonts.mono }}
+                className="text-[9px] tracking-[0.12em] uppercase font-bold text-emerald-600"
+              >
+                Remember
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {[
+                "Baby due April",
+                "Runs 5K daily",
+                "Third Wave Coffee fan",
+              ].map((item) => (
+                <span
+                  key={item}
+                  style={{ fontFamily: fonts.sans }}
+                  className="px-3 py-1.5 rounded-lg bg-white/50 backdrop-blur-sm border border-white/40 text-[12px] font-medium text-zinc-600 shadow-[0_1px_3px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.5)]"
+                >
+                  {item}
+                </span>
               ))}
             </div>
-          </IntelligenceLayer>
+          </motion.div>
 
-          {/* Personal Context */}
-          <IntelligenceLayer
-            label="Remember"
-            color="#16a34a"
-            scrollYProgress={scrollYProgress}
-            enterRange={[0.43, 0.46]}
+          <div className="mx-6 h-px bg-gradient-to-r from-zinc-300/50 to-transparent" />
+
+          {/* Strategic — single bold line */}
+          <motion.div
+            style={{ opacity: strategyOpacity, y: strategyY }}
+            className="px-6 pt-4 pb-6"
           >
-            <div className="flex flex-col gap-2.5">
-              {insights.personal.map((s, i) => (
-                <StaggeredItem
-                  key={i}
-                  scrollYProgress={scrollYProgress}
-                  baseEnter={0.44}
-                  index={i}
-                  color="#16a34a"
-                >
-                  {s.text}
-                </StaggeredItem>
-              ))}
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-600/[0.08] border border-purple-600/[0.12] mb-2">
+              <div className="w-1 h-1 rounded-full bg-purple-600" />
+              <span
+                style={{ fontFamily: fonts.mono }}
+                className="text-[9px] tracking-[0.12em] uppercase font-bold text-purple-600"
+              >
+                Why They Matter
+              </span>
             </div>
-          </IntelligenceLayer>
-
-          {/* Strategic Context */}
-          <IntelligenceLayer
-            label="Why They Matter"
-            color="#9333ea"
-            scrollYProgress={scrollYProgress}
-            enterRange={[0.48, 0.51]}
-          >
             <div
-              style={{ fontFamily: fonts.serif }}
-              className="text-[14px] italic text-zinc-600 leading-relaxed"
+              style={{ fontFamily: fonts.sans }}
+              className="text-[15px] font-medium text-zinc-700 leading-snug"
             >
-              {insights.strategic}
+              Portfolio company &middot; Series A prep &middot; Fund I proof
+              point
             </div>
-          </IntelligenceLayer>
+          </motion.div>
         </div>
       </motion.div>
     </motion.div>
@@ -805,10 +865,8 @@ function PathNode({
         transform: "translate(-50%, -50%)",
       }}
     >
-      <motion.div
-        whileHover={{ scale: 1.05 }}
-        className="rounded-xl px-4 py-3 min-w-[140px] text-center backdrop-blur-md shadow-[0_8px_24px_-6px_rgba(0,0,0,0.08)] border"
-        style={{ backgroundColor: bgColor, borderColor }}
+      <div
+        className="rounded-xl px-4 py-3 min-w-[140px] text-center bg-[rgba(242,242,247,0.88)] backdrop-blur-2xl border border-white/45 shadow-[0_2px_8px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.5)]"
       >
         <div
           style={{ fontFamily: fonts.sans, color }}
@@ -824,7 +882,7 @@ function PathNode({
             {sublabel}
           </div>
         )}
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -958,7 +1016,7 @@ function InsightsMovementB({
       >
         <div
           style={{ fontFamily: fonts.mono }}
-          className="text-[10px] text-zinc-400 text-center whitespace-nowrap bg-white/80 px-2 py-0.5 rounded-full backdrop-blur-sm border border-zinc-100"
+          className="text-[10px] text-zinc-400 text-center whitespace-nowrap bg-[rgba(242,242,247,0.85)] px-2 py-0.5 rounded-full backdrop-blur-xl border border-white/40 shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.4)]"
         >
           cold LinkedIn &middot; added 2019 &middot; never messaged
         </div>
@@ -974,7 +1032,7 @@ function InsightsMovementB({
       >
         <div
           style={{ fontFamily: fonts.serif }}
-          className="text-[12px] italic text-yellow-700 whitespace-nowrap bg-white/80 px-2 py-0.5 rounded-full backdrop-blur-sm shadow-sm"
+          className="text-[12px] italic text-yellow-700 whitespace-nowrap bg-[rgba(242,242,247,0.85)] px-2 py-0.5 rounded-full backdrop-blur-xl border border-white/40 shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.4)]"
         >
           {insights.path.intermediary.toYou}
         </div>
@@ -989,7 +1047,7 @@ function InsightsMovementB({
       >
         <div
           style={{ fontFamily: fonts.serif }}
-          className="text-[12px] italic text-yellow-700 whitespace-nowrap bg-white/80 px-2 py-0.5 rounded-full backdrop-blur-sm shadow-sm"
+          className="text-[12px] italic text-yellow-700 whitespace-nowrap bg-[rgba(242,242,247,0.85)] px-2 py-0.5 rounded-full backdrop-blur-xl border border-white/40 shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.4)]"
         >
           {insights.path.intermediary.toTarget}
         </div>
@@ -1007,7 +1065,7 @@ function InsightsMovementB({
       >
         <div
           style={{ fontFamily: fonts.mono }}
-          className="bg-yellow-50 text-yellow-800 border border-yellow-200/60 rounded-full px-5 py-2 text-[12px] font-semibold tracking-wide shadow-sm"
+          className="bg-[rgba(242,242,247,0.9)] text-yellow-800 border border-white/45 rounded-full px-5 py-2 text-[12px] font-semibold tracking-wide backdrop-blur-xl shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.5)]"
         >
           2 warm hops &gt; 1 cold connection
         </div>
@@ -1023,7 +1081,7 @@ function InsightsMovementB({
         }}
         className="absolute z-20 w-[min(340px,26vw)] pointer-events-auto"
       >
-        <div className="bg-white/95 backdrop-blur-xl border border-zinc-200/80 rounded-2xl p-5 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.12)]">
+        <div className="bg-[rgba(242,242,247,0.92)] backdrop-blur-3xl border border-white/50 rounded-2xl p-5 shadow-[0_4px_16px_rgba(0,0,0,0.05),0_12px_40px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.6)]">
           <div className="flex items-center gap-2 mb-3">
             <svg
               className="w-4 h-4 text-emerald-600"
