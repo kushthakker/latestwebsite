@@ -32,25 +32,25 @@ interface GroupConfig {
 // Refined, premium color palette (softer, more sophisticated)
 const groupConfig: Record<string, GroupConfig> = {
   "Previous Colleagues": {
-    color: "#166534",
-    bg: "#dcfce7",
+    color: "#2d7d4f",
+    bg: "rgba(45,125,79,0.08)",
     labelPos: { x: -18, y: -32 },
-  }, // Emerald
+  },
   "College Alumni": {
-    color: "#5b21b6",
-    bg: "#ede9fe",
+    color: "#5856d6",
+    bg: "rgba(88,86,214,0.08)",
     labelPos: { x: 18, y: -32 },
-  }, // Violet
+  },
   "Industry Peers": {
-    color: "#9a3412",
-    bg: "#ffedd5",
+    color: "#b3601e",
+    bg: "rgba(179,96,30,0.07)",
     labelPos: { x: -18, y: 10 },
-  }, // Orange/Amber
+  },
   "Close Friends": {
-    color: "#0369a1",
-    bg: "#e0f2fe",
+    color: "#2c7be5",
+    bg: "rgba(44,123,229,0.07)",
     labelPos: { x: 18, y: 10 },
-  }, // Sky Blue
+  },
 };
 
 const groups = Object.keys(groupConfig);
@@ -329,11 +329,10 @@ function FounderCard({
           transformOrigin: "center center",
         }}
       >
-        <div className="relative w-full overflow-hidden rounded-2xl bg-white/80 backdrop-blur-xl border border-zinc-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.06),0_1px_3px_rgb(0,0,0,0.04)] p-6 flex flex-col">
-          <PaperGrain id="founder-grain" opacity={0.03} />
+        <div className="relative w-full overflow-hidden rounded-2xl bg-white/65 backdrop-blur-2xl border border-white/50 shadow-[0_2px_4px_rgba(0,0,0,0.02),0_8px_32px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.7)] p-6 flex flex-col">
 
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-zinc-100 border border-zinc-200 flex items-center justify-center shadow-inner">
+            <div className="w-10 h-10 rounded-full bg-white/50 backdrop-blur-md border border-white/50 flex items-center justify-center">
               <span
                 style={{ fontFamily: fonts.mono }}
                 className="text-sm font-semibold text-zinc-600 tracking-wider"
@@ -438,27 +437,21 @@ function PersonPill({
           scale: pillScale,
           rotate: pillRotate,
         }}
-        whileHover={{ scale: 1.03, y: -2, transition: { duration: 0.2 } }}
         className="group relative"
       >
-        <div className="relative flex items-start gap-3 w-auto min-w-[200px] max-w-[240px] bg-white/95 backdrop-blur-md border border-zinc-200/80 rounded-xl p-3 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.03)] transition-shadow hover:shadow-[0_8px_24px_-4px_rgba(0,0,0,0.1)]">
-          {/* Subtle group color indicator line */}
-          <div
-            className="absolute left-0 top-3 bottom-3 w-[3px] rounded-r-full"
-            style={{ backgroundColor: color, opacity: 0.8 }}
-          />
+        <div className="relative flex items-start gap-3 w-auto min-w-[200px] max-w-[240px] bg-white/55 backdrop-blur-xl border border-white/40 rounded-2xl p-3 shadow-[0_2px_4px_rgba(0,0,0,0.02),0_8px_24px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.6)]">
 
           <div
-            className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center border shadow-sm"
+            className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center border backdrop-blur-md"
             style={{
               backgroundColor: bg,
-              borderColor: color + "30",
+              borderColor: color + "20",
               color: color,
             }}
           >
             <span
               style={{ fontFamily: fonts.mono }}
-              className="text-[10px] font-bold tracking-wider"
+              className="text-[10px] font-semibold tracking-wider"
             >
               {person.initials}
             </span>
@@ -568,61 +561,17 @@ function GroupLabel({
         style={{
           opacity: labelOpacity,
           y: labelY,
-          backgroundColor: bg,
-          borderColor: color + "20",
         }}
-        className="px-3 py-1.5 rounded-full border shadow-sm backdrop-blur-md"
+        className="px-3 py-1.5 rounded-full bg-white/45 backdrop-blur-lg border border-white/40 shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.5)]"
       >
         <span
           style={{ fontFamily: fonts.mono, color: color }}
-          className="text-[9px] tracking-[0.15em] uppercase font-bold whitespace-nowrap"
+          className="text-[9px] tracking-[0.15em] uppercase font-semibold whitespace-nowrap"
         >
           {group}
         </span>
       </motion.div>
     </div>
-  );
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// BRIDGE TEXTS
-// ═══════════════════════════════════════════════════════════════════════════
-
-function BridgeText({
-  scrollYProgress,
-  enterRange,
-  children,
-}: {
-  scrollYProgress: MotionValue<number>;
-  enterRange: [number, number, number, number];
-  children: React.ReactNode;
-}) {
-  const opacity = useTransform(scrollYProgress, enterRange, [0, 1, 1, 0]);
-  const y = useTransform(
-    scrollYProgress,
-    [enterRange[0], enterRange[1]],
-    [24, 0],
-  );
-  const scale = useTransform(
-    scrollYProgress,
-    [enterRange[0], enterRange[1]],
-    [0.95, 1],
-  );
-
-  return (
-    <motion.div
-      style={{ opacity, y, scale }}
-      className="absolute inset-0 flex items-center justify-center z-50 pointer-events-none"
-    >
-      <div className="text-center max-w-[420px] px-6">
-        <div
-          style={{ fontFamily: fonts.serif }}
-          className="text-[clamp(1.25rem,2vw,1.75rem)] italic text-zinc-400 leading-relaxed tracking-tight"
-        >
-          {children}
-        </div>
-      </div>
-    </motion.div>
   );
 }
 
@@ -1147,21 +1096,35 @@ function NudgeCard({
   nudge,
   scrollYProgress,
   enterRange,
+  exitRange,
 }: {
   nudge: NudgeData;
   scrollYProgress: MotionValue<number>;
   enterRange: [number, number];
+  exitRange: [number, number];
 }) {
-  const opacity = useTransform(scrollYProgress, enterRange, [0, 1]);
-  const y = useTransform(scrollYProgress, enterRange, [40, 0]);
-  const x = useTransform(scrollYProgress, enterRange, [20, 0]);
+  const opacity = useTransform(
+    scrollYProgress,
+    [enterRange[0], enterRange[1], exitRange[0], exitRange[1]],
+    [0, 1, 1, 0],
+  );
+  const y = useTransform(
+    scrollYProgress,
+    [enterRange[0], enterRange[1], exitRange[0], exitRange[1]],
+    [30, 0, 0, -20],
+  );
+  const cardScale = useTransform(
+    scrollYProgress,
+    [enterRange[0], enterRange[1], exitRange[0], exitRange[1]],
+    [0.97, 1, 1, 0.97],
+  );
 
   // Stagger internal elements after card enters
-  const msgEnter = enterRange[0] + 0.02;
+  const msgEnter = enterRange[1] + 0.008;
   const msgOpacity = useTransform(
     scrollYProgress,
-    [msgEnter, msgEnter + 0.015],
-    [0, 1],
+    [msgEnter, msgEnter + 0.015, exitRange[0], exitRange[1]],
+    [0, 1, 1, 0],
   );
   const msgY = useTransform(
     scrollYProgress,
@@ -1169,19 +1132,20 @@ function NudgeCard({
     [12, 0],
   );
 
-  const btnEnter = msgEnter + 0.02;
+  const btnEnter = msgEnter + 0.015;
   const btnOpacity = useTransform(
     scrollYProgress,
-    [btnEnter, btnEnter + 0.012],
-    [0, 1],
+    [btnEnter, btnEnter + 0.012, exitRange[0], exitRange[1]],
+    [0, 1, 1, 0],
   );
 
   return (
     <motion.div
-      style={{ opacity, y, x }}
-      className="mb-4 group pointer-events-auto"
+      style={{ opacity, y, scale: cardScale }}
+      className="absolute inset-0 flex items-center justify-center pointer-events-none z-30"
     >
-      <div className="relative bg-white border border-zinc-200/80 rounded-2xl p-5 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)] transition-all hover:shadow-[0_8px_24px_-4px_rgba(0,0,0,0.08)] hover:border-zinc-300">
+      <div className="w-[min(400px,28vw)] pointer-events-auto">
+      <div className="relative bg-white/95 backdrop-blur-xl border border-zinc-200/60 rounded-2xl p-5 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.03)] transition-shadow hover:shadow-[0_12px_40px_-8px_rgba(0,0,0,0.1)]">
         {/* Accent tab */}
         <div
           className="absolute left-0 top-6 bottom-6 w-1 rounded-r-full"
@@ -1306,6 +1270,7 @@ function NudgeCard({
           </button>
         </motion.div>
       </div>
+      </div>
     </motion.div>
   );
 }
@@ -1315,31 +1280,62 @@ function KeepUpSection({
 }: {
   scrollYProgress: MotionValue<number>;
 }) {
-  const containerOpacity = useTransform(scrollYProgress, [0.72, 0.75], [0, 1]);
-
-  // Card entrance ranges: each card gets 0.04 to enter, with pauses between
-  const cardRanges: [number, number][] = [
-    [0.75, 0.79],
-    [0.82, 0.86],
-    [0.88, 0.92],
+  // Cards crossfade one at a time — each enters, holds, then exits
+  const cardRanges: { enter: [number, number]; exit: [number, number] }[] = [
+    { enter: [0.74, 0.78], exit: [0.81, 0.83] },
+    { enter: [0.83, 0.87], exit: [0.89, 0.91] },
+    { enter: [0.91, 0.94], exit: [0.96, 0.98] },
   ];
 
+  // Progress dot opacities
+  const dot0 = useTransform(
+    scrollYProgress,
+    [0.74, 0.78, 0.81, 0.83],
+    [0.3, 1, 1, 0.3],
+  );
+  const dot1 = useTransform(
+    scrollYProgress,
+    [0.83, 0.87, 0.89, 0.91],
+    [0.3, 1, 1, 0.3],
+  );
+  const dot2 = useTransform(
+    scrollYProgress,
+    [0.91, 0.94, 0.96, 0.98],
+    [0.3, 1, 1, 0.3],
+  );
+  const dotOpacities = [dot0, dot1, dot2];
+  const dotsContainerOpacity = useTransform(
+    scrollYProgress,
+    [0.74, 0.78, 0.96, 0.98],
+    [0, 1, 1, 0],
+  );
+
   return (
-    <motion.div
-      style={{ opacity: containerOpacity }}
-      className="absolute inset-0 flex items-center justify-center pointer-events-none z-30"
-    >
-      <div className="w-[min(440px,32vw)] flex flex-col">
-        {nudges.map((nudge, i) => (
-          <NudgeCard
-            key={nudge.type}
-            nudge={nudge}
-            scrollYProgress={scrollYProgress}
-            enterRange={cardRanges[i]}
+    <>
+      {nudges.map((nudge, i) => (
+        <NudgeCard
+          key={nudge.type}
+          nudge={nudge}
+          scrollYProgress={scrollYProgress}
+          enterRange={cardRanges[i].enter}
+          exitRange={cardRanges[i].exit}
+        />
+      ))}
+
+      {/* Progress dots */}
+      <motion.div
+        style={{ opacity: dotsContainerOpacity }}
+        className="absolute left-1/2 bottom-[10vh] -translate-x-1/2 flex gap-2.5 z-40"
+      >
+        {dotOpacities.map((dotOp, i) => (
+          <motion.div
+            key={i}
+            style={{ opacity: dotOp }}
+            className="w-1.5 h-1.5 rounded-full bg-zinc-400"
           />
         ))}
-      </div>
-    </motion.div>
+      </motion.div>
+    </>
   );
 }
 
@@ -1428,7 +1424,7 @@ export default function NetworkSection() {
   );
 
   // Section exit
-  const sectionOpacity = useTransform(scrollYProgress, [0.96, 1.0], [1, 0]);
+  const sectionOpacity = useTransform(scrollYProgress, [0.96, 0.98], [1, 0]);
 
   // Shared text classes & styles
   const headlineClass =
@@ -1441,8 +1437,8 @@ export default function NetworkSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-zinc-50"
-      style={{ height: "1500vh" }}
+      className="relative bg-white"
+      style={{ height: "1200vh" }}
     >
       <motion.div
         className="sticky top-0 h-screen overflow-hidden flex bg-white/50 backdrop-blur-2xl"
@@ -1465,7 +1461,7 @@ export default function NetworkSection() {
         </svg>
 
         {/* ══ Left text panel — 30% ══════════════════════════════ */}
-        <div className="w-[30%] h-full flex flex-col justify-center pl-[6vw] pr-[2vw] relative z-40 border-r border-zinc-100/50 bg-white/40 shadow-[4px_0_24px_rgba(0,0,0,0.01)]">
+        <div className="w-[30%] h-full flex flex-col justify-center pl-[6vw] pr-[2vw] relative z-40 border-r border-white/50 bg-white/55 backdrop-blur-2xl shadow-[4px_0_24px_rgba(0,0,0,0.03)]">
           {/* Section labels — 3-way crossfade */}
           <div className="relative h-6 mb-8">
             <motion.div
@@ -1489,7 +1485,7 @@ export default function NetworkSection() {
           </div>
 
           {/* Headlines — 4-way crossfade */}
-          <div className="relative min-h-[200px]">
+          <div className="relative min-h-[280px]">
             <motion.h2
               style={{ opacity: h1Opacity, y: h1Y, fontFamily: fonts.sans }}
               className={headlineClass}
@@ -1527,10 +1523,10 @@ export default function NetworkSection() {
           </div>
 
           {/* Spacer */}
-          <div className="h-4 w-12 bg-zinc-200/60 rounded-full mb-6" />
+          <div className="h-px w-16 bg-gradient-to-r from-zinc-300 to-transparent mb-8" />
 
           {/* Subtexts — 5-way crossfade */}
-          <div className="relative min-h-[100px]">
+          <div className="relative min-h-[120px]">
             <motion.p
               style={{ opacity: sub1Opacity, fontFamily: fonts.sans }}
               className={subtextClass}
@@ -1578,11 +1574,14 @@ export default function NetworkSection() {
         </div>
 
         {/* ══ Right visualization panel — 70% ═══════════════════ */}
-        <div className="w-[70%] h-full relative overflow-hidden bg-white">
-          {/* Elegant background gradients */}
+        <div className="w-[70%] h-full relative overflow-hidden bg-[#f2f2f7]">
+          {/* Ambient gradient mesh — gives glass elements something to refract */}
           <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] bg-[radial-gradient(ellipse_at_center,rgba(244,244,245,0.8),transparent_70%)] opacity-60" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-[radial-gradient(ellipse_at_center,rgba(250,250,250,1),transparent_70%)]" />
+            <div className="absolute top-[-15%] left-[-5%] w-[55%] h-[55%] bg-[radial-gradient(ellipse_at_center,rgba(45,125,79,0.07),transparent_70%)]" />
+            <div className="absolute top-[-10%] right-[5%] w-[50%] h-[50%] bg-[radial-gradient(ellipse_at_center,rgba(88,86,214,0.06),transparent_70%)]" />
+            <div className="absolute bottom-[-10%] left-[10%] w-[55%] h-[55%] bg-[radial-gradient(ellipse_at_center,rgba(179,96,30,0.05),transparent_70%)]" />
+            <div className="absolute bottom-[-5%] right-[-5%] w-[50%] h-[50%] bg-[radial-gradient(ellipse_at_center,rgba(44,123,229,0.06),transparent_70%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,rgba(255,255,255,0.3),transparent_80%)]" />
           </div>
 
           {/* ── Network (0% – 31%) ── */}
@@ -1614,39 +1613,11 @@ export default function NetworkSection() {
             <GroupLabel key={g} group={g} scrollYProgress={scrollYProgress} />
           ))}
 
-          {/* ── Bridge 1 (28% – 36%) ── */}
-          <BridgeText
-            scrollYProgress={scrollYProgress}
-            enterRange={[0.28, 0.31, 0.33, 0.36]}
-          >
-            But a map only shows
-            <br />
-            where things are.
-            <br />
-            <span className="text-zinc-300">
-              Not what&apos;s happening
-              <br />
-              inside them.
-            </span>
-          </BridgeText>
-
           {/* ── Insights Movement A (34% – 54%) ── */}
           <InsightsMovementA scrollYProgress={scrollYProgress} />
 
           {/* ── Insights Movement B (52% – 68%) ── */}
           <InsightsMovementB scrollYProgress={scrollYProgress} />
-
-          {/* ── Bridge 2 (66% – 73%) ── */}
-          <BridgeText
-            scrollYProgress={scrollYProgress}
-            enterRange={[0.66, 0.69, 0.7, 0.73]}
-          >
-            <span className="text-zinc-400">
-              Intelligence without action
-              <br />
-              is just trivia.
-            </span>
-          </BridgeText>
 
           {/* ── Keep Up (72% – 94%) ── */}
           <KeepUpSection scrollYProgress={scrollYProgress} />

@@ -22,14 +22,14 @@ const rows: Row[] = [
     theOnePercent: { value: "85%", sub: "warm intro" },
   },
   {
-    label: "deal flow",
+    label: "where it starts",
     everyoneElse: { value: "hope for inbound", sub: "" },
-    theOnePercent: { value: "84%", sub: "start with referral" },
+    theOnePercent: { value: "84%", sub: "begin with a referral" },
   },
   {
-    label: "time to close",
-    everyoneElse: { value: "39 days", sub: "average" },
-    theOnePercent: { value: "21 days", sub: "through referrals" },
+    label: "speed to yes",
+    everyoneElse: { value: "39 days", sub: "" },
+    theOnePercent: { value: "21 days", sub: "" },
   },
   {
     label: "they stay",
@@ -169,7 +169,7 @@ export default function ComparisonTable() {
       className="relative"
       style={{
         minHeight: "120vh",
-        padding: "12vh 0 16vh",
+        padding: "4vh 0 16vh",
         background: "#fff",
       }}
     >
