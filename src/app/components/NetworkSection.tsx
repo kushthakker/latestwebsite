@@ -436,8 +436,7 @@ function PersonPill({
         }}
         className="group relative"
       >
-        <div className="relative flex items-start gap-3 w-auto min-w-[200px] max-w-[240px] bg-[rgba(242,242,247,0.85)] backdrop-blur-2xl border border-white/45 rounded-2xl p-3 shadow-[0_2px_4px_rgba(0,0,0,0.03),0_8px_24px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.5)]"
-        >
+        <div className="relative flex items-start gap-3 w-auto min-w-[200px] max-w-[240px] bg-[rgba(242,242,247,0.85)] backdrop-blur-2xl border border-white/45 rounded-2xl p-3 shadow-[0_2px_4px_rgba(0,0,0,0.03),0_8px_24px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.5)]">
           <div
             className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center border backdrop-blur-md shadow-sm"
             style={{
@@ -677,17 +676,9 @@ function InsightsMovementA({
 
   const signalsOpacity = useTransform(scrollYProgress, [0.4, 0.43], [0, 1]);
   const signalsY = useTransform(scrollYProgress, [0.4, 0.43], [16, 0]);
-  const personalOpacity = useTransform(
-    scrollYProgress,
-    [0.44, 0.47],
-    [0, 1],
-  );
+  const personalOpacity = useTransform(scrollYProgress, [0.44, 0.47], [0, 1]);
   const personalY = useTransform(scrollYProgress, [0.44, 0.47], [16, 0]);
-  const strategyOpacity = useTransform(
-    scrollYProgress,
-    [0.48, 0.51],
-    [0, 1],
-  );
+  const strategyOpacity = useTransform(scrollYProgress, [0.48, 0.51], [0, 1]);
   const strategyY = useTransform(scrollYProgress, [0.48, 0.51], [16, 0]);
 
   return (
@@ -791,19 +782,17 @@ function InsightsMovementA({
               </span>
             </div>
             <div className="flex flex-wrap gap-1.5">
-              {[
-                "Baby due April",
-                "Runs 5K daily",
-                "Third Wave Coffee fan",
-              ].map((item) => (
-                <span
-                  key={item}
-                  style={{ fontFamily: fonts.sans }}
-                  className="px-3 py-1.5 rounded-lg bg-white/50 backdrop-blur-sm border border-white/40 text-[12px] font-medium text-zinc-600 shadow-[0_1px_3px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.5)]"
-                >
-                  {item}
-                </span>
-              ))}
+              {["Baby due April", "Runs 5K daily", "Third Wave Coffee fan"].map(
+                (item) => (
+                  <span
+                    key={item}
+                    style={{ fontFamily: fonts.sans }}
+                    className="px-3 py-1.5 rounded-lg bg-white/50 backdrop-blur-sm border border-white/40 text-[12px] font-medium text-zinc-600 shadow-[0_1px_3px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.5)]"
+                  >
+                    {item}
+                  </span>
+                ),
+              )}
             </div>
           </motion.div>
 
@@ -865,9 +854,7 @@ function PathNode({
         transform: "translate(-50%, -50%)",
       }}
     >
-      <div
-        className="rounded-xl px-4 py-3 min-w-[140px] text-center bg-[rgba(242,242,247,0.88)] backdrop-blur-2xl border border-white/45 shadow-[0_2px_8px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.5)]"
-      >
+      <div className="rounded-xl px-4 py-3 min-w-[140px] text-center bg-[rgba(242,242,247,0.88)] backdrop-blur-2xl border border-white/45 shadow-[0_2px_8px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.5)]">
         <div
           style={{ fontFamily: fonts.sans, color }}
           className="text-[14px] font-semibold tracking-tight"
@@ -915,11 +902,11 @@ function InsightsMovementB({
 
   // Using a 100x100 coord system ensures flawless responsive scaling
   const youX = -14,
-    youY = -6;
+    youY = -8;
   const targetX = 14,
-    targetY = -6;
+    targetY = -8;
   const midX = 0,
-    midY = 10;
+    midY = 6;
 
   const sYou = { x: 50 + youX, y: 50 + youY };
   const sTarget = { x: 50 + targetX, y: 50 + targetY };
@@ -1053,78 +1040,82 @@ function InsightsMovementB({
         </div>
       </motion.div>
 
+      {/* Combined insight + recommendation glass card */}
       <motion.div
         style={{
           opacity: insightOpacity,
           y: insightY,
           left: "50%",
-          bottom: "16vh",
+          top: `calc(50% + 20vh)`,
           transform: "translateX(-50%)",
         }}
-        className="absolute z-20 text-center"
+        className="absolute z-20 w-[min(380px,28vw)] pointer-events-auto"
       >
-        <div
-          style={{ fontFamily: fonts.mono }}
-          className="bg-[rgba(242,242,247,0.9)] text-yellow-800 border border-white/45 rounded-full px-5 py-2 text-[12px] font-semibold tracking-wide backdrop-blur-xl shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.5)]"
-        >
-          2 warm hops &gt; 1 cold connection
-        </div>
-      </motion.div>
+        <div className="relative overflow-hidden bg-[rgba(242,242,247,0.9)] backdrop-blur-3xl border border-white/50 rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.05),0_12px_40px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.6)]">
+          <PaperGrain id="path-recommend" opacity={0.02} />
 
-      <motion.div
-        style={{
-          opacity: recommendOpacity,
-          y: recommendY,
-          left: "50%",
-          bottom: "5vh",
-          transform: "translateX(-50%)",
-        }}
-        className="absolute z-20 w-[min(340px,26vw)] pointer-events-auto"
-      >
-        <div className="bg-[rgba(242,242,247,0.92)] backdrop-blur-3xl border border-white/50 rounded-2xl p-5 shadow-[0_4px_16px_rgba(0,0,0,0.05),0_12px_40px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.6)]">
-          <div className="flex items-center gap-2 mb-3">
-            <svg
-              className="w-4 h-4 text-emerald-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M13 10V3L4 14h7v7l9-11h-7z"
-              />
-            </svg>
-            <span
+          {/* Top shimmer */}
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-400/30 to-transparent" />
+
+          {/* Insight badge header */}
+          <div className="flex items-center justify-center px-5 pt-5 pb-3">
+            <div
               style={{ fontFamily: fonts.mono }}
-              className="text-[10px] tracking-[0.15em] uppercase text-zinc-500 font-bold"
+              className="text-yellow-800 text-[11px] font-semibold tracking-wide px-4 py-1.5 rounded-full bg-[rgba(242,242,247,0.8)] backdrop-blur-xl border border-yellow-200/40 shadow-[0_2px_8px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.4)]"
             >
-              Recommended Path
-            </span>
+              2 warm hops &gt; 1 cold connection
+            </div>
           </div>
 
-          <div
-            style={{ fontFamily: fonts.sans }}
-            className="text-[13px] text-zinc-600 leading-relaxed"
-          >
-            Ask{" "}
-            <span className="font-semibold text-zinc-900">
-              {insights.path.intermediary.name}
-            </span>{" "}
-            for an intro to {insights.path.target.name}. They were in the same
-            IIT batch. She introduced you to two others in his circle last year.
-          </div>
+          {/* Divider */}
+          <div className="h-px mx-5 bg-gradient-to-r from-transparent via-zinc-200/60 to-transparent" />
 
-          <div className="mt-4 flex items-center gap-2">
-            <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            <span
-              style={{ fontFamily: fonts.mono }}
-              className="text-[11px] font-semibold text-emerald-700"
+          {/* Recommendation body */}
+          <motion.div style={{ opacity: recommendOpacity, y: recommendY }} className="p-5">
+            <div className="flex items-center gap-2 mb-3">
+              <svg
+                className="w-4 h-4 text-emerald-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
+              <span
+                style={{ fontFamily: fonts.mono }}
+                className="text-[10px] tracking-[0.15em] uppercase text-zinc-500 font-bold"
+              >
+                Recommended Path
+              </span>
+            </div>
+
+            <div
+              style={{ fontFamily: fonts.sans }}
+              className="text-[13px] text-zinc-600 leading-relaxed"
             >
-              High Trust Indicator
-            </span>
-          </div>
+              Ask{" "}
+              <span className="font-semibold text-zinc-900">
+                {insights.path.intermediary.name}
+              </span>{" "}
+              for an intro to {insights.path.target.name}. They were in the same
+              IIT batch. She introduced you to two others in his circle last year.
+            </div>
+
+            <div className="mt-4 flex items-center gap-2">
+              <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              <span
+                style={{ fontFamily: fonts.mono }}
+                className="text-[11px] font-semibold text-emerald-700"
+              >
+                High Trust Indicator
+              </span>
+            </div>
+          </motion.div>
         </div>
       </motion.div>
     </motion.div>
@@ -1161,6 +1152,11 @@ function NudgeCard({
     [enterRange[0], enterRange[1], exitRange[0], exitRange[1]],
     [0.97, 1, 1, 0.97],
   );
+  const rotate = useTransform(
+    scrollYProgress,
+    [enterRange[0], enterRange[1], exitRange[0], exitRange[1]],
+    [1.5, 0, 0, -1],
+  );
 
   const msgEnter = enterRange[1] + 0.008;
   const msgOpacity = useTransform(
@@ -1183,31 +1179,32 @@ function NudgeCard({
 
   return (
     <motion.div
-      style={{ opacity, y, scale: cardScale }}
+      style={{ opacity, y, scale: cardScale, rotate }}
       className="absolute inset-0 flex items-center justify-center pointer-events-none z-30"
     >
       <div className="w-[min(400px,28vw)] pointer-events-auto">
-        <div className="relative bg-white/95 backdrop-blur-xl border border-zinc-200/60 rounded-2xl p-5 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.03)] transition-shadow hover:shadow-[0_12px_40px_-8px_rgba(0,0,0,0.1)]">
+        <div className="relative overflow-hidden bg-[rgba(242,242,247,0.88)] backdrop-blur-2xl border border-white/45 rounded-2xl p-6 shadow-[0_4px_16px_rgba(0,0,0,0.05),0_12px_40px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.5)]">
+          {/* Top shimmer accent */}
           <div
-            className="absolute left-0 top-6 bottom-6 w-1 rounded-r-full"
-            style={{ backgroundColor: nudge.accentColor, opacity: 0.8 }}
+            className="absolute top-0 left-0 right-0 h-px"
+            style={{ background: `linear-gradient(90deg, transparent, ${nudge.accentColor}40, transparent)` }}
           />
 
-          <PaperGrain id={`nudge-${nudge.type}`} opacity={0.02} />
+          <PaperGrain id={`nudge-${nudge.type}`} opacity={0.03} />
 
-          <div className="flex items-center justify-between mb-4 pl-2">
+          <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-3">
               <div
-                className="w-8 h-8 rounded-full flex items-center justify-center border shadow-sm"
+                className="w-10 h-10 rounded-full flex items-center justify-center border backdrop-blur-md shadow-sm"
                 style={{
                   backgroundColor: nudge.badgeBg,
-                  borderColor: nudge.accentColor + "30",
+                  borderColor: nudge.accentColor + "25",
                   color: nudge.accentColor,
                 }}
               >
                 <span
                   style={{ fontFamily: fonts.mono }}
-                  className="text-[10px] font-bold tracking-wider"
+                  className="text-[11px] font-bold tracking-wider"
                 >
                   {nudge.person.initials}
                 </span>
@@ -1215,34 +1212,38 @@ function NudgeCard({
               <div>
                 <div
                   style={{ fontFamily: fonts.sans }}
-                  className="text-[14px] font-semibold text-zinc-900 tracking-tight leading-none mb-1"
+                  className="text-[15px] font-semibold text-zinc-800 tracking-tight leading-none mb-1"
                 >
                   {nudge.person.name}
                 </div>
                 <div
                   style={{ fontFamily: fonts.mono }}
-                  className="text-[10px] text-zinc-500"
+                  className="text-[11px] text-zinc-500"
                 >
                   {nudge.person.role}
                 </div>
               </div>
             </div>
-            <div
-              style={{
-                fontFamily: fonts.mono,
-                color: nudge.badgeColor,
-                backgroundColor: nudge.badgeBg,
-              }}
-              className="px-2.5 py-1 rounded-md text-[9px] font-bold uppercase tracking-wider"
-            >
-              {nudge.badge}
+            <div className="px-3 py-1.5 rounded-full bg-[rgba(242,242,247,0.8)] backdrop-blur-xl border border-white/40 shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.4)]">
+              <span
+                style={{
+                  fontFamily: fonts.mono,
+                  color: nudge.badgeColor,
+                }}
+                className="text-[9px] font-bold uppercase tracking-wider"
+              >
+                {nudge.badge}
+              </span>
             </div>
           </div>
 
-          <div className="mb-4 pl-2">
+          {/* Divider */}
+          <div className="h-px w-full bg-gradient-to-r from-zinc-200/60 via-zinc-200/30 to-transparent mb-5" />
+
+          <div className="mb-5">
             <div
               style={{ fontFamily: fonts.mono }}
-              className="text-[9px] tracking-[0.15em] uppercase text-zinc-400 font-bold mb-1.5"
+              className="text-[9px] tracking-[0.15em] uppercase text-zinc-400 font-bold mb-2"
             >
               Context
             </div>
@@ -1256,36 +1257,38 @@ function NudgeCard({
 
           <motion.div
             style={{ opacity: msgOpacity, y: msgY }}
-            className="mb-4 pl-2"
+            className="mb-5"
           >
             <div
               style={{ fontFamily: fonts.mono }}
-              className="text-[9px] tracking-[0.15em] uppercase text-zinc-400 font-bold mb-1.5"
+              className="text-[9px] tracking-[0.15em] uppercase text-zinc-400 font-bold mb-2"
             >
               Draft
             </div>
-            <div
-              style={{
-                fontFamily: fonts.serif,
-                borderLeftColor: nudge.accentColor + "40",
-              }}
-              className="text-[13px] italic text-zinc-700 leading-relaxed bg-zinc-50 rounded-r-lg border-l-2 py-2.5 px-3.5"
-            >
-              &ldquo;{nudge.suggested}&rdquo;
+            <div className="relative overflow-hidden rounded-xl bg-white/50 backdrop-blur-xl border border-white/60 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] py-3 px-4">
+              <div
+                className="absolute left-0 top-0 bottom-0 w-0.5 rounded-full"
+                style={{ backgroundColor: nudge.accentColor, opacity: 0.5 }}
+              />
+              <div
+                style={{ fontFamily: fonts.serif }}
+                className="text-[13px] italic text-zinc-700 leading-relaxed pl-2"
+              >
+                &ldquo;{nudge.suggested}&rdquo;
+              </div>
             </div>
           </motion.div>
 
           <motion.div
             style={{ opacity: btnOpacity }}
-            className="flex gap-2 pl-2"
+            className="flex gap-2"
           >
             <button
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[13px] font-semibold transition-all hover:brightness-105 active:scale-[0.97] bg-[rgba(242,242,247,0.8)] backdrop-blur-xl border border-white/50 shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.4)]"
               style={{
                 fontFamily: fonts.sans,
-                backgroundColor: nudge.badgeBg,
                 color: nudge.accentColor,
               }}
-              className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-[13px] font-semibold transition-opacity hover:opacity-80 active:scale-95"
             >
               Review & Send
               <svg
@@ -1304,12 +1307,16 @@ function NudgeCard({
             </button>
             <button
               style={{ fontFamily: fonts.sans }}
-              className="px-4 py-1.5 rounded-lg text-[13px] font-medium text-zinc-500 bg-white border border-zinc-200 transition-colors hover:bg-zinc-50 active:scale-95"
+              className="px-4 py-2 rounded-xl text-[13px] font-medium text-zinc-500 bg-white/40 backdrop-blur-xl border border-white/40 transition-all hover:bg-white/60 active:scale-[0.97]"
             >
               Dismiss
             </button>
           </motion.div>
         </div>
+
+        {/* Card stack shadows for depth */}
+        <div className="mx-3 h-2 -mt-1 rounded-b-xl bg-[rgba(242,242,247,0.5)] backdrop-blur-lg border-x border-b border-white/30 shadow-[0_4px_12px_rgba(0,0,0,0.03)]" />
+        <div className="mx-6 h-1.5 -mt-0.5 rounded-b-lg bg-[rgba(242,242,247,0.3)] backdrop-blur-md border-x border-b border-white/20 shadow-[0_4px_8px_rgba(0,0,0,0.02)]" />
       </div>
     </motion.div>
   );
