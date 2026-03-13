@@ -46,3 +46,13 @@
 - **Reasoning/action spacing**: In the center panel, a `flex-1` reasoning scroller plus a fixed footer creates a dead gap for shorter signals and hides actions for taller ones. Put reasoning and suggested action in the same scroll flow with explicit bottom padding.
 - **Bottom-pinned action layout**: If the action block must always stay at the bottom of the center card, make the reasoning card the only flexible scroll region (`flex-1` + `overflow-y-auto`) and keep the action card as a sibling below it with a fixed `mt-*` gap.
 - **Action header copy**: The action card already signals intent through the eyebrow label and CTA button, so extra status text like `ready to send` is redundant and can be removed to keep the header cleaner.
+
+## 2026-03-14 — Warm Intro Stage Clarification
+
+- **Show the comparison, then demote it**: For the "paths you can't see" moment, briefly let the cold route appear first, then fade it down once the warm path starts drawing. Keeping both paths equally loud makes the story harder to parse.
+- **Sequence beats explanation**: Replacing floating nodes plus scattered labels with explicit `Start / Bridge / Target` cards and verb labels on the connectors makes the intro mechanics legible at a glance.
+- **Keep the action tray focused**: Once the flow itself explains `You -> Priya -> Rajesh`, the lower glass tray should only do two jobs: show the actual ask and explain why this intermediary is trusted.
+- **Do not reuse draw values for straight bars**: SVG path drawing wants `strokeDashoffset: 1 -> 0`, but connector bars want `scaleX: 0 -> 1`. Using one motion value for both inverts one of the animations.
+- **Use container width, not viewport width, inside the right panel**: For the centered warm-intro stage, `w-full max-w-[760px]` inside a padded flex wrapper is more stable than sizing the whole card with `vw`, especially because the stage lives inside a 70% panel rather than the full viewport.
+- **Longer stagger reads cleaner here**: The intro sequence feels clearer when each beat gets a little more scroll budget: stage, cold-route compare, first handoff, second handoff, then the explanation tray. Tight ranges made the whole moment feel like one simultaneous reveal.
+- **Slightly oversized badges work better than perfectly balanced ones**: The step-number circles and connector arrow bubbles should be a touch larger than the surrounding microcopy, otherwise the eye lands on the text first and misses the motion direction.

@@ -686,48 +686,119 @@ function InsightsMovementA({
 
 // ─── Path Visualization (Movement B) ─────────────────────────────────────
 
-function PathNode({
-  label,
-  sublabel,
-  color,
-  bgColor,
-  borderColor,
-  x,
-  y,
+function IntroStepCard({
+  step,
+  eyebrow,
+  title,
+  subtitle,
+  accent,
 }: {
-  label: string;
-  sublabel?: string;
-  color: string;
-  bgColor: string;
-  borderColor: string;
-  x: number;
-  y: number;
+  step: string;
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  accent: string;
 }) {
   return (
-    <div
-      className="absolute z-10"
-      style={{
-        left: `calc(50% + ${x}vw)`,
-        top: `calc(50% + ${y}vh)`,
-        transform: "translate(-50%, -50%)",
-      }}
-    >
-      <div className="rounded-xl px-4 py-3 min-w-[140px] text-center bg-[rgba(242,242,247,0.88)] backdrop-blur-2xl border border-white/45 shadow-[0_2px_8px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.5)]">
-        <div
-          style={{ fontFamily: fonts.sans, color }}
-          className="text-[14px] font-semibold tracking-tight"
-        >
-          {label}
-        </div>
-        {sublabel && (
+    <div className="relative overflow-hidden rounded-[1.65rem] bg-[rgba(242,242,247,0.88)] backdrop-blur-2xl border border-white/45 shadow-[0_2px_10px_rgba(0,0,0,0.04),0_14px_32px_rgba(0,0,0,0.07),inset_0_1px_0_rgba(255,255,255,0.55)] p-4">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/90 to-transparent" />
+
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div
+            style={{ fontFamily: fonts.mono, color: accent }}
+            className="text-[9px] font-bold tracking-[0.18em] uppercase"
+          >
+            {eyebrow}
+          </div>
+          <div
+            style={{ fontFamily: fonts.sans }}
+            className="mt-2 text-[15px] font-semibold text-zinc-900 tracking-tight leading-tight"
+          >
+            {title}
+          </div>
           <div
             style={{ fontFamily: fonts.mono }}
-            className="text-[10px] text-zinc-500 mt-1 truncate"
+            className="mt-2 text-[10px] leading-relaxed text-zinc-500"
           >
-            {sublabel}
+            {subtitle}
           </div>
-        )}
+        </div>
+
+        <div
+          className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border shadow-[inset_0_1px_0_rgba(255,255,255,0.45)]"
+          style={{
+            color: accent,
+            backgroundColor: `${accent}14`,
+            borderColor: `${accent}26`,
+          }}
+        >
+          <span
+            style={{ fontFamily: fonts.mono }}
+            className="text-[12px] font-semibold tracking-[0.08em]"
+          >
+            {step}
+          </span>
+        </div>
       </div>
+    </div>
+  );
+}
+
+function IntroConnector({
+  label,
+  accentClassName,
+  lineScale,
+  labelOpacity,
+  labelY,
+}: {
+  label: string;
+  accentClassName: string;
+  lineScale: MotionValue<number>;
+  labelOpacity: MotionValue<number>;
+  labelY: MotionValue<number>;
+}) {
+  return (
+    <div className="relative flex min-w-[88px] flex-1 items-center justify-center px-1 pt-12">
+      <motion.div
+        style={{ opacity: labelOpacity, y: labelY }}
+        className="absolute left-1/2 top-0 z-10 -translate-x-1/2"
+      >
+        <div className="rounded-full bg-[rgba(242,242,247,0.84)] backdrop-blur-xl border border-white/40 px-3 py-1 shadow-[0_2px_10px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.45)]">
+          <span
+            style={{ fontFamily: fonts.mono }}
+            className={`text-[9px] font-bold uppercase tracking-[0.16em] ${accentClassName}`}
+          >
+            {label}
+          </span>
+        </div>
+      </motion.div>
+
+      <div className="absolute inset-x-2 top-1/2 h-px -translate-y-1/2 bg-white/60" />
+      <motion.div
+        style={{ scaleX: lineScale, transformOrigin: "left center" }}
+        className={`absolute inset-x-2 top-1/2 h-px -translate-y-1/2 rounded-full bg-gradient-to-r ${accentClassName === "text-blue-600" ? "from-blue-400 via-cyan-400 to-emerald-400" : "from-emerald-400 via-yellow-400 to-amber-400"}`}
+      />
+      <motion.div
+        style={{ opacity: labelOpacity, scale: labelOpacity }}
+        className="absolute right-0 top-1/2 -translate-y-1/2"
+      >
+        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/70 backdrop-blur-md border border-white/60 shadow-[0_4px_12px_rgba(0,0,0,0.04)]">
+          <svg
+            className={`h-4 w-4 ${accentClassName}`}
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M4 10h10m0 0-3-3m3 3-3 3"
+            />
+          </svg>
+        </div>
+      </motion.div>
     </div>
   );
 }
@@ -739,246 +810,278 @@ function InsightsMovementB({
 }) {
   const moveOpacity = useTransform(
     scrollYProgress,
-    [0.56, 0.59, 0.72, 0.75],
+    [0.56, 0.59, 0.73, 0.76],
     [0, 1, 1, 0],
   );
   const enterY = useTransform(scrollYProgress, [0.56, 0.59], [30, 0]);
 
-  const coldOpacity = useTransform(scrollYProgress, [0.59, 0.62], [0, 1]);
-  const coldLabelOpacity = useTransform(scrollYProgress, [0.60, 0.62], [0, 1]);
+  const coldOpacity = useTransform(
+    scrollYProgress,
+    [0.595, 0.625, 0.66, 0.69],
+    [0, 1, 0.25, 0.14],
+  );
+  const coldLabelOpacity = useTransform(
+    scrollYProgress,
+    [0.605, 0.625, 0.65, 0.67],
+    [0, 1, 0.25, 0],
+  );
 
-  const warmOpacity = useTransform(scrollYProgress, [0.62, 0.65], [0, 1]);
-  const warmLeg1Dash = useTransform(scrollYProgress, [0.62, 0.65], [1, 0]);
-  const warmLeg2Dash = useTransform(scrollYProgress, [0.63, 0.66], [1, 0]);
-  const warmLabel1Opacity = useTransform(scrollYProgress, [0.64, 0.66], [0, 1]);
-  const warmLabel2Opacity = useTransform(scrollYProgress, [0.65, 0.67], [0, 1]);
+  const warmOpacity = useTransform(scrollYProgress, [0.625, 0.66], [0, 1]);
+  const warmLeg1Dash = useTransform(scrollYProgress, [0.63, 0.658], [1, 0]);
+  const warmLeg2Dash = useTransform(scrollYProgress, [0.645, 0.673], [1, 0]);
+  const warmLeg1Scale = useTransform(scrollYProgress, [0.628, 0.656], [0, 1]);
+  const warmLeg2Scale = useTransform(scrollYProgress, [0.643, 0.671], [0, 1]);
+  const stageOpacity = useTransform(scrollYProgress, [0.58, 0.615], [0, 1]);
+  const stageScale = useTransform(scrollYProgress, [0.58, 0.615], [0.96, 1]);
+  const stageY = useTransform(scrollYProgress, [0.58, 0.615], [24, 0]);
 
-  const insightOpacity = useTransform(scrollYProgress, [0.66, 0.68], [0, 1]);
-  const insightY = useTransform(scrollYProgress, [0.66, 0.68], [16, 0]);
-  const recommendOpacity = useTransform(scrollYProgress, [0.68, 0.70], [0, 1]);
-  const recommendY = useTransform(scrollYProgress, [0.68, 0.70], [16, 0]);
-
-  const youX = -14,
-    youY = -8;
-  const targetX = 14,
-    targetY = -8;
-  const midX = 0,
-    midY = 6;
-
-  const sYou = { x: 50 + youX, y: 50 + youY };
-  const sTarget = { x: 50 + targetX, y: 50 + targetY };
-  const sMid = { x: 50 + midX, y: 50 + midY };
-
-  const coldCp = { x: 50, y: 50 + youY - 8 };
-  const warmCp1 = { x: sYou.x + 4, y: (sYou.y + sMid.y) / 2 - 2 };
-  const warmCp2 = { x: sTarget.x - 4, y: (sMid.y + sTarget.y) / 2 - 2 };
+  const coldTagY = useTransform(scrollYProgress, [0.595, 0.625], [10, 0]);
+  const youCardOpacity = useTransform(scrollYProgress, [0.605, 0.635], [0, 1]);
+  const youCardY = useTransform(scrollYProgress, [0.605, 0.635], [22, 0]);
+  const bridgeCardOpacity = useTransform(scrollYProgress, [0.635, 0.665], [0, 1]);
+  const bridgeCardY = useTransform(scrollYProgress, [0.635, 0.665], [22, 0]);
+  const targetCardOpacity = useTransform(scrollYProgress, [0.665, 0.695], [0, 1]);
+  const targetCardY = useTransform(scrollYProgress, [0.665, 0.695], [22, 0]);
+  const askLabelOpacity = useTransform(scrollYProgress, [0.628, 0.648], [0, 1]);
+  const askLabelY = useTransform(scrollYProgress, [0.628, 0.648], [10, 0]);
+  const introLabelOpacity = useTransform(scrollYProgress, [0.652, 0.674], [0, 1]);
+  const introLabelY = useTransform(scrollYProgress, [0.652, 0.674], [10, 0]);
+  const trayOpacity = useTransform(scrollYProgress, [0.688, 0.712], [0, 1]);
+  const trayY = useTransform(scrollYProgress, [0.688, 0.712], [18, 0]);
 
   return (
     <motion.div
       style={{ opacity: moveOpacity, y: enterY }}
       className="absolute inset-0 pointer-events-none z-20"
     >
-      <svg
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-        className="absolute inset-0 w-full h-full z-0"
-      >
-        <defs>
-          <linearGradient id="warm-line" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#ca8a04" />
-            <stop offset="100%" stopColor="#eab308" />
-          </linearGradient>
-        </defs>
-
-        <motion.path
-          d={`M ${sYou.x} ${sYou.y} Q ${coldCp.x} ${coldCp.y} ${sTarget.x} ${sTarget.y}`}
-          fill="none"
-          stroke="rgba(161,161,170,0.4)"
-          strokeWidth={0.15}
-          strokeDasharray="0.6 0.6"
-          style={{ opacity: coldOpacity }}
-        />
-        <motion.path
-          d={`M ${sYou.x} ${sYou.y} Q ${warmCp1.x} ${warmCp1.y} ${sMid.x} ${sMid.y}`}
-          fill="none"
-          stroke="url(#warm-line)"
-          strokeWidth={0.3}
-          strokeLinecap="round"
-          pathLength={1}
-          strokeDasharray="1"
-          style={{ opacity: warmOpacity, strokeDashoffset: warmLeg1Dash }}
-        />
-        <motion.path
-          d={`M ${sMid.x} ${sMid.y} Q ${warmCp2.x} ${warmCp2.y} ${sTarget.x} ${sTarget.y}`}
-          fill="none"
-          stroke="url(#warm-line)"
-          strokeWidth={0.3}
-          strokeLinecap="round"
-          pathLength={1}
-          strokeDasharray="1"
-          style={{ opacity: warmOpacity, strokeDashoffset: warmLeg2Dash }}
-        />
-      </svg>
-
-      <PathNode
-        label="YOU"
-        color="#2563eb"
-        bgColor="#eff6ff"
-        borderColor="#bfdbfe"
-        x={youX}
-        y={youY}
-      />
-      <PathNode
-        label={insights.path.target.name}
-        sublabel={insights.path.target.role}
-        color="#b91c1c"
-        bgColor="#fef2f2"
-        borderColor="#fecaca"
-        x={targetX}
-        y={targetY}
-      />
-      <motion.div style={{ opacity: warmOpacity }}>
-        <PathNode
-          label={insights.path.intermediary.name}
-          sublabel={insights.path.intermediary.role}
-          color="#15803d"
-          bgColor="#f0fdf4"
-          borderColor="#bbf7d0"
-          x={midX}
-          y={midY}
-        />
-      </motion.div>
-
-      <motion.div
-        style={{
-          opacity: coldLabelOpacity,
-          left: "50%",
-          top: `calc(50% + ${youY - 8}vh)`,
-          transform: "translateX(-50%)",
-        }}
-        className="absolute z-15"
-      >
-        <div
-          style={{ fontFamily: fonts.mono }}
-          className="text-[10px] text-zinc-400 text-center whitespace-nowrap bg-[rgba(242,242,247,0.85)] px-2 py-0.5 rounded-full backdrop-blur-xl border border-white/40 shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.4)]"
+      <div className="absolute inset-0 flex items-center justify-center px-8">
+        <motion.div
+          style={{ opacity: stageOpacity, scale: stageScale, y: stageY }}
+          className="pointer-events-auto relative w-full max-w-[760px]"
         >
-          cold LinkedIn &middot; added 2019 &middot; never messaged
-        </div>
-      </motion.div>
+          <motion.div
+            animate={{
+              x: [-10, 14, -10],
+              y: [-8, 10, -8],
+              scale: [1, 1.08, 1],
+            }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+            className="pointer-events-none absolute -right-8 top-0 h-40 w-40 rounded-full bg-amber-300/20 blur-[46px]"
+          />
+          <motion.div
+            animate={{
+              x: [12, -8, 12],
+              y: [8, -10, 8],
+              scale: [1, 1.12, 1],
+            }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+            className="pointer-events-none absolute -bottom-6 left-6 h-44 w-44 rounded-full bg-sky-300/14 blur-[52px]"
+          />
 
-      <motion.div
-        style={{
-          opacity: warmLabel1Opacity,
-          left: `calc(50% + ${(youX + midX) / 2}vw - 2vw)`,
-          top: `calc(50% + ${(youY + midY) / 2}vh + 1vh)`,
-        }}
-        className="absolute z-15"
-      >
-        <div
-          style={{ fontFamily: fonts.serif }}
-          className="text-[12px] italic text-yellow-700 whitespace-nowrap bg-[rgba(242,242,247,0.85)] px-2 py-0.5 rounded-full backdrop-blur-xl border border-white/40 shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.4)]"
-        >
-          {insights.path.intermediary.toYou}
-        </div>
-      </motion.div>
-      <motion.div
-        style={{
-          opacity: warmLabel2Opacity,
-          left: `calc(50% + ${(midX + targetX) / 2}vw + 1vw)`,
-          top: `calc(50% + ${(midY + targetY) / 2}vh + 1vh)`,
-        }}
-        className="absolute z-15"
-      >
-        <div
-          style={{ fontFamily: fonts.serif }}
-          className="text-[12px] italic text-yellow-700 whitespace-nowrap bg-[rgba(242,242,247,0.85)] px-2 py-0.5 rounded-full backdrop-blur-xl border border-white/40 shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.4)]"
-        >
-          {insights.path.intermediary.toTarget}
-        </div>
-      </motion.div>
+          <div className="relative overflow-hidden rounded-[2rem] bg-[rgba(242,242,247,0.84)] backdrop-blur-3xl border border-white/50 shadow-[0_8px_28px_rgba(0,0,0,0.05),0_24px_64px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.6)] p-6">
+            <PaperGrain id="path-stage-glass" opacity={0.025} />
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/90 to-transparent" />
 
-      {/* Combined insight + recommendation glass card */}
-      <motion.div
-        style={{
-          opacity: insightOpacity,
-          y: insightY,
-          left: "50%",
-          top: `calc(50% + 20vh)`,
-          transform: "translateX(-50%)",
-        }}
-        className="absolute z-20 w-[min(380px,28vw)] pointer-events-auto"
-      >
-        <div className="relative overflow-hidden bg-[rgba(242,242,247,0.9)] backdrop-blur-3xl border border-white/50 rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.05),0_12px_40px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.6)]">
-          <PaperGrain id="path-recommend" opacity={0.02} />
+            <div className="relative z-10">
+              <div className="flex items-start justify-between gap-4">
+                <div className="max-w-[26rem]">
+                  <div
+                    style={{ fontFamily: fonts.mono }}
+                    className="text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500"
+                  >
+                    Warm Introduction
+                  </div>
+                  <div
+                    style={{ fontFamily: fonts.sans }}
+                    className="mt-2 text-[24px] font-semibold tracking-tight text-zinc-900 leading-tight"
+                  >
+                    First ask Priya.
+                    <br />
+                    Then let her carry the trust.
+                  </div>
+                </div>
 
-          {/* Top shimmer */}
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-400/30 to-transparent" />
+                <div className="rounded-full bg-[rgba(242,242,247,0.82)] backdrop-blur-xl border border-white/40 px-4 py-2 shadow-[0_2px_10px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.45)]">
+                  <span
+                    style={{ fontFamily: fonts.mono }}
+                    className="text-[10px] font-bold uppercase tracking-[0.16em] text-amber-700"
+                  >
+                    2 warm hops &gt; 1 cold DM
+                  </span>
+                </div>
+              </div>
 
-          {/* Insight badge header */}
-          <div className="flex items-center justify-center px-5 pt-5 pb-3">
-            <div
-              style={{ fontFamily: fonts.mono }}
-              className="text-yellow-800 text-[11px] font-semibold tracking-wide px-4 py-1.5 rounded-full bg-[rgba(242,242,247,0.8)] backdrop-blur-xl border border-yellow-200/40 shadow-[0_2px_8px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.4)]"
-            >
-              2 warm hops &gt; 1 cold connection
+              <div className="relative mt-6 overflow-hidden rounded-[1.75rem] bg-white/30 border border-white/45 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.55)]">
+                <svg
+                  viewBox="0 0 100 26"
+                  preserveAspectRatio="none"
+                  className="pointer-events-none absolute inset-x-5 top-3 h-16 w-[calc(100%-2.5rem)]"
+                >
+                  <defs>
+                    <linearGradient id="warm-stage-line" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#60a5fa" />
+                      <stop offset="55%" stopColor="#34d399" />
+                      <stop offset="100%" stopColor="#fbbf24" />
+                    </linearGradient>
+                  </defs>
+
+                  <motion.path
+                    d="M 14 22 Q 50 2 86 22"
+                    fill="none"
+                    stroke="rgba(161,161,170,0.45)"
+                    strokeWidth={0.55}
+                    strokeDasharray="1.2 1.2"
+                    style={{ opacity: coldOpacity }}
+                  />
+                  <motion.path
+                    d="M 14 22 Q 32 16 50 22"
+                    fill="none"
+                    stroke="url(#warm-stage-line)"
+                    strokeWidth={0.95}
+                    strokeLinecap="round"
+                    pathLength={1}
+                    strokeDasharray="1"
+                    style={{ opacity: warmOpacity, strokeDashoffset: warmLeg1Dash }}
+                  />
+                  <motion.path
+                    d="M 50 22 Q 68 16 86 22"
+                    fill="none"
+                    stroke="url(#warm-stage-line)"
+                    strokeWidth={0.95}
+                    strokeLinecap="round"
+                    pathLength={1}
+                    strokeDasharray="1"
+                    style={{ opacity: warmOpacity, strokeDashoffset: warmLeg2Dash }}
+                  />
+                </svg>
+
+                <motion.div
+                  style={{ opacity: coldLabelOpacity, y: coldTagY }}
+                  className="absolute left-1/2 top-3 z-10 -translate-x-1/2"
+                >
+                  <div className="rounded-full bg-[rgba(242,242,247,0.8)] backdrop-blur-xl border border-white/40 px-3 py-1 shadow-[0_2px_10px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.4)]">
+                    <span
+                      style={{ fontFamily: fonts.mono }}
+                      className="text-[9px] font-semibold uppercase tracking-[0.16em] text-zinc-500"
+                    >
+                      Cold DM: LinkedIn add from 2019
+                    </span>
+                  </div>
+                </motion.div>
+
+                <div className="relative z-10 mt-12 flex items-center gap-3">
+                  <motion.div
+                    style={{ opacity: youCardOpacity, y: youCardY }}
+                    className="w-[min(170px,13.5vw)]"
+                  >
+                    <IntroStepCard
+                      step="01"
+                      eyebrow="Start"
+                      title="You"
+                      subtitle="Need a warm path into Mahindra."
+                      accent="#2563eb"
+                    />
+                  </motion.div>
+
+                  <IntroConnector
+                    label="Ask Priya"
+                    accentClassName="text-blue-600"
+                    lineScale={warmLeg1Scale}
+                    labelOpacity={askLabelOpacity}
+                    labelY={askLabelY}
+                  />
+
+                  <motion.div
+                    style={{ opacity: bridgeCardOpacity, y: bridgeCardY }}
+                    className="w-[min(170px,13.5vw)]"
+                  >
+                    <IntroStepCard
+                      step="02"
+                      eyebrow="Bridge"
+                      title={insights.path.intermediary.name}
+                      subtitle={insights.path.intermediary.toYou}
+                      accent="#059669"
+                    />
+                  </motion.div>
+
+                  <IntroConnector
+                    label="She Introduces"
+                    accentClassName="text-emerald-600"
+                    lineScale={warmLeg2Scale}
+                    labelOpacity={introLabelOpacity}
+                    labelY={introLabelY}
+                  />
+
+                  <motion.div
+                    style={{ opacity: targetCardOpacity, y: targetCardY }}
+                    className="w-[min(170px,13.5vw)]"
+                  >
+                    <IntroStepCard
+                      step="03"
+                      eyebrow="Target"
+                      title={insights.path.target.name}
+                      subtitle={insights.path.target.role}
+                      accent="#b45309"
+                    />
+                  </motion.div>
+                </div>
+              </div>
+
+              <motion.div
+                style={{ opacity: trayOpacity, y: trayY }}
+                className="mt-5 grid grid-cols-2 gap-3"
+              >
+                <div className="rounded-[1.4rem] bg-[rgba(242,242,247,0.78)] backdrop-blur-2xl border border-white/45 p-4 shadow-[0_2px_10px_rgba(0,0,0,0.04),0_12px_30px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.45)]">
+                  <div
+                    style={{ fontFamily: fonts.mono }}
+                    className="text-[9px] font-bold uppercase tracking-[0.16em] text-blue-600"
+                  >
+                    What Brace suggests
+                  </div>
+                  <div
+                    style={{ fontFamily: fonts.sans }}
+                    className="mt-3 text-[14px] leading-relaxed text-zinc-700"
+                  >
+                    &ldquo;Priya, would you be open to introducing me to
+                    Rajesh? I think NexaFlow could be relevant for
+                    Mahindra&apos;s supply chain team.&rdquo;
+                  </div>
+                </div>
+
+                <div className="rounded-[1.4rem] bg-[rgba(242,242,247,0.78)] backdrop-blur-2xl border border-white/45 p-4 shadow-[0_2px_10px_rgba(0,0,0,0.04),0_12px_30px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.45)]">
+                  <div
+                    style={{ fontFamily: fonts.mono }}
+                    className="text-[9px] font-bold uppercase tracking-[0.16em] text-emerald-600"
+                  >
+                    Why Priya
+                  </div>
+                  <div className="mt-3 space-y-2">
+                    <div className="flex items-start gap-2">
+                      <div className="mt-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                      <div
+                        style={{ fontFamily: fonts.sans }}
+                        className="text-[13px] leading-relaxed text-zinc-700"
+                      >
+                        {insights.path.intermediary.toTarget}
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <div className="mt-1.5 h-1.5 w-1.5 rounded-full bg-amber-500" />
+                      <div
+                        style={{ fontFamily: fonts.sans }}
+                        className="text-[13px] leading-relaxed text-zinc-700"
+                      >
+                        She introduced you to two others in his circle last
+                        year.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
-
-          {/* Divider */}
-          <div className="h-px mx-5 bg-gradient-to-r from-transparent via-zinc-200/60 to-transparent" />
-
-          {/* Recommendation body */}
-          <motion.div
-            style={{ opacity: recommendOpacity, y: recommendY }}
-            className="p-5"
-          >
-            <div className="flex items-center gap-2 mb-3">
-              <svg
-                className="w-4 h-4 text-emerald-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              </svg>
-              <span
-                style={{ fontFamily: fonts.mono }}
-                className="text-[10px] tracking-[0.15em] uppercase text-zinc-500 font-bold"
-              >
-                Recommended Path
-              </span>
-            </div>
-
-            <div
-              style={{ fontFamily: fonts.sans }}
-              className="text-[13px] text-zinc-600 leading-relaxed"
-            >
-              Ask{" "}
-              <span className="font-semibold text-zinc-900">
-                {insights.path.intermediary.name}
-              </span>{" "}
-              for an intro to {insights.path.target.name}. They were in the same
-              IIT batch. She introduced you to two others in his circle last
-              year.
-            </div>
-
-            <div className="mt-4 flex items-center gap-2">
-              <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              <span
-                style={{ fontFamily: fonts.mono }}
-                className="text-[11px] font-semibold text-emerald-700"
-              >
-                High Trust Indicator
-              </span>
-            </div>
-          </motion.div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </motion.div>
   );
 }
