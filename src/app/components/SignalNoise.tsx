@@ -1,7 +1,14 @@
+// File: src/app/components/SignalNoise.tsx
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useMotionTemplate,
+  type MotionValue,
+} from "framer-motion";
 
 // ─────────────────────────────────────────────────────
 // Noise card data — realistic digital clutter
@@ -20,132 +27,276 @@ interface NoiseCard {
 }
 
 // ─────────────────────────────────────────────────────
-// Card components
+// Card components — Apple/Nike Premium Aesthetic
 // ─────────────────────────────────────────────────────
 
-const cardBase = {
-  background: "#fff",
-  boxShadow: "0 1px 3px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.04)",
+const cardBase: React.CSSProperties = {
+  background: "rgba(255, 255, 255, 0.82)",
+  backdropFilter: "blur(20px)",
+  WebkitBackdropFilter: "blur(20px)",
+  boxShadow:
+    "0 4px 24px -4px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.4)",
   border: "1px solid rgba(0,0,0,0.06)",
-  fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  fontFamily:
+    "var(--font-sans), -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
   width: "100%",
+  borderRadius: 16,
 } as const;
 
 function LinkedInCard({ name, text }: { name: string; text: string }) {
   return (
-    <div style={{ ...cardBase, borderRadius: 12, padding: "16px 18px" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+    <div style={{ ...cardBase, padding: "16px 18px" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+          marginBottom: 12,
+        }}
+      >
         <div
           style={{
-            width: 36,
-            height: 36,
+            width: 38,
+            height: 38,
             borderRadius: "50%",
-            background: "linear-gradient(135deg, #0a66c2 0%, #004182 100%)",
+            background: "linear-gradient(180deg, #0a66c2 0%, #004182 100%)",
+            boxShadow:
+              "inset 0 1px 2px rgba(255,255,255,0.3), 0 2px 6px rgba(10,102,194,0.2)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             color: "#fff",
-            fontSize: 14,
+            fontSize: 15,
             fontWeight: 600,
           }}
         >
           {name[0]}
         </div>
         <div>
-          <div style={{ fontSize: 13, fontWeight: 600, color: "#191919" }}>{name}</div>
-          <div style={{ fontSize: 11, color: "#666", marginTop: 1 }}>2nd &middot; 3h</div>
+          <div
+            style={{
+              fontSize: 14,
+              fontWeight: 600,
+              color: "#1d1d1f",
+              letterSpacing: "-0.01em",
+            }}
+          >
+            {name}
+          </div>
+          <div
+            style={{
+              fontSize: 12,
+              color: "#86868b",
+              marginTop: 2,
+              fontWeight: 500,
+            }}
+          >
+            2nd &middot; 3h
+          </div>
         </div>
-        <div style={{ marginLeft: "auto", fontSize: 10, fontWeight: 600, color: "#0a66c2" }}>
+        <div
+          style={{
+            marginLeft: "auto",
+            fontSize: 13,
+            fontWeight: 700,
+            color: "#0a66c2",
+            opacity: 0.9,
+          }}
+        >
           in
         </div>
       </div>
-      <div style={{ fontSize: 12.5, lineHeight: 1.5, color: "#333" }}>{text}</div>
+      <div
+        style={{
+          fontSize: 13,
+          lineHeight: 1.5,
+          color: "#424245",
+          letterSpacing: "-0.005em",
+        }}
+      >
+        {text}
+      </div>
       <div
         style={{
           display: "flex",
           gap: 16,
-          marginTop: 12,
-          paddingTop: 10,
+          marginTop: 14,
+          paddingTop: 12,
           borderTop: "1px solid rgba(0,0,0,0.06)",
-          fontSize: 11,
-          color: "#666",
+          fontSize: 12,
+          fontWeight: 500,
+          color: "#86868b",
         }}
       >
-        <span>Like</span>
-        <span>Comment</span>
-        <span>Repost</span>
+        <span
+          style={{ cursor: "pointer", transition: "color 0.2s" }}
+          className="hover:text-zinc-800"
+        >
+          Like
+        </span>
+        <span
+          style={{ cursor: "pointer", transition: "color 0.2s" }}
+          className="hover:text-zinc-800"
+        >
+          Comment
+        </span>
+        <span
+          style={{ cursor: "pointer", transition: "color 0.2s" }}
+          className="hover:text-zinc-800"
+        >
+          Repost
+        </span>
       </div>
     </div>
   );
 }
 
-function TweetCard({ handle, text, likes }: { handle: string; text: string; likes: string }) {
+function TweetCard({
+  handle,
+  text,
+  likes,
+}: {
+  handle: string;
+  text: string;
+  likes: string;
+}) {
   return (
-    <div style={{ ...cardBase, borderRadius: 14, padding: "14px 16px" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+    <div style={{ ...cardBase, padding: "16px" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          marginBottom: 10,
+        }}
+      >
         <div
           style={{
-            width: 32,
-            height: 32,
+            width: 34,
+            height: 34,
             borderRadius: "50%",
-            background: "linear-gradient(135deg, #1d1d1f 0%, #333 100%)",
+            background: "linear-gradient(180deg, #2c2c2e 0%, #1c1c1e 100%)",
+            boxShadow:
+              "inset 0 1px 1px rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.1)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             color: "#fff",
-            fontSize: 12,
+            fontSize: 13,
             fontWeight: 600,
           }}
         >
           {handle[1]?.toUpperCase()}
         </div>
-        <div style={{ fontSize: 13, fontWeight: 600, color: "#0f1419" }}>{handle}</div>
-        <div style={{ marginLeft: "auto", fontSize: 13, fontWeight: 700, color: "#536471" }}>
+        <div
+          style={{
+            fontSize: 14,
+            fontWeight: 600,
+            color: "#1d1d1f",
+            letterSpacing: "-0.01em",
+          }}
+        >
+          {handle}
+        </div>
+        <div
+          style={{
+            marginLeft: "auto",
+            fontSize: 14,
+            fontWeight: 700,
+            color: "#1d1d1f",
+            opacity: 0.8,
+          }}
+        >
           𝕏
         </div>
       </div>
-      <div style={{ fontSize: 13, lineHeight: 1.45, color: "#0f1419" }}>{text}</div>
-      <div style={{ display: "flex", gap: 20, marginTop: 10, fontSize: 11, color: "#536471" }}>
+      <div
+        style={{
+          fontSize: 13.5,
+          lineHeight: 1.5,
+          color: "#1d1d1f",
+          letterSpacing: "-0.005em",
+        }}
+      >
+        {text}
+      </div>
+      <div
+        style={{
+          display: "flex",
+          gap: 20,
+          marginTop: 12,
+          fontSize: 12,
+          fontWeight: 500,
+          color: "#86868b",
+        }}
+      >
         <span>3 replies</span>
         <span>12 reposts</span>
-        <span>{likes} likes</span>
+        <span style={{ color: "#1d1d1f", fontWeight: 600 }}>{likes} likes</span>
       </div>
     </div>
   );
 }
 
-function WhatsAppCard({ group, sender, text }: { group: string; sender: string; text: string }) {
+function WhatsAppCard({
+  group,
+  sender,
+  text,
+}: {
+  group: string;
+  sender: string;
+  text: string;
+}) {
   return (
-    <div style={{ ...cardBase, borderRadius: 12, padding: "12px 14px" }}>
+    <div style={{ ...cardBase, padding: "14px 16px" }}>
       <div
         style={{
-          fontSize: 11,
+          fontSize: 12,
           fontWeight: 600,
-          color: "#128C7E",
-          marginBottom: 6,
+          color: "#25D366",
+          marginBottom: 8,
           display: "flex",
           alignItems: "center",
           gap: 6,
         }}
       >
         <span style={{ fontSize: 13 }}>WhatsApp</span>
-        <span style={{ color: "#999", fontWeight: 400, fontSize: 10 }}>&middot; {group}</span>
+        <span style={{ color: "#86868b", fontWeight: 500, fontSize: 11 }}>
+          &middot; {group}
+        </span>
       </div>
       <div
         style={{
-          background: "#dcf8c6",
-          borderRadius: 8,
-          padding: "8px 12px",
-          fontSize: 12.5,
-          lineHeight: 1.45,
-          color: "#111",
+          background: "rgba(220, 248, 198, 0.4)",
+          border: "1px solid rgba(37, 211, 102, 0.1)",
+          borderRadius: 12,
+          borderTopLeftRadius: 4,
+          padding: "10px 14px",
+          fontSize: 13,
+          lineHeight: 1.5,
+          color: "#1d1d1f",
         }}
       >
-        <div style={{ fontSize: 11, fontWeight: 600, color: "#128C7E", marginBottom: 3 }}>
+        <div
+          style={{
+            fontSize: 12,
+            fontWeight: 600,
+            color: "#128C7E",
+            marginBottom: 4,
+          }}
+        >
           {sender}
         </div>
         {text}
-        <div style={{ fontSize: 10, color: "#999", textAlign: "right", marginTop: 4 }}>
+        <div
+          style={{
+            fontSize: 11,
+            fontWeight: 500,
+            color: "#86868b",
+            textAlign: "right",
+            marginTop: 6,
+          }}
+        >
           11:42 AM
         </div>
       </div>
@@ -164,57 +315,87 @@ function LinearCard({
   status: string;
   priority: "urgent" | "high" | "medium";
 }) {
-  const priorityColors = { urgent: "#e53e3e", high: "#dd6b20", medium: "#d69e2e" };
+  const priorityColors = {
+    urgent: "#ff453a",
+    high: "#ff9f0a",
+    medium: "#ffd60a",
+  };
   const statusColors: Record<string, string> = {
-    "In Progress": "#3182ce",
-    Todo: "#718096",
-    "In Review": "#805ad5",
+    "In Progress": "#0a84ff",
+    Todo: "#86868b",
+    "In Review": "#bf5af2",
   };
   return (
-    <div style={{ ...cardBase, borderRadius: 10, padding: "12px 14px" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+    <div style={{ ...cardBase, padding: "14px 16px" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          marginBottom: 8,
+        }}
+      >
         <div
           style={{
-            width: 14,
-            height: 14,
-            borderRadius: 3,
+            width: 16,
+            height: 16,
+            borderRadius: 4,
             background: "linear-gradient(135deg, #5e6ad2, #4852c9)",
+            boxShadow: "inset 0 1px 1px rgba(255,255,255,0.2)",
           }}
         />
-        <span style={{ fontSize: 11, color: "#666", fontFamily: "monospace" }}>{id}</span>
+        <span
+          style={{
+            fontSize: 12,
+            color: "#86868b",
+            fontWeight: 500,
+            fontFamily: "ui-monospace, monospace",
+          }}
+        >
+          {id}
+        </span>
         <span
           style={{
             marginLeft: "auto",
-            fontSize: 10,
-            fontWeight: 600,
+            fontSize: 11,
+            fontWeight: 700,
             color: priorityColors[priority],
             textTransform: "uppercase",
-            letterSpacing: "0.04em",
+            letterSpacing: "0.06em",
           }}
         >
           {priority}
         </span>
       </div>
-      <div style={{ fontSize: 13, fontWeight: 500, color: "#1a1a1a", lineHeight: 1.35 }}>
+      <div
+        style={{
+          fontSize: 14,
+          fontWeight: 600,
+          color: "#1d1d1f",
+          lineHeight: 1.4,
+          letterSpacing: "-0.01em",
+        }}
+      >
         {title}
       </div>
       <div
         style={{
-          marginTop: 8,
+          marginTop: 10,
           display: "inline-flex",
           alignItems: "center",
-          gap: 5,
-          fontSize: 10.5,
-          color: statusColors[status] || "#718096",
-          fontWeight: 500,
+          gap: 6,
+          fontSize: 12,
+          color: statusColors[status] || "#86868b",
+          fontWeight: 600,
         }}
       >
         <div
           style={{
-            width: 7,
-            height: 7,
+            width: 8,
+            height: 8,
             borderRadius: "50%",
-            background: statusColors[status] || "#718096",
+            background: statusColors[status] || "#86868b",
+            boxShadow: `0 0 4px ${statusColors[status]}80`,
           }}
         />
         {status}
@@ -223,38 +404,70 @@ function LinearCard({
   );
 }
 
-function SlackCard({ channel, sender, text }: { channel: string; sender: string; text: string }) {
+function SlackCard({
+  channel,
+  sender,
+  text,
+}: {
+  channel: string;
+  sender: string;
+  text: string;
+}) {
   return (
-    <div style={{ ...cardBase, borderRadius: 10, padding: "12px 14px" }}>
+    <div style={{ ...cardBase, padding: "14px 16px" }}>
       <div
         style={{
           display: "flex",
           alignItems: "center",
           gap: 6,
-          marginBottom: 8,
-          fontSize: 11,
+          marginBottom: 10,
+          fontSize: 12,
           fontWeight: 600,
         }}
       >
-        <span style={{ color: "#e01e5a", fontSize: 14 }}>#</span>
-        <span style={{ color: "#1d1c1d" }}>{channel}</span>
-        <span style={{ color: "#999", fontWeight: 400, marginLeft: "auto", fontSize: 10 }}>
+        <span style={{ color: "#E01E5A", fontSize: 15 }}>#</span>
+        <span style={{ color: "#1d1d1f" }}>{channel}</span>
+        <span
+          style={{
+            color: "#86868b",
+            fontWeight: 500,
+            marginLeft: "auto",
+            fontSize: 11,
+          }}
+        >
           2m ago
         </span>
       </div>
-      <div style={{ display: "flex", gap: 8 }}>
+      <div style={{ display: "flex", gap: 10 }}>
         <div
           style={{
-            width: 28,
-            height: 28,
-            borderRadius: 6,
+            width: 32,
+            height: 32,
+            borderRadius: 8,
             background: "linear-gradient(135deg, #36c5f0, #2eb67d)",
+            boxShadow: "inset 0 1px 1px rgba(255,255,255,0.3)",
             flexShrink: 0,
           }}
         />
         <div>
-          <span style={{ fontSize: 12, fontWeight: 600, color: "#1d1c1d" }}>{sender}</span>
-          <div style={{ fontSize: 12.5, color: "#1d1c1d", lineHeight: 1.4, marginTop: 2 }}>
+          <span
+            style={{
+              fontSize: 13,
+              fontWeight: 700,
+              color: "#1d1d1f",
+              letterSpacing: "-0.01em",
+            }}
+          >
+            {sender}
+          </span>
+          <div
+            style={{
+              fontSize: 13,
+              color: "#424245",
+              lineHeight: 1.45,
+              marginTop: 2,
+            }}
+          >
             {text}
           </div>
         </div>
@@ -265,30 +478,43 @@ function SlackCard({ channel, sender, text }: { channel: string; sender: string;
 
 function EmailCard({ from, subject }: { from: string; subject: string }) {
   return (
-    <div style={{ ...cardBase, borderRadius: 10, padding: "12px 14px" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+    <div style={{ ...cardBase, padding: "14px 16px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
         <div
           style={{
-            width: 32,
-            height: 32,
+            width: 36,
+            height: 36,
             borderRadius: "50%",
-            background: "linear-gradient(135deg, #ea4335, #fbbc04)",
+            background: "linear-gradient(180deg, #ea4335 0%, #d33426 100%)",
+            boxShadow:
+              "inset 0 1px 2px rgba(255,255,255,0.3), 0 2px 6px rgba(234,67,53,0.2)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             color: "#fff",
-            fontSize: 13,
+            fontSize: 14,
             fontWeight: 600,
+            flexShrink: 0,
           }}
         >
           {from[0]}
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 12, fontWeight: 600, color: "#202124" }}>{from}</div>
           <div
             style={{
-              fontSize: 12,
-              color: "#5f6368",
+              fontSize: 14,
+              fontWeight: 600,
+              color: "#1d1d1f",
+              letterSpacing: "-0.01em",
+            }}
+          >
+            {from}
+          </div>
+          <div
+            style={{
+              fontSize: 13,
+              color: "#86868b",
+              fontWeight: 500,
               marginTop: 2,
               whiteSpace: "nowrap",
               overflow: "hidden",
@@ -298,7 +524,18 @@ function EmailCard({ from, subject }: { from: string; subject: string }) {
             {subject}
           </div>
         </div>
-        <div style={{ fontSize: 10, color: "#999", flexShrink: 0 }}>9:14 AM</div>
+        <div
+          style={{
+            fontSize: 11,
+            fontWeight: 500,
+            color: "#86868b",
+            flexShrink: 0,
+            alignSelf: "flex-start",
+            marginTop: 2,
+          }}
+        >
+          9:14 AM
+        </div>
       </div>
     </div>
   );
@@ -306,20 +543,28 @@ function EmailCard({ from, subject }: { from: string; subject: string }) {
 
 function NewsCard({ source, headline }: { source: string; headline: string }) {
   return (
-    <div style={{ ...cardBase, borderRadius: 10, padding: "12px 14px" }}>
+    <div style={{ ...cardBase, padding: "14px 16px" }}>
       <div
         style={{
-          fontSize: 10,
-          fontWeight: 600,
-          color: "#e53e3e",
-          marginBottom: 4,
+          fontSize: 11,
+          fontWeight: 700,
+          color: "#ff3b30",
+          marginBottom: 6,
           textTransform: "uppercase",
           letterSpacing: "0.06em",
         }}
       >
         {source} &middot; Breaking
       </div>
-      <div style={{ fontSize: 13, fontWeight: 600, color: "#1a1a1a", lineHeight: 1.35 }}>
+      <div
+        style={{
+          fontSize: 14,
+          fontWeight: 600,
+          color: "#1d1d1f",
+          lineHeight: 1.4,
+          letterSpacing: "-0.01em",
+        }}
+      >
         {headline}
       </div>
     </div>
@@ -336,41 +581,79 @@ function SubstackCard({
   preview: string;
 }) {
   return (
-    <div style={{ ...cardBase, borderRadius: 12, padding: "14px 16px" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+    <div style={{ ...cardBase, padding: "16px" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          marginBottom: 12,
+        }}
+      >
         <div
           style={{
-            width: 30,
-            height: 30,
+            width: 34,
+            height: 34,
             borderRadius: "50%",
-            background: "linear-gradient(135deg, #ff6719, #ff8a50)",
+            background: "linear-gradient(180deg, #ff6719 0%, #e5520b 100%)",
+            boxShadow:
+              "inset 0 1px 2px rgba(255,255,255,0.3), 0 2px 6px rgba(255,103,25,0.2)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             color: "#fff",
-            fontSize: 14,
+            fontSize: 16,
             fontWeight: 700,
           }}
         >
           S
         </div>
         <div>
-          <div style={{ fontSize: 12, fontWeight: 600, color: "#191919" }}>{author}</div>
-          <div style={{ fontSize: 10, color: "#999" }}>on Substack</div>
+          <div
+            style={{
+              fontSize: 13,
+              fontWeight: 600,
+              color: "#1d1d1f",
+              letterSpacing: "-0.01em",
+            }}
+          >
+            {author}
+          </div>
+          <div
+            style={{
+              fontSize: 11,
+              fontWeight: 500,
+              color: "#86868b",
+              marginTop: 1,
+            }}
+          >
+            on Substack
+          </div>
         </div>
       </div>
-      <div style={{ fontSize: 14, fontWeight: 600, color: "#191919", lineHeight: 1.3, marginBottom: 6 }}>
-        {title}
-      </div>
-      <div style={{ fontSize: 12, color: "#666", lineHeight: 1.45 }}>{preview}</div>
       <div
         style={{
-          marginTop: 10,
-          paddingTop: 8,
+          fontSize: 15,
+          fontWeight: 600,
+          color: "#1d1d1f",
+          lineHeight: 1.35,
+          marginBottom: 6,
+          letterSpacing: "-0.01em",
+        }}
+      >
+        {title}
+      </div>
+      <div style={{ fontSize: 13, color: "#424245", lineHeight: 1.5 }}>
+        {preview}
+      </div>
+      <div
+        style={{
+          marginTop: 12,
+          paddingTop: 10,
           borderTop: "1px solid rgba(0,0,0,0.06)",
-          fontSize: 11,
+          fontSize: 12,
           color: "#ff6719",
-          fontWeight: 500,
+          fontWeight: 600,
         }}
       >
         Read more
@@ -389,57 +672,99 @@ function BraceSignalCard({
   source: string;
 }) {
   const sourceIcons: Record<string, string> = {
-    email: "e",
+    email: "E",
     linkedin: "in",
-    memory: "m",
-    news: "n",
+    memory: "M",
+    news: "N",
   };
   const sourceColors: Record<string, string> = {
-    email: "rgba(180,120,60,0.7)",
-    linkedin: "rgba(100,120,140,0.65)",
-    memory: "rgba(160,140,60,0.7)",
-    news: "rgba(120,100,80,0.6)",
+    email: "rgba(180,120,60,0.8)",
+    linkedin: "rgba(100,120,140,0.8)",
+    memory: "rgba(160,140,60,0.8)",
+    news: "rgba(120,100,80,0.8)",
   };
   return (
     <div
       style={{
-        background: "rgba(252,250,245,0.97)",
-        borderRadius: 10,
-        padding: "12px 14px",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.06), 0 6px 20px rgba(0,0,0,0.03)",
-        border: "1px solid rgba(80,100,60,0.12)",
-        fontFamily: "'Georgia', 'Times New Roman', serif",
+        background:
+          "linear-gradient(145deg, rgba(252,250,245,0.95) 0%, rgba(245,242,234,0.95) 100%)",
+        backdropFilter: "blur(24px)",
+        WebkitBackdropFilter: "blur(24px)",
+        borderRadius: 16,
+        padding: "16px 18px",
+        boxShadow:
+          "0 12px 32px -4px rgba(100,80,60,0.12), 0 2px 8px rgba(100,80,60,0.06), inset 0 1px 0 rgba(255,255,255,0.9)",
+        border: "1px solid rgba(160,140,110,0.25)",
+        fontFamily: "ui-serif, 'Georgia', 'Times New Roman', serif",
         width: "100%",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "1px",
+          background:
+            "linear-gradient(90deg, transparent, rgba(200,180,140,0.5), transparent)",
+        }}
+      />
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          marginBottom: 10,
+        }}
+      >
         <div
           style={{
-            width: 26,
-            height: 26,
+            width: 28,
+            height: 28,
             borderRadius: "50%",
             background: sourceColors[source] || "#999",
+            boxShadow: "inset 0 1px 2px rgba(255,255,255,0.2)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             color: "#fff",
-            fontSize: 9,
-            fontWeight: 600,
+            fontSize: 10,
+            fontWeight: 700,
             letterSpacing: "0.02em",
           }}
         >
           {sourceIcons[source] || "?"}
         </div>
-        <div style={{ fontSize: 13, fontWeight: 600, color: "rgba(35,25,15,0.88)" }}>
+        <div
+          style={{
+            fontSize: 15,
+            fontWeight: 600,
+            color: "rgba(35,25,15,0.95)",
+            letterSpacing: "-0.01em",
+          }}
+        >
           {person}
         </div>
-        <div style={{ fontSize: 10, color: "rgba(80,50,30,0.4)", marginLeft: "auto" }}>3h ago</div>
+        <div
+          style={{
+            fontSize: 11,
+            fontWeight: 500,
+            color: "rgba(80,50,30,0.5)",
+            marginLeft: "auto",
+            fontStyle: "italic",
+          }}
+        >
+          3h ago
+        </div>
       </div>
       <div
         style={{
-          fontSize: 12.5,
-          lineHeight: 1.45,
-          color: "rgba(35,25,15,0.72)",
+          fontSize: 13.5,
+          lineHeight: 1.5,
+          color: "rgba(35,25,15,0.85)",
         }}
       >
         {signal}
@@ -451,9 +776,6 @@ function BraceSignalCard({
 // ─────────────────────────────────────────────────────
 // All the noise cards with their positions
 // ─────────────────────────────────────────────────────
-
-// Loose grid: cards spaced ~22% apart in x, ~20% apart in y
-// Original card widths preserved. Early waves well-spaced, later waves crowd center.
 
 const noiseCards: NoiseCard[] = [
   // ── Wave 1 — four corners, maximum spacing ──
@@ -521,7 +843,7 @@ const noiseCards: NoiseCard[] = [
     y: "76%",
     rotation: 1.2,
     width: "255px",
-    enterAt: 0.20,
+    enterAt: 0.2,
     z: 13,
   },
   // ── Wave 2 — mid-edges, filling the ring ──
@@ -608,7 +930,7 @@ const noiseCards: NoiseCard[] = [
     y: "0%",
     rotation: -1,
     width: "265px",
-    enterAt: 0.30,
+    enterAt: 0.3,
     z: 18,
   },
   {
@@ -693,7 +1015,7 @@ const noiseCards: NoiseCard[] = [
     y: "22%",
     rotation: -1.5,
     width: "250px",
-    enterAt: 0.40,
+    enterAt: 0.4,
     z: 23,
   },
   {
@@ -779,7 +1101,7 @@ const noiseCards: NoiseCard[] = [
     y: "5%",
     rotation: 1.8,
     width: "260px",
-    enterAt: 0.50,
+    enterAt: 0.5,
     z: 28,
   },
   {
@@ -863,7 +1185,7 @@ const noiseCards: NoiseCard[] = [
     y: "36%",
     rotation: -1.5,
     width: "258px",
-    enterAt: 0.60,
+    enterAt: 0.6,
     z: 33,
   },
   {
@@ -949,7 +1271,7 @@ const noiseCards: NoiseCard[] = [
     y: "42%",
     rotation: 2.5,
     width: "255px",
-    enterAt: 0.70,
+    enterAt: 0.7,
     z: 38,
   },
   {
@@ -1049,7 +1371,7 @@ const noiseCards: NoiseCard[] = [
     y: "18%",
     rotation: 1.5,
     width: "260px",
-    enterAt: 0.80,
+    enterAt: 0.8,
     z: 44,
   },
   {
@@ -1181,12 +1503,28 @@ function AnimatedNoiseCard({
   scrollProgress,
 }: {
   card: NoiseCard;
-  scrollProgress: ReturnType<typeof useScroll>["scrollYProgress"];
+  scrollProgress: MotionValue<number>;
 }) {
-  const entryEnd = card.enterAt + 0.035;
-  const opacity = useTransform(scrollProgress, [card.enterAt, entryEnd], [0, 1]);
-  const scale = useTransform(scrollProgress, [card.enterAt, entryEnd], [0.88, 1]);
+  const entryEnd = card.enterAt + 0.04; // Smoother entry window
+  const opacity = useTransform(
+    scrollProgress,
+    [card.enterAt, entryEnd],
+    [0, 1],
+  );
+  const scale = useTransform(
+    scrollProgress,
+    [card.enterAt, entryEnd],
+    [0.88, 1],
+  );
   const y = useTransform(scrollProgress, [card.enterAt, entryEnd], [24, 0]);
+
+  // Apple-style premium blur reveal
+  const blurVal = useTransform(
+    scrollProgress,
+    [card.enterAt, entryEnd],
+    [8, 0],
+  );
+  const filter = useMotionTemplate`blur(${blurVal}px)`;
 
   return (
     <motion.div
@@ -1200,10 +1538,24 @@ function AnimatedNoiseCard({
         opacity,
         scale,
         y,
+        filter,
         transformOrigin: "center center",
+        willChange: "transform, opacity, filter",
       }}
     >
-      {card.content}
+      <motion.div
+        whileHover={{
+          scale: 1.04,
+          y: -4,
+          boxShadow:
+            "0 24px 48px -12px rgba(0,0,0,0.15), 0 4px 12px -2px rgba(0,0,0,0.08)",
+          zIndex: 100,
+        }}
+        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+        style={{ width: "100%", height: "100%", borderRadius: 16 }}
+      >
+        {card.content}
+      </motion.div>
     </motion.div>
   );
 }
@@ -1219,9 +1571,9 @@ export default function SignalNoise() {
     offset: ["start start", "end end"],
   });
 
-  const headlineOpacity = useTransform(scrollYProgress, [0.02, 0.10], [0, 1]);
-  const headlineY = useTransform(scrollYProgress, [0.02, 0.10], [30, 0]);
-  const sectionOpacity = useTransform(scrollYProgress, [0.90, 0.98], [1, 0]);
+  const headlineOpacity = useTransform(scrollYProgress, [0.02, 0.1], [0, 1]);
+  const headlineY = useTransform(scrollYProgress, [0.02, 0.1], [30, 0]);
+  const sectionOpacity = useTransform(scrollYProgress, [0.9, 0.98], [1, 0]);
 
   return (
     <section ref={sectionRef} className="relative" style={{ height: "500vh" }}>
@@ -1233,7 +1585,10 @@ export default function SignalNoise() {
         <div className="absolute inset-0" style={{ background: "#fff" }} />
 
         {/* Noise cards fill the viewport */}
-        <div className="absolute inset-0 overflow-hidden">
+        <div
+          className="absolute inset-0 overflow-hidden"
+          style={{ perspective: "1000px" }}
+        >
           {noiseCards.map((card) => (
             <AnimatedNoiseCard
               key={card.id}
@@ -1252,15 +1607,17 @@ export default function SignalNoise() {
             zIndex: 5,
           }}
         >
-          <div style={{ maxWidth: 600, textAlign: "center", padding: "0 32px" }}>
+          <div
+            style={{ maxWidth: 640, textAlign: "center", padding: "0 32px" }}
+          >
             <h2
               style={{
-                fontFamily: "'Georgia', 'Times New Roman', serif",
-                fontSize: "clamp(1.6rem, 3.2vw, 2.4rem)",
-                lineHeight: 1.25,
+                fontFamily: "ui-serif, 'Georgia', 'Times New Roman', serif",
+                fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
+                lineHeight: 1.2,
                 fontWeight: 400,
-                letterSpacing: "-0.02em",
-                color: "rgba(9,9,11,0.88)",
+                letterSpacing: "-0.03em",
+                color: "#1d1d1f",
                 margin: 0,
               }}
             >
@@ -1268,11 +1625,11 @@ export default function SignalNoise() {
             </h2>
             <p
               style={{
-                fontFamily: "'Georgia', 'Times New Roman', serif",
-                fontSize: "clamp(1rem, 1.8vw, 1.25rem)",
-                lineHeight: 1.5,
-                color: "rgba(9,9,11,0.5)",
-                margin: "16px 0 0 0",
+                fontFamily: "ui-serif, 'Georgia', 'Times New Roman', serif",
+                fontSize: "clamp(1.1rem, 2vw, 1.35rem)",
+                lineHeight: 1.6,
+                color: "#86868b",
+                margin: "20px 0 0 0",
               }}
             >
               that&apos;s dozens of relationships fading,

@@ -5,6 +5,8 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import DemoMockup from "./components/DemoMockup";
 import SignalNoise from "./components/SignalNoise";
 import NetworkSection from "./components/NetworkSection";
+import ComparisonTable from "./components/ComparisonTable";
+import OnePercentClub from "./components/OnePercentClub";
 
 
 function GrainOverlay() {
@@ -167,6 +169,8 @@ export default function Home() {
       <HeroSection />
       <SignalNoise />
       <NetworkSection />
+      <ComparisonTable />
+      <OnePercentClub />
     </div>
   );
 }

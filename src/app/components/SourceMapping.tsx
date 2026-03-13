@@ -1,3 +1,4 @@
+// File: src/app/components/SourceMapping.tsx
 "use client";
 
 import { useRef } from "react";
@@ -10,13 +11,13 @@ export default function SourceMapping() {
     offset: ["start start", "end end"],
   });
 
-  // Left text
+  // Left text entrance
   const textOpacity = useTransform(scrollYProgress, [0.04, 0.14], [0, 1]);
   const textY = useTransform(scrollYProgress, [0.04, 0.14], [40, 0]);
 
-  // Right image
-  const imgOpacity = useTransform(scrollYProgress, [0.08, 0.20], [0, 1]);
-  const imgScale = useTransform(scrollYProgress, [0.08, 0.20], [0.92, 1]);
+  // Right image entrance
+  const imgOpacity = useTransform(scrollYProgress, [0.08, 0.2], [0, 1]);
+  const imgScale = useTransform(scrollYProgress, [0.08, 0.2], [0.94, 1]);
 
   // Section exit
   const sectionOpacity = useTransform(scrollYProgress, [0.84, 0.96], [1, 0]);
@@ -31,7 +32,7 @@ export default function SourceMapping() {
         className="sticky top-0 h-screen overflow-hidden"
         style={{ opacity: sectionOpacity }}
       >
-        {/* White background with subtle warm radials */}
+        {/* White background with subtle warm radials for depth */}
         <div
           style={{
             position: "absolute",
@@ -44,11 +45,11 @@ export default function SourceMapping() {
             position: "absolute",
             inset: 0,
             background:
-              "radial-gradient(ellipse 60% 50% at 65% 50%, rgba(200,190,175,0.06), transparent)",
+              "radial-gradient(ellipse 60% 50% at 65% 50%, rgba(200,190,175,0.08), transparent)",
           }}
         />
 
-        {/* Content */}
+        {/* Content Container */}
         <div
           style={{
             position: "relative",
@@ -62,19 +63,19 @@ export default function SourceMapping() {
           <div
             style={{
               width: "35%",
-              paddingLeft: "clamp(40px, 6vw, 96px)",
+              paddingLeft: "clamp(48px, 8vw, 120px)",
               paddingRight: "clamp(24px, 3vw, 48px)",
             }}
           >
             <motion.div style={{ opacity: textOpacity, y: textY }}>
               <h2
                 style={{
-                  fontFamily: "'Georgia', 'Times New Roman', serif",
-                  fontSize: "clamp(1.5rem, 2.6vw, 2.3rem)",
-                  lineHeight: 1.3,
+                  fontFamily: "ui-serif, 'Georgia', 'Times New Roman', serif",
+                  fontSize: "clamp(1.8rem, 3vw, 2.6rem)",
+                  lineHeight: 1.25,
                   fontWeight: 400,
-                  letterSpacing: "-0.02em",
-                  color: "rgba(9,9,11,0.88)",
+                  letterSpacing: "-0.03em",
+                  color: "#1d1d1f",
                   margin: 0,
                 }}
               >
@@ -82,11 +83,12 @@ export default function SourceMapping() {
               </h2>
               <p
                 style={{
-                  fontFamily: "'Georgia', 'Times New Roman', serif",
-                  fontSize: "clamp(0.95rem, 1.5vw, 1.15rem)",
-                  lineHeight: 1.65,
-                  color: "rgba(9,9,11,0.4)",
-                  margin: "20px 0 0 0",
+                  fontFamily: "ui-serif, 'Georgia', 'Times New Roman', serif",
+                  fontSize: "clamp(1.05rem, 1.6vw, 1.25rem)",
+                  lineHeight: 1.6,
+                  color: "#86868b",
+                  margin: "24px 0 0 0",
+                  fontStyle: "italic",
                 }}
               >
                 by proximity, momentum,
@@ -94,19 +96,15 @@ export default function SourceMapping() {
                 and intent.
               </p>
 
-              {/* Subtle accent line */}
+              {/* Premium gradient accent line */}
               <motion.div
                 style={{
-                  width: 40,
+                  width: 64,
                   height: 1,
-                  marginTop: 28,
+                  marginTop: 32,
                   background:
-                    "linear-gradient(90deg, rgba(9,9,11,0.15), transparent)",
-                  opacity: useTransform(
-                    scrollYProgress,
-                    [0.10, 0.20],
-                    [0, 1]
-                  ),
+                    "linear-gradient(90deg, rgba(29,29,31,0.2), transparent)",
+                  opacity: useTransform(scrollYProgress, [0.1, 0.2], [0, 1]),
                 }}
               />
             </motion.div>
@@ -119,19 +117,22 @@ export default function SourceMapping() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              paddingRight: "clamp(24px, 4vw, 64px)",
+              paddingRight: "clamp(24px, 6vw, 80px)",
             }}
           >
             <motion.img
               src="/source-brain.png"
               alt="Sources connecting to Brace intelligence"
+              animate={{ y: [0, -12, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               style={{
                 width: "100%",
-                maxWidth: 700,
+                maxWidth: 720,
                 height: "auto",
                 opacity: imgOpacity,
                 scale: imgScale,
-                mixBlendMode: "screen",
+                mixBlendMode: "multiply",
+                filter: "drop-shadow(0 24px 48px rgba(0,0,0,0.06))",
               }}
             />
           </div>
