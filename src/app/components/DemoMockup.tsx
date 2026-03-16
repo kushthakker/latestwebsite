@@ -68,17 +68,17 @@ const DEMO_PROFILES: Record<string, DemoProfile> = {
     refId: "BRC-AM-0247",
     proximity: "close",
     remember: [
-      "Wife Meera is expecting in April — ask about preparations",
+      "Wife Meera is expecting in April \u2014 ask about preparations",
       "Runs 5K every morning at Cubbon Park",
       "Prefers Third Wave Coffee over Starbucks",
     ],
-    traits: ["IIT Bombay ’12", "Supply Chain AI", "Seed to $5M ARR in 18mo"],
+    traits: ["IIT Bombay '12", "Supply Chain AI", "Seed to $5M ARR in 18mo"],
     circle: [
       { relation: "co-founder", name: "Vikram Rao", detail: "NexaFlow, CTO" },
       { relation: "advisor", name: "Kunal Shah", detail: "CRED, Founder" },
       { relation: "wife", name: "Meera Mehta", detail: "Google, Product Lead" },
     ],
-    lastInteraction: "Board call — Feb 28, 2026",
+    lastInteraction: "Board call \u2014 Feb 28, 2026",
   },
   "priya-venkatesh": {
     id: "priya-venkatesh",
@@ -86,7 +86,7 @@ const DEMO_PROFILES: Record<string, DemoProfile> = {
     role: "Founder & CEO at Karya Finance",
     metAt: "Warm intro from Arjun Mehta, Jan 2025",
     knownFor:
-      "Ex-Razorpay #30. Built RazorpayX Lending. YC W23 alum. Building for India’s 63M SMBs.",
+      "Ex-Razorpay #30. Built RazorpayX Lending. YC W23 alum. Building for India\u2019s 63M SMBs.",
     alignment:
       "Pipeline deal for Fund I. Strong founder-market fit. Fintech infra thesis.",
     email: "priya@karyafinance.com",
@@ -97,7 +97,7 @@ const DEMO_PROFILES: Record<string, DemoProfile> = {
       { relation: "co-founder", name: "Sneha Iyer", detail: "Karya, CTO" },
       { relation: "mentor", name: "Arjun Mehta", detail: "NexaFlow, CEO" },
     ],
-    lastInteraction: "Coffee at Third Wave — Feb 12, 2026",
+    lastInteraction: "Coffee at Third Wave \u2014 Feb 12, 2026",
   },
   "kavya-iyer": {
     id: "kavya-iyer",
@@ -107,13 +107,13 @@ const DEMO_PROFILES: Record<string, DemoProfile> = {
     knownFor:
       "Sharp allocator. Doubled India venture allocation in 2 years. Harvard MBA, ex-McKinsey.",
     alignment:
-      "Target LP for Fund II. Family office manages ₹2,000Cr+ in alternatives.",
+      "Target LP for Fund II. Family office manages \u20B92,000Cr+ in alternatives.",
     email: "kavya@sundaramcapital.com",
     refId: "BRC-KI-0156",
     proximity: "known",
     remember: [
-      "Daughter at Harvard — proud of legacy admission",
-      "Passionate about climate tech — good Fund II angle",
+      "Daughter at Harvard \u2014 proud of legacy admission",
+      "Passionate about climate tech \u2014 good Fund II angle",
     ],
     traits: ["Harvard MBA", "Family Office", "Climate Allocator"],
     circle: [
@@ -124,7 +124,7 @@ const DEMO_PROFILES: Record<string, DemoProfile> = {
       },
       { relation: "colleague", name: "Anita Rao", detail: "Sundaram, Partner" },
     ],
-    lastInteraction: "LP meet — Oct 14, 2024",
+    lastInteraction: "LP meet \u2014 Oct 14, 2024",
   },
   "rajan-anand": {
     id: "rajan-anand",
@@ -140,10 +140,10 @@ const DEMO_PROFILES: Record<string, DemoProfile> = {
     refId: "BRC-RA-0312",
     proximity: "close",
     remember: [
-      "IIT Delhi batch of ’97 — same hostel as you",
-      "Weekend trekker — just did Hampta Pass",
+      "IIT Delhi batch of \u201997 \u2014 same hostel as you",
+      "Weekend trekker \u2014 just did Hampta Pass",
     ],
-    traits: ["IIT Delhi ’97", "India SaaS", "2x co-investor"],
+    traits: ["IIT Delhi '97", "India SaaS", "2x co-investor"],
     circle: [
       { relation: "partner", name: "Sandeep Murthy", detail: "Elevar, GP" },
       {
@@ -152,7 +152,7 @@ const DEMO_PROFILES: Record<string, DemoProfile> = {
         detail: "Logistics SaaS",
       },
     ],
-    lastInteraction: "Chai at Chaayos — Jan 15, 2026",
+    lastInteraction: "Chai at Chaayos \u2014 Jan 15, 2026",
   },
 };
 
@@ -167,15 +167,15 @@ const DEMO_SIGNALS: DemoSignal[] = [
     isFollowUp: true,
     followUpContext: "$5M ARR",
     insight:
-      "Portfolio support moment — your Mahindra intro could unlock their next big logo",
+      "Portfolio support moment \u2014 your Mahindra intro could unlock their next big logo",
     because:
-      "He’s your portfolio founder asking for a warm intro — this is exactly what good investors do",
-    and: "He’s getting Series A inbound from top funds — your active support now cements your value before he has options",
-    so: "Delivering on the Mahindra intro proves you’re his most valuable board seat, not just his first check",
+      "He\u2019s your portfolio founder asking for a warm intro \u2014 this is exactly what good investors do",
+    and: "He\u2019s getting Series A inbound from top funds \u2014 your active support now cements your value before he has options",
+    so: "Delivering on the Mahindra intro proves you\u2019re his most valuable board seat, not just his first check",
     actionLabel: "reply",
     actionChannel: "email",
     suggestedText:
-      "Great case study. I’ll reach out to Rajesh Jejurikar’s office — know him from CII meetings. Let me warm it up this week.\n\nOn Series A — let’s discuss timing over dinner. Free Thursday?",
+      "Great case study. I\u2019ll reach out to Rajesh Jejurikar\u2019s office \u2014 know him from CII meetings. Let me warm it up this week.\n\nOn Series A \u2014 let\u2019s discuss timing over dinner. Free Thursday?",
   },
   {
     id: "s6",
@@ -183,17 +183,17 @@ const DEMO_SIGNALS: DemoSignal[] = [
     personName: "Priya Venkatesh",
     source: "linkedin",
     timestamp: "5h ago",
-    content: "Posted: “Karya Finance crosses ₹200Cr disbursed in 10 months”",
+    content: "Posted: \u201cKarya Finance crosses \u20B9200Cr disbursed in 10 months\u201d",
     insight:
-      "Strong traction from a founder you’re building a relationship with",
+      "Strong traction from a founder you\u2019re building a relationship with",
     because:
       "Arjun introduced you to Priya last month and you had a great first coffee at Third Wave",
-    and: "Her milestone post is getting traction — engaging now shows you’re paying attention",
+    and: "Her milestone post is getting traction \u2014 engaging now shows you\u2019re paying attention",
     so: "Showing up for her public wins builds trust early, before every other investor starts circling",
     actionLabel: "comment",
     actionChannel: "linkedin",
     suggestedText:
-      "Impressive numbers, Priya. The default rate at that disbursement volume is the real story — speaks to how well the alternative data scoring works. Excited to see what’s next.",
+      "Impressive numbers, Priya. The default rate at that disbursement volume is the real story \u2014 speaks to how well the alternative data scoring works. Excited to see what\u2019s next.",
   },
   {
     id: "s1",
@@ -202,17 +202,17 @@ const DEMO_SIGNALS: DemoSignal[] = [
     source: "linkedin",
     timestamp: "1d ago",
     content:
-      "Posted: “NexaFlow hits $5M ARR — Tata Steel deal changed everything”",
+      "Posted: \u201cNexaFlow hits $5M ARR \u2014 Tata Steel deal changed everything\u201d",
     insight:
-      "Portfolio proof point · $5M ARR in 18mo · validates Fund I thesis",
+      "Portfolio proof point \u00B7 $5M ARR in 18mo \u00B7 validates Fund I thesis",
     because:
       "You led his seed round and this ARR milestone is a key proof point for Fund I returns",
-    and: "The first 48 hours of a founder’s milestone post get the most visibility — your public support matters",
-    so: "Engaging now reinforces that you’re a hands-on investor, not just a check-writer",
+    and: "The first 48 hours of a founder\u2019s milestone post get the most visibility \u2014 your public support matters",
+    so: "Engaging now reinforces that you\u2019re a hands-on investor, not just a check-writer",
     actionLabel: "comment",
     actionChannel: "linkedin",
     suggestedText:
-      "Proud to have backed Arjun & team from day one. The NRR numbers tell the real story — this is sticky, enterprise-grade PMF. Exciting road ahead.",
+      "Proud to have backed Arjun & team from day one. The NRR numbers tell the real story \u2014 this is sticky, enterprise-grade PMF. Exciting road ahead.",
   },
   {
     id: "s3",
@@ -221,15 +221,15 @@ const DEMO_SIGNALS: DemoSignal[] = [
     source: "memory",
     timestamp: "today",
     content: "Back from Davos this week",
-    insight: "Good moment to reconnect — Davos stories are freshest now",
+    insight: "Good moment to reconnect \u2014 Davos stories are freshest now",
     because:
       "She asked to see Fund I data at your last meeting and you discussed climate supply chain tech",
-    and: "She’s just back from Davos — the first 48 hours are when insights and introductions are top of mind",
-    so: "A check-in now naturally reopens the Fund II conversation while she’s energized from Davos",
+    and: "She\u2019s just back from Davos \u2014 the first 48 hours are when insights and introductions are top of mind",
+    so: "A check-in now naturally reopens the Fund II conversation while she\u2019s energized from Davos",
     actionLabel: "ask how it went",
     actionChannel: "dm",
     suggestedText:
-      "Kavya — hope Davos was good. Would love to hear what you picked up on the India allocation side. Coffee at Taj this week? I also have the Fund I data you’d asked about.",
+      "Kavya \u2014 hope Davos was good. Would love to hear what you picked up on the India allocation side. Coffee at Taj this week? I also have the Fund I data you\u2019d asked about.",
   },
   {
     id: "s7",
@@ -237,21 +237,21 @@ const DEMO_SIGNALS: DemoSignal[] = [
     personName: "Priya Venkatesh",
     source: "quiet",
     timestamp: "today",
-    content: "Arjun can connect you to Priya’s NBFC partner at MicroLend",
-    insight: "Warm path · deepen the relationship through Arjun’s network",
+    content: "Arjun can connect you to Priya\u2019s NBFC partner at MicroLend",
+    insight: "Warm path \u00B7 deepen the relationship through Arjun\u2019s network",
     because:
-      "You’re building a relationship with Priya and Arjun’s company integrates with Karya",
+      "You\u2019re building a relationship with Priya and Arjun\u2019s company integrates with Karya",
     and: "Meeting the people around a founder tells you more than any pitch deck",
-    so: "Asking Arjun for this intro signals to Priya that you’re doing the work, not just window-shopping",
+    so: "Asking Arjun for this intro signals to Priya that you\u2019re doing the work, not just window-shopping",
     actionLabel: "request intro",
     actionChannel: "dm",
     suggestedText:
-      "Arjun — I’m getting to know Priya and Karya Finance better. Could you connect me with Vikram at MicroLend? Would be great to hear their perspective.",
+      "Arjun \u2014 I\u2019m getting to know Priya and Karya Finance better. Could you connect me with Vikram at MicroLend? Would be great to hear their perspective.",
   },
 ];
 
 // ─────────────────────────────────────────────────────
-// UI Themes
+// UI Themes (light, matching minimalistic/signal-new)
 // ─────────────────────────────────────────────────────
 
 const SOURCE_THEMES: Record<
@@ -266,59 +266,59 @@ const SOURCE_THEMES: Record<
 > = {
   email: {
     label: "Email",
-    color: "#2c7be5",
-    bg: "rgba(44,123,229,0.10)",
-    border: "rgba(44,123,229,0.18)",
-    soft: "rgba(44,123,229,0.16)",
+    color: "rgba(145,110,60,0.76)",
+    bg: "rgba(175,145,95,0.08)",
+    border: "rgba(145,110,60,0.22)",
+    soft: "rgba(175,145,95,0.10)",
   },
   linkedin: {
     label: "LinkedIn",
-    color: "#5856d6",
-    bg: "rgba(88,86,214,0.10)",
-    border: "rgba(88,86,214,0.18)",
-    soft: "rgba(88,86,214,0.15)",
+    color: "rgba(60,110,170,0.75)",
+    bg: "rgba(80,120,170,0.07)",
+    border: "rgba(60,110,170,0.20)",
+    soft: "rgba(80,120,170,0.10)",
   },
   memory: {
     label: "Memory",
-    color: "#b3601e",
-    bg: "rgba(179,96,30,0.09)",
-    border: "rgba(179,96,30,0.18)",
-    soft: "rgba(179,96,30,0.13)",
+    color: "rgba(132,98,62,0.75)",
+    bg: "rgba(170,140,105,0.08)",
+    border: "rgba(132,98,62,0.20)",
+    soft: "rgba(170,140,105,0.10)",
   },
   news: {
     label: "News",
-    color: "#c2410c",
-    bg: "rgba(194,65,12,0.09)",
-    border: "rgba(194,65,12,0.18)",
-    soft: "rgba(194,65,12,0.14)",
+    color: "rgba(90,100,82,0.72)",
+    bg: "rgba(120,135,100,0.08)",
+    border: "rgba(90,100,82,0.20)",
+    soft: "rgba(120,135,100,0.10)",
   },
   quiet: {
     label: "Quiet",
-    color: "#2d7d4f",
-    bg: "rgba(45,125,79,0.10)",
-    border: "rgba(45,125,79,0.18)",
-    soft: "rgba(45,125,79,0.14)",
+    color: "rgba(80,100,60,0.72)",
+    bg: "rgba(80,100,60,0.07)",
+    border: "rgba(80,100,60,0.18)",
+    soft: "rgba(80,100,60,0.10)",
   },
 };
 
 const PROXIMITY_THEMES = {
   close: {
     label: "inner circle",
-    color: "#2d7d4f",
-    bg: "rgba(45,125,79,0.10)",
-    border: "rgba(45,125,79,0.16)",
+    color: "#c9a55a",
+    bg: "rgba(201,165,90,0.08)",
+    border: "rgba(201,165,90,0.20)",
   },
   known: {
     label: "known",
-    color: "#2c7be5",
-    bg: "rgba(44,123,229,0.10)",
-    border: "rgba(44,123,229,0.16)",
+    color: "rgba(80,50,30,0.50)",
+    bg: "rgba(80,50,30,0.04)",
+    border: "rgba(80,50,30,0.12)",
   },
   new: {
     label: "new",
-    color: "#71717a",
-    bg: "rgba(113,113,122,0.10)",
-    border: "rgba(113,113,122,0.16)",
+    color: "rgba(80,50,30,0.35)",
+    bg: "rgba(80,50,30,0.03)",
+    border: "rgba(80,50,30,0.08)",
   },
 } as const;
 
@@ -341,7 +341,7 @@ function getInitials(name: string) {
     .toUpperCase();
 }
 
-function PaperGrain({ id, opacity = 0.03 }: { id: string; opacity?: number }) {
+function PaperGrain({ id, opacity = 0.035 }: { id: string; opacity?: number }) {
   return (
     <svg
       className="pointer-events-none absolute inset-0 h-full w-full mix-blend-overlay"
@@ -350,7 +350,7 @@ function PaperGrain({ id, opacity = 0.03 }: { id: string; opacity?: number }) {
       <filter id={id}>
         <feTurbulence
           type="fractalNoise"
-          baseFrequency="0.8"
+          baseFrequency="0.85"
           numOctaves="4"
           stitchTiles="stitch"
         />
@@ -361,22 +361,35 @@ function PaperGrain({ id, opacity = 0.03 }: { id: string; opacity?: number }) {
   );
 }
 
-function GlassSurface({
+function CardSurface({
   children,
   className = "",
   grainId,
+  variant = "signal",
 }: {
   children: ReactNode;
   className?: string;
   grainId: string;
+  variant?: "signal" | "rolodex";
 }) {
+  const bg =
+    variant === "signal"
+      ? "linear-gradient(168deg, rgba(243,245,237,0.32) 0%, rgba(236,239,225,0.22) 100%)"
+      : "linear-gradient(168deg, rgba(245,235,227,0.30) 0%, rgba(238,228,218,0.20) 100%)";
+
   return (
     <div
-      className={`relative min-h-0 overflow-hidden rounded-[30px] border border-white/55 bg-[rgba(242,242,247,0.72)] backdrop-blur-[28px] shadow-[0_4px_16px_rgba(0,0,0,0.05),0_18px_60px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.72)] ${className}`}
+      className={`relative min-h-0 overflow-hidden rounded-[30px] backdrop-blur-[28px] ${className}`}
+      style={{
+        background: bg,
+        border: "1px solid rgba(0,0,0,0.04)",
+        boxShadow:
+          "0 1px 0 rgba(255,255,255,0.7) inset, 0 2px 8px rgba(0,0,0,0.03), 0 8px 32px rgba(0,0,0,0.04)",
+      }}
     >
-      <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-90" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.28),rgba(255,255,255,0.04)_34%,rgba(255,255,255,0.12)_100%)]" />
-      <PaperGrain id={grainId} opacity={0.028} />
+      <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-50" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.40),rgba(255,255,255,0.10)_34%,rgba(255,255,255,0.20)_100%)]" />
+      <PaperGrain id={grainId} opacity={0.02} />
       {children}
     </div>
   );
@@ -384,7 +397,7 @@ function GlassSurface({
 
 function SectionEyebrow({
   label,
-  color = "#71717a",
+  color = "rgba(60,70,50,0.42)",
 }: {
   label: string;
   color?: string;
@@ -530,30 +543,40 @@ function DemoSignalInbox({
   onSelect: (id: string) => void;
 }) {
   return (
-    <GlassSurface grainId="demo-inbox-grain" className="flex h-full min-h-0 flex-col">
-      <div className="relative border-b border-white/45 px-4 pb-3 pt-4">
+    <CardSurface grainId="demo-inbox-grain" variant="signal" className="flex h-full min-h-0 flex-col">
+      <div
+        className="relative px-4 pb-3 pt-4"
+        style={{ borderBottom: "1px solid rgba(60,70,50,0.08)" }}
+      >
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.28),rgba(255,255,255,0.08))]" />
         <div className="relative flex items-start justify-between gap-3">
           <div>
             <SectionEyebrow label="For You" />
             <div
-              style={{ fontFamily: fonts.sans }}
-              className="mt-1.5 text-[18px] font-medium tracking-tight text-zinc-900"
+              style={{ fontFamily: fonts.sans, color: "rgba(35,45,30,0.90)" }}
+              className="mt-1.5 text-[18px] font-medium tracking-tight"
             >
               Relationship feed
             </div>
             <p
-              style={{ fontFamily: fonts.sans }}
-              className="mt-0.5 text-[12px] leading-snug text-zinc-500"
+              style={{ fontFamily: fonts.sans, color: "rgba(60,70,50,0.52)" }}
+              className="mt-0.5 text-[12px] leading-snug"
             >
               Signals ranked by urgency, context, and relationship value.
             </p>
           </div>
 
-          <div className="rounded-full border border-white/60 bg-white/45 px-3 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.65)] backdrop-blur-xl">
+          <div
+            className="rounded-full px-3 py-1.5 backdrop-blur-xl"
+            style={{
+              background: "rgba(255,255,255,0.45)",
+              border: "1px solid rgba(255,255,255,0.60)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.65)",
+            }}
+          >
             <div
-              style={{ fontFamily: fonts.mono }}
-              className="text-[10px] uppercase tracking-[0.18em] text-zinc-500"
+              style={{ fontFamily: fonts.mono, color: "rgba(60,70,50,0.42)" }}
+              className="text-[10px] uppercase tracking-[0.18em]"
             >
               {signals.length} live
             </div>
@@ -578,11 +601,18 @@ function DemoSignalInbox({
                 className="group relative w-full overflow-hidden rounded-[22px] text-left"
               >
                 <div
-                  className={`relative border px-3.5 py-3.5 transition-all duration-250 ${
-                    isSelected
-                      ? "border-white/70 bg-white/60 shadow-[0_10px_30px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.72)]"
-                      : "border-white/45 bg-white/30 shadow-[0_4px_14px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.55)] group-hover:bg-white/42"
-                  }`}
+                  className="relative px-3.5 py-3.5 transition-all duration-250"
+                  style={{
+                    background: isSelected
+                      ? "rgba(80,100,60,0.06)"
+                      : "rgba(255,255,255,0.20)",
+                    border: isSelected
+                      ? "1px solid rgba(80,100,60,0.15)"
+                      : "1px solid rgba(255,255,255,0.45)",
+                    boxShadow: isSelected
+                      ? "0 10px 30px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.55)"
+                      : "0 4px 14px rgba(0,0,0,0.02), inset 0 1px 0 rgba(255,255,255,0.45)",
+                  }}
                 >
                   {isSelected && (
                     <>
@@ -590,7 +620,7 @@ function DemoSignalInbox({
                         layoutId="demo-signal-active"
                         className="absolute inset-0 rounded-[22px]"
                         style={{
-                          boxShadow: `inset 0 0 0 1px ${theme.border}, 0 16px 34px ${theme.soft}`,
+                          boxShadow: `inset 0 0 0 1px ${theme.border}`,
                         }}
                         transition={{
                           type: "spring",
@@ -613,11 +643,12 @@ function DemoSignalInbox({
 
                   <div className="relative z-10 flex gap-3">
                     <div
-                      className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.55)]"
+                      className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full backdrop-blur-md"
                       style={{
                         backgroundColor: theme.bg,
-                        borderColor: theme.border,
+                        border: `1px solid ${theme.border}`,
                         color: theme.color,
+                        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.55)",
                       }}
                     >
                       <SourceIcon
@@ -630,8 +661,8 @@ function DemoSignalInbox({
                       <div className="mb-1.5 flex items-start justify-between gap-2">
                         <div className="min-w-0">
                           <div
-                            style={{ fontFamily: fonts.sans }}
-                            className="truncate text-[14px] font-semibold tracking-tight text-zinc-900"
+                            style={{ fontFamily: fonts.sans, color: "rgba(35,40,30,0.85)" }}
+                            className="truncate text-[14px] font-semibold tracking-tight"
                           >
                             {signal.personName}
                           </div>
@@ -650,8 +681,13 @@ function DemoSignalInbox({
                             </span>
                             {signal.isFollowUp && (
                               <span
-                                style={{ fontFamily: fonts.mono }}
-                                className="rounded-full border border-white/60 bg-white/55 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-zinc-500"
+                                style={{
+                                  fontFamily: fonts.mono,
+                                  color: "rgba(60,70,50,0.42)",
+                                  background: "rgba(255,255,255,0.55)",
+                                  border: "1px solid rgba(255,255,255,0.60)",
+                                }}
+                                className="rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.16em]"
                               >
                                 follow-up
                               </span>
@@ -660,16 +696,16 @@ function DemoSignalInbox({
                         </div>
 
                         <span
-                          style={{ fontFamily: fonts.mono }}
-                          className="shrink-0 pt-0.5 text-[10px] text-zinc-400"
+                          style={{ fontFamily: fonts.mono, color: "rgba(60,70,50,0.38)" }}
+                          className="shrink-0 pt-0.5 text-[10px]"
                         >
                           {signal.timestamp}
                         </span>
                       </div>
 
                       <p
-                        style={{ fontFamily: fonts.sans }}
-                        className="line-clamp-2 pr-3 text-[12px] leading-relaxed text-zinc-500"
+                        style={{ fontFamily: fonts.sans, color: "rgba(35,40,30,0.55)" }}
+                        className="line-clamp-2 pr-3 text-[12px] leading-relaxed"
                       >
                         {signal.content}
                       </p>
@@ -681,7 +717,7 @@ function DemoSignalInbox({
           })}
         </div>
       </div>
-    </GlassSurface>
+    </CardSurface>
   );
 }
 
@@ -697,7 +733,7 @@ function DemoSignalDetail({
   const theme = SOURCE_THEMES[signal.source] ?? SOURCE_THEMES.email;
 
   return (
-    <GlassSurface grainId="demo-detail-grain" className="flex h-full min-h-0 flex-col">
+    <CardSurface grainId="demo-detail-grain" variant="signal" className="flex h-full min-h-0 flex-col">
       <div
         className="pointer-events-none absolute -left-[10%] top-[-8%] h-[42%] w-[60%] rounded-full blur-3xl"
         style={{ backgroundColor: theme.soft }}
@@ -713,7 +749,10 @@ function DemoSignalDetail({
           transition={{ duration: 0.24, ease: "easeOut" }}
           className="relative z-10 flex h-full min-h-0 flex-col"
         >
-          <div className="border-b border-white/45 px-5 pb-3 pt-4">
+          <div
+            className="px-5 pb-3 pt-4"
+            style={{ borderBottom: "1px solid rgba(60,70,50,0.08)" }}
+          >
             <div className="mb-2.5 flex items-center justify-between gap-3">
               <div className="flex flex-wrap items-center gap-2">
                 <span
@@ -730,8 +769,11 @@ function DemoSignalDetail({
                 </span>
 
                 <span
-                  style={{ fontFamily: fonts.mono }}
-                  className="rounded-full border border-white/60 bg-white/45 px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-zinc-500"
+                  style={{
+                    fontFamily: fonts.mono,
+                    color: "rgba(60,70,50,0.38)",
+                  }}
+                  className="rounded-full border border-white/60 bg-white/45 px-2.5 py-1 text-[10px] uppercase tracking-[0.16em]"
                 >
                   {signal.timestamp}
                 </span>
@@ -752,8 +794,8 @@ function DemoSignalDetail({
               </div>
 
               <span
-                style={{ fontFamily: fonts.mono }}
-                className="text-[10px] uppercase tracking-[0.18em] text-zinc-400"
+                style={{ fontFamily: fonts.mono, color: "rgba(60,70,50,0.35)" }}
+                className="text-[10px] uppercase tracking-[0.18em]"
               >
                 Action brief
               </span>
@@ -762,8 +804,8 @@ function DemoSignalDetail({
             <div className="mb-2.5">
               <SectionEyebrow label={signal.personName} color={theme.color} />
               <h2
-                style={{ fontFamily: fonts.sans }}
-                className="mt-1.5 line-clamp-2 text-[18px] font-medium leading-snug tracking-[-0.03em] text-zinc-900"
+                style={{ fontFamily: fonts.sans, color: "rgba(35,40,30,0.85)" }}
+                className="mt-1.5 line-clamp-2 text-[18px] font-medium leading-snug tracking-[-0.03em]"
               >
                 {signal.insight}
               </h2>
@@ -771,14 +813,14 @@ function DemoSignalDetail({
 
             <div className="rounded-[18px] border border-white/55 bg-white/40 px-3 py-2.5 shadow-[0_6px_24px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.64)] backdrop-blur-xl">
               <span
-                style={{ fontFamily: fonts.mono }}
-                className="mb-1 block text-[9px] font-semibold uppercase tracking-[0.18em] text-zinc-400"
+                style={{ fontFamily: fonts.mono, color: "rgba(60,70,50,0.35)" }}
+                className="mb-1 block text-[9px] font-semibold uppercase tracking-[0.18em]"
               >
                 Source snapshot
               </span>
               <p
-                style={{ fontFamily: fonts.sans }}
-                className="line-clamp-1 text-[13px] leading-snug text-zinc-700"
+                style={{ fontFamily: fonts.sans, color: "rgba(35,40,30,0.72)" }}
+                className="line-clamp-1 text-[13px] leading-snug"
               >
                 {signal.content}
               </p>
@@ -790,8 +832,8 @@ function DemoSignalDetail({
               <div className="mb-3 flex items-center justify-between gap-3">
                 <SectionEyebrow label="Why now" color={theme.color} />
                 <span
-                  style={{ fontFamily: fonts.mono }}
-                  className="text-[10px] uppercase tracking-[0.16em] text-zinc-400"
+                  style={{ fontFamily: fonts.mono, color: "rgba(60,70,50,0.30)" }}
+                  className="text-[10px] uppercase tracking-[0.16em]"
                 >
                   reasoning chain
                 </span>
@@ -799,7 +841,13 @@ function DemoSignalDetail({
 
               <div className="demo-no-scrollbar min-h-0 flex-1 overflow-y-auto">
                 <div className="relative space-y-3.5 pl-4 pr-1">
-                  <div className="absolute bottom-2 left-[5px] top-2 w-px bg-gradient-to-b from-zinc-200 via-zinc-200 to-transparent" />
+                  <div
+                    className="absolute bottom-2 left-[5px] top-2 w-px"
+                    style={{
+                      background:
+                        "linear-gradient(180deg, rgba(60,70,50,0.15), rgba(60,70,50,0.05))",
+                    }}
+                  />
                   {[
                     { label: "because", text: signal.because, active: false },
                     { label: "and", text: signal.and, active: false },
@@ -809,21 +857,31 @@ function DemoSignalDetail({
                       <div
                         className="absolute left-[-15px] top-[7px] h-[11px] w-[11px] rounded-full border-2 border-white shadow-sm"
                         style={{
-                          backgroundColor: step.active ? theme.color : "#d4d4d8",
+                          backgroundColor: step.active
+                            ? "rgba(80,100,60,0.60)"
+                            : "rgba(60,70,50,0.18)",
                         }}
                       />
                       <div
-                        style={{ fontFamily: fonts.mono }}
-                        className="mb-0.5 text-[10px] uppercase tracking-[0.18em] text-zinc-400"
+                        style={{
+                          fontFamily: fonts.mono,
+                          color: step.active
+                            ? "rgba(80,100,60,0.55)"
+                            : "rgba(60,70,50,0.35)",
+                        }}
+                        className="mb-0.5 text-[10px] uppercase tracking-[0.18em]"
                       >
                         {step.label}
                       </div>
                       <p
                         style={{
                           fontFamily: step.active ? fonts.serif : fonts.sans,
+                          color: step.active
+                            ? "rgba(35,40,30,0.85)"
+                            : "rgba(35,40,30,0.62)",
                         }}
                         className={`text-[14px] leading-relaxed ${
-                          step.active ? "italic text-zinc-800" : "text-zinc-600"
+                          step.active ? "italic" : ""
                         }`}
                       >
                         {step.text}
@@ -850,8 +908,8 @@ function DemoSignalDetail({
                   }}
                 />
                 <p
-                  style={{ fontFamily: fonts.sans }}
-                  className="line-clamp-2 text-[14px] leading-snug text-zinc-800"
+                  style={{ fontFamily: fonts.sans, color: "rgba(35,40,30,0.72)" }}
+                  className="line-clamp-2 text-[14px] leading-snug"
                 >
                   {signal.suggestedText}
                 </p>
@@ -864,21 +922,30 @@ function DemoSignalDetail({
                   disabled={sendState !== "idle"}
                   whileHover={sendState === "idle" ? { y: -1 } : undefined}
                   whileTap={sendState === "idle" ? { scale: 0.985 } : undefined}
-                  className={`inline-flex h-[40px] items-center justify-center gap-2 rounded-full px-5 text-[14px] font-medium transition-all duration-300 ${
-                    sendState === "idle"
-                      ? "text-white shadow-[0_14px_28px_rgba(0,0,0,0.16)]"
-                      : sendState === "sending"
-                        ? "cursor-not-allowed bg-white/50 text-zinc-400"
-                        : "bg-emerald-500 text-white shadow-[0_14px_28px_rgba(16,185,129,0.25)]"
-                  }`}
-                  style={
-                    sendState === "idle"
+                  className="inline-flex h-[40px] items-center justify-center gap-2 rounded-full px-5 text-[14px] font-medium transition-all duration-300"
+                  style={{
+                    fontFamily: fonts.sans,
+                    ...(sendState === "idle"
                       ? {
-                          fontFamily: fonts.sans,
-                          background: `linear-gradient(180deg, ${theme.color}, color-mix(in srgb, ${theme.color} 74%, black))`,
+                          background: `linear-gradient(180deg, rgba(80,100,60,0.65), rgba(80,100,60,0.50))`,
+                          border: "1px solid rgba(80,100,60,0.30)",
+                          color: "white",
+                          boxShadow: "0 14px 28px rgba(80,100,60,0.18)",
                         }
-                      : { fontFamily: fonts.sans }
-                  }
+                      : sendState === "sending"
+                        ? {
+                            background: "rgba(255,255,255,0.50)",
+                            border: "1px solid rgba(255,255,255,0.60)",
+                            color: "rgba(60,70,50,0.38)",
+                            cursor: "not-allowed",
+                          }
+                        : {
+                            background: "rgba(80,100,60,0.55)",
+                            border: "1px solid rgba(80,100,60,0.25)",
+                            color: "white",
+                            boxShadow: "0 14px 28px rgba(80,100,60,0.20)",
+                          }),
+                  }}
                 >
                   <span className="capitalize">
                     {sendState === "idle"
@@ -924,7 +991,8 @@ function DemoSignalDetail({
                 <div className="relative flex-1">
                   <div className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center">
                     <svg
-                      className="h-3.5 w-3.5 text-zinc-400"
+                      className="h-3.5 w-3.5"
+                      style={{ color: "rgba(60,70,50,0.35)" }}
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -940,8 +1008,11 @@ function DemoSignalDetail({
                   <input
                     type="text"
                     placeholder="Refine or add context..."
-                    className="h-[40px] w-full rounded-full border border-white/60 bg-white/48 pl-10 pr-4 text-[13px] text-zinc-800 placeholder:text-zinc-400 focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/50 shadow-[0_4px_14px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.58)] backdrop-blur-xl"
-                    style={{ fontFamily: fonts.sans }}
+                    className="h-[40px] w-full rounded-full border border-white/60 bg-white/48 pl-10 pr-4 text-[13px] backdrop-blur-xl focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/50 shadow-[0_4px_14px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.58)]"
+                    style={{
+                      fontFamily: fonts.sans,
+                      color: "rgba(35,40,30,0.78)",
+                    }}
                   />
                 </div>
               </div>
@@ -949,7 +1020,7 @@ function DemoSignalDetail({
           </div>
         </motion.div>
       </AnimatePresence>
-    </GlassSurface>
+    </CardSurface>
   );
 }
 
@@ -957,7 +1028,7 @@ function DemoRolodexCard({ profile }: { profile: DemoProfile }) {
   const proximity = PROXIMITY_THEMES[profile.proximity];
 
   return (
-    <GlassSurface grainId="demo-profile-grain" className="flex h-full min-h-0 flex-col">
+    <CardSurface grainId="demo-profile-grain" variant="rolodex" className="flex h-full min-h-0 flex-col">
       <AnimatePresence mode="wait">
         <motion.div
           key={profile.id}
@@ -967,7 +1038,10 @@ function DemoRolodexCard({ profile }: { profile: DemoProfile }) {
           transition={{ duration: 0.22, ease: "easeOut" }}
           className="relative z-10 flex h-full min-h-0 flex-col"
         >
-          <div className="relative overflow-hidden border-b border-white/45 px-4 pb-4 pt-4">
+          <div
+            className="relative overflow-hidden px-4 pb-4 pt-4"
+            style={{ borderBottom: "1px solid rgba(80,50,30,0.06)" }}
+          >
             <div
               className="pointer-events-none absolute left-[-20%] top-[-35%] h-[72%] w-[80%] rounded-full blur-3xl"
               style={{ backgroundColor: proximity.bg }}
@@ -990,10 +1064,10 @@ function DemoRolodexCard({ profile }: { profile: DemoProfile }) {
 
               <div className="flex items-center gap-2.5">
                 <div
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border backdrop-blur-md shadow-[0_6px_20px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.65)]"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full backdrop-blur-md shadow-[0_6px_20px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.65)]"
                   style={{
                     backgroundColor: proximity.bg,
-                    borderColor: proximity.border,
+                    border: `1px solid ${proximity.border}`,
                     color: proximity.color,
                   }}
                 >
@@ -1007,14 +1081,14 @@ function DemoRolodexCard({ profile }: { profile: DemoProfile }) {
 
                 <div className="min-w-0">
                   <h3
-                    style={{ fontFamily: fonts.sans }}
-                    className="truncate text-[16px] font-medium tracking-[-0.02em] text-zinc-900"
+                    style={{ fontFamily: fonts.sans, color: "rgba(35,25,15,0.92)" }}
+                    className="truncate text-[16px] font-medium tracking-[-0.02em]"
                   >
                     {profile.name}
                   </h3>
                   <p
-                    style={{ fontFamily: fonts.sans }}
-                    className="truncate text-[11px] leading-snug text-zinc-500"
+                    style={{ fontFamily: fonts.sans, color: "rgba(80,50,30,0.48)" }}
+                    className="truncate text-[11px] leading-snug"
                   >
                     {profile.role}
                   </p>
@@ -1027,7 +1101,7 @@ function DemoRolodexCard({ profile }: { profile: DemoProfile }) {
                     <span
                       key={trait}
                       style={{ fontFamily: fonts.mono }}
-                      className="rounded-full border border-white/60 bg-white/46 px-2 py-1 text-[9px] text-zinc-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]"
+                      className="rounded-full border border-white/60 bg-white/46 px-2 py-1 text-[9px] text-[rgba(80,50,30,0.48)] shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]"
                     >
                       {trait}
                     </span>
@@ -1039,36 +1113,39 @@ function DemoRolodexCard({ profile }: { profile: DemoProfile }) {
 
           <div className="demo-no-scrollbar min-h-0 flex-1 overflow-y-auto px-3.5 py-3">
             <div className="space-y-2.5">
-              <div className="overflow-hidden rounded-[18px] bg-[linear-gradient(180deg,rgba(24,24,27,0.92),rgba(39,39,42,0.88))] px-3.5 py-3 text-white shadow-[0_12px_34px_rgba(0,0,0,0.18)]">
+              <div className="overflow-hidden rounded-[18px] border border-white/55 bg-white/40 px-3.5 py-3 shadow-[0_6px_20px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.56)] backdrop-blur-xl">
                 <span
-                  style={{ fontFamily: fonts.mono }}
-                  className="block text-[9px] uppercase tracking-[0.18em] text-zinc-400"
+                  style={{ fontFamily: fonts.mono, color: "rgba(80,50,30,0.42)" }}
+                  className="block text-[9px] uppercase tracking-[0.18em]"
                 >
                   Why they matter
                 </span>
                 <p
-                  style={{ fontFamily: fonts.sans }}
-                  className="mt-1.5 text-[12px] leading-snug text-zinc-100"
+                  style={{ fontFamily: fonts.sans, color: "rgba(35,25,15,0.70)" }}
+                  className="mt-1.5 text-[12px] leading-snug"
                 >
                   {profile.alignment}
                 </p>
               </div>
 
               <div className="rounded-[16px] border border-white/55 bg-white/38 px-3.5 py-3 shadow-[0_6px_20px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.56)] backdrop-blur-xl">
-                <SectionEyebrow label="Known For" />
+                <SectionEyebrow label="Known For" color="rgba(80,50,30,0.42)" />
                 <p
-                  style={{ fontFamily: fonts.sans }}
-                  className="mt-1.5 text-[12px] leading-snug text-zinc-700"
+                  style={{ fontFamily: fonts.sans, color: "rgba(35,25,15,0.78)" }}
+                  className="mt-1.5 text-[12px] leading-snug"
                 >
                   {profile.knownFor}
                 </p>
               </div>
 
-              <div className="rounded-[16px] border border-white/55 bg-white/38 px-3.5 py-3 shadow-[0_6px_20px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.56)] backdrop-blur-xl">
-                <SectionEyebrow label="Met" />
+              <div
+                className="rounded-[16px] border border-white/55 bg-white/38 px-3.5 py-3 shadow-[0_6px_20px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.56)] backdrop-blur-xl"
+                style={{ background: "rgba(120,80,40,0.04)" }}
+              >
+                <SectionEyebrow label="Met" color="rgba(80,50,30,0.42)" />
                 <p
-                  style={{ fontFamily: fonts.serif }}
-                  className="mt-1.5 text-[12px] italic leading-snug text-zinc-700"
+                  style={{ fontFamily: fonts.serif, color: "rgba(35,25,15,0.67)" }}
+                  className="mt-1.5 text-[12px] italic leading-snug"
                 >
                   {profile.metAt}
                 </p>
@@ -1085,8 +1162,8 @@ function DemoRolodexCard({ profile }: { profile: DemoProfile }) {
                           style={{ backgroundColor: proximity.color }}
                         />
                         <p
-                          style={{ fontFamily: fonts.sans }}
-                          className="text-[11px] leading-snug text-zinc-600"
+                          style={{ fontFamily: fonts.sans, color: "rgba(35,25,15,0.62)" }}
+                          className="text-[11px] leading-snug"
                         >
                           {item}
                         </p>
@@ -1098,7 +1175,7 @@ function DemoRolodexCard({ profile }: { profile: DemoProfile }) {
 
               {profile.circle && profile.circle.length > 0 && (
                 <div className="rounded-[16px] border border-white/55 bg-white/38 px-3.5 py-3 shadow-[0_6px_20px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.56)] backdrop-blur-xl">
-                  <SectionEyebrow label="Circle" />
+                  <SectionEyebrow label="Circle" color="rgba(80,50,30,0.42)" />
                   <div className="mt-2 space-y-1.5">
                     {profile.circle.map((person) => (
                       <div
@@ -1107,23 +1184,23 @@ function DemoRolodexCard({ profile }: { profile: DemoProfile }) {
                       >
                         <div className="min-w-0">
                           <div
-                            style={{ fontFamily: fonts.sans }}
-                            className="truncate text-[11px] font-medium text-zinc-800"
+                            style={{ fontFamily: fonts.sans, color: "rgba(35,25,15,0.72)" }}
+                            className="truncate text-[11px] font-medium"
                           >
                             {person.name}
                           </div>
                           {person.detail && (
                             <div
-                              style={{ fontFamily: fonts.sans }}
-                              className="truncate text-[10px] text-zinc-500"
+                              style={{ fontFamily: fonts.sans, color: "rgba(80,50,30,0.42)" }}
+                              className="truncate text-[10px]"
                             >
                               {person.detail}
                             </div>
                           )}
                         </div>
                         <span
-                          style={{ fontFamily: fonts.mono }}
-                          className="shrink-0 text-[8px] uppercase tracking-[0.16em] text-zinc-400"
+                          style={{ fontFamily: fonts.mono, color: "rgba(80,50,30,0.32)" }}
+                          className="shrink-0 text-[8px] uppercase tracking-[0.16em]"
                         >
                           {person.relation}
                         </span>
@@ -1135,17 +1212,20 @@ function DemoRolodexCard({ profile }: { profile: DemoProfile }) {
             </div>
           </div>
 
-          <div className="border-t border-white/45 px-4 py-3">
+          <div
+            className="px-4 py-3"
+            style={{ borderTop: "1px solid rgba(80,50,30,0.06)" }}
+          >
             <div className="flex items-center justify-between gap-2">
               <span
-                style={{ fontFamily: fonts.mono }}
-                className="truncate text-[10px] text-zinc-500"
+                style={{ fontFamily: fonts.mono, color: "rgba(35,25,15,0.50)" }}
+                className="truncate text-[10px]"
               >
                 {profile.email}
               </span>
               <span
-                style={{ fontFamily: fonts.mono }}
-                className="shrink-0 text-[9px] uppercase tracking-[0.16em] text-zinc-400"
+                style={{ fontFamily: fonts.mono, color: "rgba(80,50,30,0.32)" }}
+                className="shrink-0 text-[9px] uppercase tracking-[0.16em]"
               >
                 {profile.refId}
               </span>
@@ -1153,7 +1233,7 @@ function DemoRolodexCard({ profile }: { profile: DemoProfile }) {
           </div>
         </motion.div>
       </AnimatePresence>
-    </GlassSurface>
+    </CardSurface>
   );
 }
 

@@ -523,21 +523,21 @@ function InsightsMovementA({
 }: {
   scrollYProgress: MotionValue<number>;
 }) {
-  const cardOpacity = useTransform(scrollYProgress, [0.40, 0.43], [0, 1]);
+  const cardOpacity = useTransform(scrollYProgress, [0.4, 0.43], [0, 1]);
   const cardScale = useTransform(
     scrollYProgress,
-    [0.40, 0.43, 0.54, 0.57],
+    [0.4, 0.43, 0.54, 0.57],
     [0.95, 1, 1, 0.95],
   );
-  const cardY = useTransform(scrollYProgress, [0.40, 0.43], [40, 0]);
+  const cardY = useTransform(scrollYProgress, [0.4, 0.43], [40, 0]);
   const exitOpacity = useTransform(scrollYProgress, [0.55, 0.58], [1, 0]);
 
   const signalsOpacity = useTransform(scrollYProgress, [0.42, 0.45], [0, 1]);
   const signalsY = useTransform(scrollYProgress, [0.42, 0.45], [16, 0]);
   const personalOpacity = useTransform(scrollYProgress, [0.46, 0.49], [0, 1]);
   const personalY = useTransform(scrollYProgress, [0.46, 0.49], [16, 0]);
-  const strategyOpacity = useTransform(scrollYProgress, [0.50, 0.53], [0, 1]);
-  const strategyY = useTransform(scrollYProgress, [0.50, 0.53], [16, 0]);
+  const strategyOpacity = useTransform(scrollYProgress, [0.5, 0.53], [0, 1]);
+  const strategyY = useTransform(scrollYProgress, [0.5, 0.53], [16, 0]);
 
   return (
     <motion.div
@@ -838,13 +838,25 @@ function InsightsMovementB({
   const coldTagY = useTransform(scrollYProgress, [0.595, 0.625], [10, 0]);
   const youCardOpacity = useTransform(scrollYProgress, [0.605, 0.635], [0, 1]);
   const youCardY = useTransform(scrollYProgress, [0.605, 0.635], [22, 0]);
-  const bridgeCardOpacity = useTransform(scrollYProgress, [0.635, 0.665], [0, 1]);
+  const bridgeCardOpacity = useTransform(
+    scrollYProgress,
+    [0.635, 0.665],
+    [0, 1],
+  );
   const bridgeCardY = useTransform(scrollYProgress, [0.635, 0.665], [22, 0]);
-  const targetCardOpacity = useTransform(scrollYProgress, [0.665, 0.695], [0, 1]);
+  const targetCardOpacity = useTransform(
+    scrollYProgress,
+    [0.665, 0.695],
+    [0, 1],
+  );
   const targetCardY = useTransform(scrollYProgress, [0.665, 0.695], [22, 0]);
   const askLabelOpacity = useTransform(scrollYProgress, [0.628, 0.648], [0, 1]);
   const askLabelY = useTransform(scrollYProgress, [0.628, 0.648], [10, 0]);
-  const introLabelOpacity = useTransform(scrollYProgress, [0.652, 0.674], [0, 1]);
+  const introLabelOpacity = useTransform(
+    scrollYProgress,
+    [0.652, 0.674],
+    [0, 1],
+  );
   const introLabelY = useTransform(scrollYProgress, [0.652, 0.674], [10, 0]);
   const trayOpacity = useTransform(scrollYProgress, [0.688, 0.712], [0, 1]);
   const trayY = useTransform(scrollYProgress, [0.688, 0.712], [18, 0]);
@@ -918,7 +930,13 @@ function InsightsMovementB({
                   className="pointer-events-none absolute inset-x-5 top-3 h-16 w-[calc(100%-2.5rem)]"
                 >
                   <defs>
-                    <linearGradient id="warm-stage-line" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <linearGradient
+                      id="warm-stage-line"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="0%"
+                    >
                       <stop offset="0%" stopColor="#60a5fa" />
                       <stop offset="55%" stopColor="#34d399" />
                       <stop offset="100%" stopColor="#fbbf24" />
@@ -941,7 +959,10 @@ function InsightsMovementB({
                     strokeLinecap="round"
                     pathLength={1}
                     strokeDasharray="1"
-                    style={{ opacity: warmOpacity, strokeDashoffset: warmLeg1Dash }}
+                    style={{
+                      opacity: warmOpacity,
+                      strokeDashoffset: warmLeg1Dash,
+                    }}
                   />
                   <motion.path
                     d="M 50 22 Q 68 16 86 22"
@@ -951,7 +972,10 @@ function InsightsMovementB({
                     strokeLinecap="round"
                     pathLength={1}
                     strokeDasharray="1"
-                    style={{ opacity: warmOpacity, strokeDashoffset: warmLeg2Dash }}
+                    style={{
+                      opacity: warmOpacity,
+                      strokeDashoffset: warmLeg2Dash,
+                    }}
                   />
                 </svg>
 
@@ -1042,9 +1066,9 @@ function InsightsMovementB({
                     style={{ fontFamily: fonts.sans }}
                     className="mt-3 text-[14px] leading-relaxed text-zinc-700"
                   >
-                    &ldquo;Priya, would you be open to introducing me to
-                    Rajesh? I think NexaFlow could be relevant for
-                    Mahindra&apos;s supply chain team.&rdquo;
+                    &ldquo;Priya, would you be open to introducing me to Rajesh?
+                    I think NexaFlow could be relevant for Mahindra&apos;s
+                    supply chain team.&rdquo;
                   </div>
                 </div>
 
@@ -1095,34 +1119,34 @@ function LiquidKeepUpSection({
 }: {
   scrollYProgress: MotionValue<number>;
 }) {
-  const enterOp = useTransform(scrollYProgress, [0.76, 0.80], [0, 1]);
-  const enterY = useTransform(scrollYProgress, [0.76, 0.80], [40, 0]);
+  const enterOp = useTransform(scrollYProgress, [0.76, 0.8], [0, 1]);
+  const enterY = useTransform(scrollYProgress, [0.76, 0.8], [40, 0]);
   const exitOp = useTransform(scrollYProgress, [0.94, 0.98], [1, 0]);
   const exitY = useTransform(scrollYProgress, [0.94, 0.98], [0, -20]);
 
   const opacity = useTransform(scrollYProgress, (v) => {
     if (v < 0.76) return 0;
     if (v > 0.98) return 0;
-    if (v >= 0.80 && v <= 0.94) return 1;
-    if (v < 0.80) return enterOp.get();
+    if (v >= 0.8 && v <= 0.94) return 1;
+    if (v < 0.8) return enterOp.get();
     return exitOp.get();
   });
 
   const y = useTransform(scrollYProgress, (v) => {
-    if (v < 0.80) return enterY.get();
+    if (v < 0.8) return enterY.get();
     if (v > 0.94) return exitY.get();
     return 0;
   });
 
   const scale = useTransform(
     scrollYProgress,
-    [0.76, 0.80, 0.94, 0.98],
+    [0.76, 0.8, 0.94, 0.98],
     [0.95, 1, 1, 0.95],
   );
 
   // The Brace intervention animates in slightly later to highlight the "save"
-  const nudgeOp = useTransform(scrollYProgress, [0.80, 0.84], [0, 1]);
-  const nudgeY = useTransform(scrollYProgress, [0.80, 0.84], [20, 0]);
+  const nudgeOp = useTransform(scrollYProgress, [0.8, 0.84], [0, 1]);
+  const nudgeY = useTransform(scrollYProgress, [0.8, 0.84], [20, 0]);
 
   const nudge = {
     person: {
@@ -1297,10 +1321,10 @@ export default function NetworkSection() {
 
   const h3Opacity = useTransform(
     scrollYProgress,
-    [0.56, 0.60, 0.72, 0.75],
+    [0.56, 0.6, 0.72, 0.75],
     [0, 1, 1, 0],
   );
-  const h3Y = useTransform(scrollYProgress, [0.56, 0.60], [20, 0]);
+  const h3Y = useTransform(scrollYProgress, [0.56, 0.6], [20, 0]);
 
   const h4Opacity = useTransform(
     scrollYProgress,
