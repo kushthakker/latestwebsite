@@ -699,7 +699,7 @@ export default function OnePercentClub() {
             }}
             className="absolute max-w-2xl text-center text-[clamp(1.5rem,3vw,2.5rem)] font-medium tracking-tight text-white/90 leading-snug"
           >
-            The top 1% of professionals don&rsquo;t network harder.
+            you don&rsquo;t have to network harder.
           </motion.h3>
 
           {/* Phase 2 */}
@@ -711,7 +711,7 @@ export default function OnePercentClub() {
             }}
             className="absolute max-w-2xl text-center text-[clamp(1.5rem,3vw,2.5rem)] font-medium tracking-tight text-white/90 leading-snug"
           >
-            They see what others can&rsquo;t.
+            you don&rsquo;t have to send more cold emails.
           </motion.h3>
 
           {/* Phase 3 */}
@@ -723,9 +723,10 @@ export default function OnePercentClub() {
             }}
             className="absolute max-w-3xl text-center text-[clamp(1.5rem,3vw,2.5rem)] font-medium tracking-tight text-white/80 leading-snug"
           >
-            They show up at the right time. <br className="hidden sm:block" />
-            <span className="text-white/50">
-              With the right words. Through the right path.
+            just focus on the work.{" "}
+            <br className="hidden sm:block" />
+            <span className="text-white/40">
+              brace keeps the people.
             </span>
           </motion.h3>
 
@@ -742,10 +743,10 @@ export default function OnePercentClub() {
           <div className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center pb-[8vh] px-6">
             <motion.div style={{ y: phase4Y }}>
               <h2 className="text-[clamp(2.5rem,5vw,4.5rem)] font-semibold tracking-tighter text-white leading-none">
-                Welcome to the 1%.
+                nothing goes unnoticed.
               </h2>
               <p className="mt-5 text-[clamp(0.9rem,1.1vw,1.1rem)] tracking-wide text-white/50 font-medium">
-                Brace — The intelligence layer for human relationships.
+                brace — the intelligence layer for human relationships.
               </p>
             </motion.div>
 

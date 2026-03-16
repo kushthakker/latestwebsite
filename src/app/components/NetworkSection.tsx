@@ -15,7 +15,7 @@ const fonts = {
 // ═══════════════════════════════════════════════════════════════════════════
 
 const founder = {
-  name: "Arjun Mehta",
+  name: "Alex Mitchell",
   initials: "AM",
   role: "Co-founder & CEO, Arcline",
   background: "Previously Product at Stripe · Stanford CS '14",
@@ -68,7 +68,7 @@ interface Person {
 const people: Person[] = [
   {
     id: "p1",
-    name: "Priya Venkatesh",
+    name: "Paige Vasquez",
     initials: "PV",
     role: "Engineering Lead, Notion",
     context: "Stripe Infra together '16–'19",
@@ -101,7 +101,7 @@ const people: Person[] = [
   },
   {
     id: "p4",
-    name: "Kavya Iyer",
+    name: "Kate Irving",
     initials: "KI",
     role: "Partner, Sequoia Capital",
     context: "Stanford CS '13, same lab group",
@@ -123,7 +123,7 @@ const people: Person[] = [
   },
   {
     id: "p6",
-    name: "Ananya Rao",
+    name: "Amy Roberts",
     initials: "AR",
     role: "CEO, Cleo Capital",
     context: "Stanford MBA '15, same dorm",
@@ -134,7 +134,7 @@ const people: Person[] = [
   },
   {
     id: "p7",
-    name: "Rajan Anand",
+    name: "Ryan Andrews",
     initials: "RA",
     role: "GP, Lightspeed Ventures",
     context: "Co-invested in Arcline Series A",
@@ -145,10 +145,10 @@ const people: Person[] = [
   },
   {
     id: "p8",
-    name: "Nina Patel",
+    name: "Nora Phillips",
     initials: "NP",
-    role: "COO, Zepto",
-    context: "Sequoia portfolio overlap",
+    role: "COO, Instacart",
+    context: "Sequoia portfolio, same batch",
     group: "Industry Peers",
     radial: { x: 17, y: 20 },
     grouped: { x: -18, y: 30 },
@@ -167,7 +167,7 @@ const people: Person[] = [
   },
   {
     id: "p10",
-    name: "Meera Shah",
+    name: "Megan Scott",
     initials: "MS",
     role: "Founder, Bloom Health",
     context: "Stanford ACM club together",
@@ -182,27 +182,27 @@ const people: Person[] = [
 
 const insights = {
   recent: [
-    { text: 'Posted: "NexaFlow hits $5M ARR" — LinkedIn, 2d ago' },
-    { text: "TechCrunch mentions NexaFlow in Series A roundup" },
+    { text: 'Posted: "Arcline hits $5M ARR" — LinkedIn, 2d ago' },
+    { text: "TechCrunch mentions Arcline in Series A roundup" },
     { text: "Actively looking for enterprise design partners" },
   ],
   personal: [
-    { text: "Wife Meera is expecting in April — ask about preparations" },
-    { text: "Runs 5K every morning at Cubbon Park" },
-    { text: "Prefers Third Wave Coffee over Starbucks" },
+    { text: "Wife Lauren is expecting in April — ask about preparations" },
+    { text: "Runs 5K every morning along the Embarcadero" },
+    { text: "Prefers Blue Bottle over Starbucks" },
   ],
   strategic:
-    "Portfolio company. Series A prep underway. Key proof point for Fund I thesis on India B2B SaaS.",
+    "Portfolio company. Series A prep underway. Key proof point for Fund I thesis on vertical SaaS.",
   path: {
     target: {
-      name: "Rajesh Jejurikar",
-      role: "President, Auto Division, Mahindra",
+      name: "Mark Jensen",
+      role: "VP Engineering, Tesla",
     },
     intermediary: {
-      name: "Priya Venkatesh",
+      name: "Paige Vasquez",
       role: "Engineering Lead, Notion",
       toYou: "Stripe together '16–'19",
-      toTarget: "IIT classmate, close friend",
+      toTarget: "Stanford classmate, close friend",
     },
   },
 };
@@ -640,7 +640,7 @@ function InsightsMovementA({
               </span>
             </div>
             <div className="flex flex-wrap gap-1.5">
-              {["Baby due April", "Runs 5K daily", "Third Wave Coffee fan"].map(
+              {["Baby due April", "Runs 5K daily", "Blue Bottle fan"].map(
                 (item) => (
                   <span
                     key={item}
@@ -907,7 +907,7 @@ function InsightsMovementB({
                     style={{ fontFamily: fonts.sans }}
                     className="mt-2 text-[24px] font-semibold tracking-tight text-zinc-900 leading-tight"
                   >
-                    First ask Priya.
+                    First ask Paige.
                     <br />
                     Then let her carry the trust.
                   </div>
@@ -1002,13 +1002,13 @@ function InsightsMovementB({
                       step="01"
                       eyebrow="Start"
                       title="You"
-                      subtitle="Need a warm path into Mahindra."
+                      subtitle="Need a warm path into Tesla."
                       accent="#2563eb"
                     />
                   </motion.div>
 
                   <IntroConnector
-                    label="Ask Priya"
+                    label="Ask Paige"
                     accentClassName="text-blue-600"
                     lineScale={warmLeg1Scale}
                     labelOpacity={askLabelOpacity}
@@ -1066,8 +1066,8 @@ function InsightsMovementB({
                     style={{ fontFamily: fonts.sans }}
                     className="mt-3 text-[14px] leading-relaxed text-zinc-700"
                   >
-                    &ldquo;Priya, would you be open to introducing me to Rajesh?
-                    I think NexaFlow could be relevant for Mahindra&apos;s
+                    &ldquo;Paige, would you be open to introducing me to Mark?
+                    I think Arcline could be relevant for Tesla&apos;s
                     supply chain team.&rdquo;
                   </div>
                 </div>
@@ -1077,7 +1077,7 @@ function InsightsMovementB({
                     style={{ fontFamily: fonts.mono }}
                     className="text-[9px] font-bold uppercase tracking-[0.16em] text-emerald-600"
                   >
-                    Why Priya
+                    Why Paige
                   </div>
                   <div className="mt-3 space-y-2">
                     <div className="flex items-start gap-2">
@@ -1150,7 +1150,7 @@ function LiquidKeepUpSection({
 
   const nudge = {
     person: {
-      name: "Kavya Iyer",
+      name: "Kate Irving",
       initials: "KI",
       role: "Partner, Sequoia Capital",
     },
