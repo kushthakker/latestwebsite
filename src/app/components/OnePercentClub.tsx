@@ -169,6 +169,7 @@ function useConstellation(
   canvasRef: React.RefObject<HTMLCanvasElement | null>,
   scrollRef: React.RefObject<number>,
   tooltipRef: React.RefObject<HTMLDivElement | null>,
+  isNarrow: boolean,
 ) {
   const sceneRef = useRef<{
     renderer: THREE.WebGLRenderer;
@@ -188,7 +189,10 @@ function useConstellation(
     const canvas = canvasRef.current;
     if (!canvas || sceneRef.current) return;
 
-    const NODE_COUNT = window.innerWidth < 768 ? 100 : 200;
+    const hoverEnabled =
+      !isNarrow && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    const pixelRatioCap = isNarrow ? 1.5 : 2;
+    const NODE_COUNT = isNarrow ? 72 : window.innerWidth < 768 ? 100 : 200;
     const { nodes, edges } = generateConstellation(NODE_COUNT);
 
     // Renderer
@@ -198,7 +202,7 @@ function useConstellation(
       alpha: true,
       powerPreference: "high-performance",
     });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, pixelRatioCap));
     renderer.setSize(canvas.clientWidth, canvas.clientHeight);
     renderer.setClearColor(0x000000, 0);
 
@@ -255,7 +259,7 @@ function useConstellation(
     const pointsMat = new THREE.ShaderMaterial({
       uniforms: {
         uTexture: { value: spriteTexture },
-        uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
+        uPixelRatio: { value: Math.min(window.devicePixelRatio, pixelRatioCap) },
       },
       vertexShader: `
         attribute float size;
@@ -330,7 +334,9 @@ function useConstellation(
       sceneRef.current.mousePx.x = e.clientX;
       sceneRef.current.mousePx.y = e.clientY;
     };
-    window.addEventListener("mousemove", onMouseMove, { passive: true });
+    if (hoverEnabled) {
+      window.addEventListener("mousemove", onMouseMove, { passive: true });
+    }
 
     // Resize
     const onResize = () => {
@@ -338,6 +344,7 @@ function useConstellation(
       const { renderer: r, camera: c } = sceneRef.current;
       const w = window.innerWidth;
       const h = window.innerHeight;
+      r.setPixelRatio(Math.min(window.devicePixelRatio, pixelRatioCap));
       r.setSize(w, h);
       c.aspect = w / h;
       c.updateProjectionMatrix();
@@ -411,7 +418,7 @@ function useConstellation(
 
         // Tooltip logic and hover state
         let isHovered = false;
-        if (interactivity > 0.5) {
+        if (hoverEnabled && interactivity > 0.5) {
           vector.set(node.x, node.y, node.z);
           vector.project(s.camera);
           const px = (vector.x * 0.5 + 0.5) * window.innerWidth;
@@ -456,7 +463,7 @@ function useConstellation(
 
       // Update Tooltip DOM
       if (tooltipRef.current) {
-        if (closestNode && interactivity > 0.8) {
+        if (hoverEnabled && closestNode && interactivity > 0.8) {
           tooltipRef.current.style.opacity = "1";
           tooltipRef.current.style.transform = `translate3d(${closestNode.px + 20}px, ${closestNode.py - 20}px, 0)`;
           if (tooltipRef.current.innerText !== closestNode.node.label) {
@@ -537,8 +544,8 @@ function useConstellation(
       (s.linesMesh.material as THREE.LineBasicMaterial).opacity = 1; // Alpha handled via vertex colors
 
       // Cinematic slow parallax
-      const targetX = s.mouse.x * 0.5;
-      const targetY = s.mouse.y * 0.5;
+      const targetX = hoverEnabled ? s.mouse.x * 0.5 : 0;
+      const targetY = hoverEnabled ? s.mouse.y * 0.5 : 0;
       s.camera.position.x += (targetX - s.camera.position.x) * 0.03;
       s.camera.position.y += (targetY - s.camera.position.y) * 0.03;
       s.camera.lookAt(0, 0, 0);
@@ -549,7 +556,9 @@ function useConstellation(
     animate();
 
     return () => {
-      window.removeEventListener("mousemove", onMouseMove);
+      if (hoverEnabled) {
+        window.removeEventListener("mousemove", onMouseMove);
+      }
       window.removeEventListener("resize", onResize);
       if (sceneRef.current) {
         cancelAnimationFrame(sceneRef.current.animFrame);
@@ -557,7 +566,7 @@ function useConstellation(
         sceneRef.current = null;
       }
     };
-  }, [canvasRef, scrollRef, tooltipRef]);
+  }, [canvasRef, isNarrow, scrollRef, tooltipRef]);
 
   return { init, sceneRef };
 }
@@ -566,7 +575,7 @@ function useConstellation(
 // COMPONENT
 // ═══════════════════════════════════════════════════════════════════════════
 
-export default function OnePercentClub() {
+export default function OnePercentClub({ isNarrow = false }: { isNarrow?: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -584,7 +593,7 @@ export default function OnePercentClub() {
     return unsub;
   }, [scrollYProgress]);
 
-  const { init } = useConstellation(canvasRef, scrollRef, tooltipRef);
+  const { init } = useConstellation(canvasRef, scrollRef, tooltipRef, isNarrow);
 
   useEffect(() => {
     const cleanup = init();
@@ -658,7 +667,7 @@ export default function OnePercentClub() {
     <section
       ref={sectionRef}
       className="relative font-sans"
-      style={{ height: "500vh" }}
+      style={{ height: isNarrow ? "260svh" : "500vh" }}
     >
       {/* Background Transition */}
       <motion.div
@@ -671,8 +680,8 @@ export default function OnePercentClub() {
 
       {/* Sticky Viewport Container */}
       <div
-        className="sticky top-0 h-screen w-full overflow-hidden"
-        style={{ zIndex: 1 }}
+        className="sticky top-0 w-full overflow-hidden"
+        style={{ height: isNarrow ? "100svh" : "100vh", zIndex: 1 }}
       >
         {/* WebGL Canvas */}
         <canvas
@@ -685,7 +694,7 @@ export default function OnePercentClub() {
         <div
           ref={tooltipRef}
           className="pointer-events-none absolute left-0 top-0 z-50 rounded-lg border border-white/10 bg-black/50 px-3 py-1.5 font-mono text-xs text-white/90 backdrop-blur-md transition-opacity duration-200"
-          style={{ opacity: 0, willChange: "transform" }}
+          style={{ opacity: 0, willChange: "transform", display: isNarrow ? "none" : "block" }}
         />
 
         {/* Cinematic Typography Overlays */}
@@ -740,7 +749,14 @@ export default function OnePercentClub() {
           {/* Gradient stage — solid at bottom, fades to transparent */}
           <div className="absolute inset-x-0 bottom-0 h-[50%] bg-gradient-to-t from-[#030303] from-15% via-[#030303]/50 via-55% to-transparent" />
 
-          <div className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center pb-[8vh] px-6">
+          <div
+            className="absolute inset-x-0 bottom-0 flex flex-col items-center px-6 text-center"
+            style={{
+              paddingBottom: isNarrow
+                ? "max(5rem, calc(env(safe-area-inset-bottom) + 4rem))"
+                : "8vh",
+            }}
+          >
             <motion.div style={{ y: phase4Y }}>
               <h2 className="text-[clamp(2.8rem,5.5vw,5rem)] font-bold tracking-tighter text-white leading-none">
                 Nothing Goes Unnoticed.
@@ -753,7 +769,7 @@ export default function OnePercentClub() {
             {/* Premium CTA */}
             <motion.div
               style={{ opacity: ctaOp, y: ctaY }}
-              className="pointer-events-auto mt-10"
+              className={`pointer-events-auto ${isNarrow ? "mt-8" : "mt-10"}`}
             >
               <a
                 href="#"

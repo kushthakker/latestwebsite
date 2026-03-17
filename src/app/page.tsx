@@ -1,16 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import dynamic from "next/dynamic";
+import { useIsNarrowLayout } from "./lib/useIsNarrowLayout";
 
 const Penflow = dynamic(
   () => import("penflow/react").then((mod) => mod.Penflow),
   { ssr: false }
 );
 import DemoMockup from "./components/DemoMockup";
-import SignalNoise from "./components/SignalNoise";
 import BoldTruth from "./components/BoldTruth";
+import BoldTruthBridge from "./components/BoldTruthBridge";
 import NetworkSection from "./components/NetworkSection";
 import ComparisonTable from "./components/ComparisonTable";
 import OnePercentClub from "./components/OnePercentClub";
@@ -33,7 +34,7 @@ function GrainOverlay() {
   );
 }
 
-function HeroSection() {
+function HeroSection({ isNarrow }: { isNarrow: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const [penflowSize, setPenflowSize] = useState(84);
@@ -59,13 +60,7 @@ function HeroSection() {
     fetch("/fonts/BrittanySignature.ttf");
   }, []);
 
-  // Auto-play animation once after 3s on page load
-  useEffect(() => {
-    const timer = setTimeout(() => triggerAnimation(), 3000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const triggerAnimation = () => {
+  const triggerAnimation = useCallback(() => {
     setIsAnimating(true);
     clearTimeout(animationTimerRef.current);
     // Revert to normal text after animation completes (~4s for "Concierge" at speed 0.7)
@@ -73,9 +68,16 @@ function HeroSection() {
       setIsAnimating(false);
       setHasPlayedOnce(true);
     }, 4000);
-  };
+  }, []);
+
+  // Auto-play animation once after 3s on page load
+  useEffect(() => {
+    const timer = setTimeout(() => triggerAnimation(), 3000);
+    return () => clearTimeout(timer);
+  }, [triggerAnimation]);
 
   const handleConciergeHover = () => {
+    if (isNarrow) return;
     if (hasPlayedOnce && !isAnimating) {
       triggerAnimation();
     }
@@ -85,37 +87,47 @@ function HeroSection() {
     target: sectionRef,
     offset: ["start start", "end start"],
   });
-  const demoStartHeightVh = 25;
-  const demoExpandedHeightVh = 96;
-  const demoExitDriftVh = -5;
+  const sectionHeight = isNarrow ? "180svh" : "250vh";
+  const viewportUnit = isNarrow ? "svh" : "vh";
+  const demoStartHeight = isNarrow ? 24 : 25;
+  const demoExpandedHeight = isNarrow ? 82 : 96;
+  const demoExitDrift = isNarrow ? -3 : -5;
 
   // Phase 1: Headline fades out
   const headlineOpacity = useTransform(scrollYProgress, [0.04, 0.22], [1, 0]);
   const headlineY = useTransform(scrollYProgress, [0.04, 0.22], [0, -60]);
 
   // Phase 2: Demo enlarges and lifts to vertical center
-  const demoWidth = useTransform(scrollYProgress, [0.10, 0.40], ["80%", "92%"]);
-  const demoHeightVh = useTransform(
+  const demoWidth = useTransform(
     scrollYProgress,
     [0.10, 0.40],
-    [demoStartHeightVh, demoExpandedHeightVh]
+    isNarrow ? ["92%", "100%"] : ["80%", "92%"]
   );
-  const demoHeight = useTransform(demoHeightVh, (heightVh) => `${heightVh}vh`);
-  const demoCenteredLiftVh = useTransform(demoHeightVh, (heightVh) => {
+  const demoHeightValue = useTransform(
+    scrollYProgress,
+    [0.10, 0.40],
+    [demoStartHeight, demoExpandedHeight]
+  );
+  const demoHeight = useTransform(
+    demoHeightValue,
+    (heightValue) => `${heightValue}${viewportUnit}`
+  );
+  const demoCenteredLift = useTransform(demoHeightValue, (heightValue) => {
     const growthProgress =
-      (heightVh - demoStartHeightVh) / (demoExpandedHeightVh - demoStartHeightVh);
-    const expandedCenterOffset = -((100 - demoExpandedHeightVh) / 2);
+      (heightValue - demoStartHeight) / (demoExpandedHeight - demoStartHeight);
+    const expandedCenterOffset = -((100 - demoExpandedHeight) / 2);
     return growthProgress * expandedCenterOffset;
   });
-  const demoExitLiftVh = useTransform(
+  const demoExitLift = useTransform(
     scrollYProgress,
     [0.60, 0.86],
-    [0, demoExitDriftVh]
+    [0, demoExitDrift]
   );
   // Grow from the bottom, land in true center when expanded, then drift upward on exit.
   const demoY = useTransform(
-    [demoCenteredLiftVh, demoExitLiftVh],
-    ([centeredLiftVh, exitLiftVh]) => `${(centeredLiftVh as number) + (exitLiftVh as number)}vh`
+    [demoCenteredLift, demoExitLift],
+    ([centeredLift, exitLift]) =>
+      `${(centeredLift as number) + (exitLift as number)}${viewportUnit}`
   );
 
   // Phase 3: Demo fades out smoothly
@@ -126,6 +138,8 @@ function HeroSection() {
   const hasSnappedRef = useRef(false);
 
   useEffect(() => {
+    if (isNarrow) return;
+
     const section = sectionRef.current;
     if (!section) return;
 
@@ -161,22 +175,23 @@ function HeroSection() {
       window.removeEventListener("scroll", handleScroll);
       clearTimeout(snapTimeoutRef.current);
     };
-  }, []);
+  }, [isNarrow]);
 
   return (
-    <section ref={sectionRef} className="relative" style={{ height: "250vh" }}>
+    <section ref={sectionRef} className="relative" style={{ height: sectionHeight }}>
       {/* Background — fixed */}
-      <div className="pointer-events-none fixed inset-0 bg-white z-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_30%,rgba(200,190,175,0.08),transparent)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_70%,rgba(200,190,175,0.05),transparent)]" />
-      </div>
+      <div className="pointer-events-none fixed inset-0 z-0 bg-white" />
 
       {/* Sticky container — stays in viewport while scrolling */}
-      <div className="sticky top-0 h-screen overflow-hidden z-10">
+      <div className="sticky top-0 overflow-hidden z-10" style={{ height: `100${viewportUnit}` }}>
         {/* Headline + copy + CTA */}
         <motion.div
-          className="absolute inset-0 flex flex-col items-center text-center px-6 justify-center z-20 pointer-events-none"
-          style={{ opacity: headlineOpacity, y: headlineY, paddingBottom: "18vh" }}
+          className="absolute inset-0 flex flex-col items-center justify-center px-5 text-center z-20 pointer-events-none sm:px-6"
+          style={{
+            opacity: headlineOpacity,
+            y: headlineY,
+            paddingBottom: isNarrow ? "10svh" : "18vh",
+          }}
         >
           <motion.h1
             ref={headingRef}
@@ -188,7 +203,7 @@ function HeroSection() {
           >
             AI{" "}
             <span
-              className="relative inline-block cursor-pointer pointer-events-auto"
+              className="relative z-20 inline-block cursor-pointer pointer-events-auto"
               style={{ overflow: "visible" }}
               onMouseEnter={handleConciergeHover}
             >
@@ -201,7 +216,7 @@ function HeroSection() {
               </span>
               {/* Penflow handwriting overlay — absolutely positioned, overflow visible */}
               <span
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                className="pointer-events-none absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2"
                 style={{ overflow: "visible" }}
               >
                 {isAnimating && (
@@ -300,8 +315,8 @@ function HeroSection() {
                 background: "#fff",
               }}
             >
-              <div style={{ height: "96vh", width: "100%" }}>
-                <DemoMockup />
+              <div style={{ height: `${demoExpandedHeight}${viewportUnit}`, width: "100%" }}>
+                <DemoMockup isNarrow={isNarrow} />
               </div>
             </motion.div>
           </motion.div>
@@ -312,15 +327,18 @@ function HeroSection() {
 }
 
 export default function Home() {
+  const isNarrow = useIsNarrowLayout();
+
   return (
     <div className="min-h-screen bg-white">
       <GrainOverlay />
-      <HeroSection />
+      <HeroSection isNarrow={isNarrow} />
       {/* <SignalNoise /> */}
       <BoldTruth />
-      <NetworkSection />
-      <ComparisonTable />
-      <OnePercentClub />
+      <BoldTruthBridge />
+      <NetworkSection isNarrow={isNarrow} />
+      <ComparisonTable isNarrow={isNarrow} />
+      <OnePercentClub isNarrow={isNarrow} />
     </div>
   );
 }

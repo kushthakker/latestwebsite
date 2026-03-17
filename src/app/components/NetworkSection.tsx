@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, type ReactNode } from "react";
 import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 import { fonts } from "../lib/fonts";
 
@@ -11,6 +11,7 @@ import { fonts } from "../lib/fonts";
 const founder = {
   name: "Alex Mitchell",
   initials: "AM",
+  avatar: "/avatars/alex-mitchell.jpg",
   role: "Co-founder & CEO, Arcline",
   background: "Previously Product at Stripe · Stanford CS '14",
   knownFor: "Fintech infrastructure, developer tools",
@@ -51,6 +52,7 @@ interface Person {
   id: string;
   name: string;
   initials: string;
+  avatar: string;
   role: string;
   context: string;
   group: string;
@@ -64,6 +66,7 @@ const people: Person[] = [
     id: "p1",
     name: "Paige Vasquez",
     initials: "PV",
+    avatar: "/avatars/paige-vasquez.jpg",
     role: "Engineering Lead, Notion",
     context: "Stripe Infra together '16–'19",
     group: "Previous Colleagues",
@@ -75,6 +78,7 @@ const people: Person[] = [
     id: "p2",
     name: "Marcus Chen",
     initials: "MC",
+    avatar: "/avatars/marcus-chen.jpg",
     role: "VP Product, Ramp",
     context: "Stripe Payments team '15–'19",
     group: "Previous Colleagues",
@@ -86,6 +90,7 @@ const people: Person[] = [
     id: "p3",
     name: "Sarah Kim",
     initials: "SK",
+    avatar: "/avatars/sarah-kim.jpg",
     role: "Founding Engineer, Linear",
     context: "Shipped Stripe Connect together",
     group: "Previous Colleagues",
@@ -97,6 +102,7 @@ const people: Person[] = [
     id: "p4",
     name: "Kate Irving",
     initials: "KI",
+    avatar: "/avatars/kate-irving.jpg",
     role: "Partner, Sequoia Capital",
     context: "Stanford CS '13, same lab group",
     group: "College Alumni",
@@ -108,6 +114,7 @@ const people: Person[] = [
     id: "p5",
     name: "James Liu",
     initials: "JL",
+    avatar: "/avatars/james-liu.jpg",
     role: "CTO, Figma",
     context: "Stanford CS '14, classmate",
     group: "College Alumni",
@@ -119,6 +126,7 @@ const people: Person[] = [
     id: "p6",
     name: "Amy Roberts",
     initials: "AR",
+    avatar: "/avatars/amy-roberts.jpg",
     role: "CEO, Cleo Capital",
     context: "Stanford MBA '15, same dorm",
     group: "College Alumni",
@@ -130,6 +138,7 @@ const people: Person[] = [
     id: "p7",
     name: "Ryan Andrews",
     initials: "RA",
+    avatar: "/avatars/ryan-andrews.jpg",
     role: "GP, Lightspeed Ventures",
     context: "Co-invested in Arcline Series A",
     group: "Industry Peers",
@@ -141,6 +150,7 @@ const people: Person[] = [
     id: "p8",
     name: "Nora Phillips",
     initials: "NP",
+    avatar: "/avatars/nora-phillips.jpg",
     role: "COO, Instacart",
     context: "Sequoia portfolio, same batch",
     group: "Industry Peers",
@@ -152,6 +162,7 @@ const people: Person[] = [
     id: "p9",
     name: "David Park",
     initials: "DP",
+    avatar: "/avatars/david-park.jpg",
     role: "Staff ML, Google DeepMind",
     context: "Stanford roommate '11–'14",
     group: "Close Friends",
@@ -163,6 +174,7 @@ const people: Person[] = [
     id: "p10",
     name: "Megan Scott",
     initials: "MS",
+    avatar: "/avatars/megan-scott.jpg",
     role: "Founder, Bloom Health",
     context: "Stanford ACM club together",
     group: "Close Friends",
@@ -263,13 +275,8 @@ function FounderCard({
       >
         <div className="relative w-full overflow-hidden rounded-2xl bg-[rgba(242,242,247,0.92)] backdrop-blur-3xl border border-white/50 shadow-[0_4px_16px_rgba(0,0,0,0.05),0_12px_40px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.6)] p-6 flex flex-col">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-white/80 backdrop-blur-md border border-white/60 flex items-center justify-center">
-              <span
-                style={{ fontFamily: fonts.mono }}
-                className="text-sm font-semibold text-zinc-600 tracking-wider"
-              >
-                {founder.initials}
-              </span>
+            <div className="w-10 h-10 rounded-full overflow-hidden border border-white/60 shadow-sm">
+              <img src={founder.avatar} alt={founder.name} className="h-full w-full object-cover" />
             </div>
             <div>
               <div
@@ -372,19 +379,12 @@ function PersonPill({
       >
         <div className="relative flex items-start gap-3 w-auto min-w-[200px] max-w-[240px] bg-[rgba(242,242,247,0.85)] backdrop-blur-2xl border border-white/45 rounded-2xl p-3 shadow-[0_2px_4px_rgba(0,0,0,0.03),0_8px_24px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.5)]">
           <div
-            className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center border backdrop-blur-md shadow-sm"
+            className="w-8 h-8 rounded-full flex-shrink-0 overflow-hidden border shadow-sm"
             style={{
-              backgroundColor: bg,
               borderColor: color + "30",
-              color: color,
             }}
           >
-            <span
-              style={{ fontFamily: fonts.mono }}
-              className="text-[10px] font-semibold tracking-wider"
-            >
-              {person.initials}
-            </span>
+            <img src={person.avatar} alt={person.name} className="h-full w-full object-cover" />
           </div>
 
           <div className="min-w-0 flex-1 pt-0.5">
@@ -498,7 +498,7 @@ function GroupLabel({
         <div className="px-3 py-1.5 rounded-full bg-[rgba(242,242,247,0.8)] backdrop-blur-xl border border-white/40 shadow-[0_2px_8px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.4)]">
           <span
             style={{ fontFamily: fonts.mono, color: color }}
-            className="text-[9px] tracking-[0.15em] uppercase font-semibold whitespace-nowrap"
+            className="text-[10px] tracking-[0.14em] uppercase font-extrabold whitespace-nowrap"
           >
             {group}
           </span>
@@ -546,13 +546,8 @@ function InsightsMovementA({
           {/* Identity — compact row */}
           <div className="px-6 pt-6 pb-5 border-b border-zinc-200/30">
             <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-full bg-[rgba(30,30,32,0.88)] backdrop-blur-md flex items-center justify-center border border-white/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.2)]">
-                <span
-                  style={{ fontFamily: fonts.mono }}
-                  className="text-[13px] font-semibold text-white/90 tracking-wider"
-                >
-                  {founder.initials}
-                </span>
+              <div className="w-11 h-11 rounded-full overflow-hidden border border-white/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.2)]">
+                <img src={founder.avatar} alt={founder.name} className="h-full w-full object-cover" />
               </div>
               <div>
                 <div
@@ -824,7 +819,7 @@ function InsightsMovementB({
                         style={{ fontFamily: fonts.mono }}
                         className="text-[15px] font-semibold text-zinc-600 tracking-wider"
                       >
-                        {founder.initials}
+                        You
                       </span>
                     </div>
                   </motion.div>
@@ -865,13 +860,8 @@ function InsightsMovementB({
                         }}
                         className="absolute inset-0 rounded-full border border-emerald-400/40"
                       />
-                      <div className="w-[4.5rem] h-[4.5rem] rounded-full bg-gradient-to-br from-emerald-50 to-white/80 backdrop-blur-md border border-emerald-200/40 flex items-center justify-center shadow-[0_2px_8px_rgba(5,150,105,0.1),inset_0_1px_0_rgba(255,255,255,0.6)]">
-                        <span
-                          style={{ fontFamily: fonts.mono }}
-                          className="text-[15px] font-semibold text-emerald-700 tracking-wider"
-                        >
-                          PV
-                        </span>
+                      <div className="w-[4.5rem] h-[4.5rem] rounded-full overflow-hidden border border-emerald-200/40 shadow-[0_2px_8px_rgba(5,150,105,0.1),inset_0_1px_0_rgba(255,255,255,0.6)]">
+                        <img src="/avatars/paige-vasquez.jpg" alt="Paige Vasquez" className="h-full w-full object-cover" />
                       </div>
                     </div>
                   </motion.div>
@@ -899,13 +889,8 @@ function InsightsMovementB({
                     style={{ opacity: markOp, y: markY, scale: markScale }}
                     className="flex justify-center"
                   >
-                    <div className="w-[4.5rem] h-[4.5rem] rounded-full bg-gradient-to-br from-amber-50 to-white/80 backdrop-blur-md border border-amber-200/40 flex items-center justify-center shadow-[0_2px_8px_rgba(180,83,9,0.08),inset_0_1px_0_rgba(255,255,255,0.6)]">
-                      <span
-                        style={{ fontFamily: fonts.mono }}
-                        className="text-[15px] font-semibold text-amber-700 tracking-wider"
-                      >
-                        MJ
-                      </span>
+                    <div className="w-[4.5rem] h-[4.5rem] rounded-full overflow-hidden border border-amber-200/40 shadow-[0_2px_8px_rgba(180,83,9,0.08),inset_0_1px_0_rgba(255,255,255,0.6)]">
+                      <img src="/avatars/mark-jensen.jpg" alt="Mark Jensen" className="h-full w-full object-cover" />
                     </div>
                   </motion.div>
 
@@ -1067,6 +1052,7 @@ function LiquidKeepUpSection({
     person: {
       name: "Kate Irving",
       initials: "KI",
+      avatar: "/avatars/kate-irving.jpg",
       role: "Partner, Sequoia Capital",
     },
     suggested:
@@ -1106,8 +1092,8 @@ function LiquidKeepUpSection({
           <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80" />
 
           <div className="flex items-center gap-4 mb-8 relative z-10">
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-white to-zinc-100 border border-white shadow-md flex items-center justify-center text-zinc-600 font-mono text-lg font-semibold backdrop-blur-md">
-              {nudge.person.initials}
+            <div className="w-14 h-14 rounded-full overflow-hidden border border-white shadow-md">
+              <img src={nudge.person.avatar} alt={nudge.person.name} className="h-full w-full object-cover" />
             </div>
             <div>
               <div
@@ -1195,7 +1181,7 @@ function LiquidKeepUpSection({
 // MAIN SECTION
 // ═══════════════════════════════════════════════════════════════════════════
 
-export default function NetworkSection() {
+function DesktopNetworkSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -1275,7 +1261,12 @@ export default function NetworkSection() {
     [0, 1, 1, 0],
   );
 
-  const sectionOpacity = useTransform(scrollYProgress, [0.96, 0.98], [1, 0]);
+  const sectionEnterOpacity = useTransform(scrollYProgress, [0, 0.008], [0, 1]);
+  const sectionExitOpacity = useTransform(scrollYProgress, [0.96, 0.98], [1, 0]);
+  const sectionOpacity = useTransform(
+    [sectionEnterOpacity, sectionExitOpacity],
+    ([enter, exit]) => Math.min(enter as number, exit as number),
+  );
 
   const headlineClass =
     "absolute inset-x-0 top-0 text-[clamp(2rem,3.5vw,3rem)] leading-[1.15] tracking-tight font-medium text-zinc-900";
@@ -1455,4 +1446,450 @@ export default function NetworkSection() {
       </motion.div>
     </section>
   );
+}
+
+function MobileStage({
+  label,
+  title,
+  subtext,
+  children,
+}: {
+  label: string;
+  title: ReactNode;
+  subtext: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-12%" }}
+      transition={{ duration: 0.55, ease: [0.25, 0.1, 0.25, 1] }}
+      className="space-y-5"
+    >
+      <div className="space-y-3">
+        <div
+          style={{ fontFamily: fonts.mono }}
+          className="text-[11px] font-bold uppercase tracking-[0.18em] text-zinc-500"
+        >
+          {label}
+        </div>
+        <h2
+          style={{ fontFamily: fonts.sans }}
+          className="text-[clamp(1.9rem,8vw,2.6rem)] leading-[1.12] tracking-tight text-zinc-900"
+        >
+          {title}
+        </h2>
+        <p
+          style={{ fontFamily: fonts.sans }}
+          className="max-w-[34rem] text-[15px] leading-relaxed text-zinc-500"
+        >
+          {subtext}
+        </p>
+      </div>
+      {children}
+    </motion.div>
+  );
+}
+
+function MobileNetworkSection() {
+  const { intermediary, target } = insights.path;
+  const groupedPeople = groups.map((group) => ({
+    group,
+    theme: groupConfig[group],
+    people: people.filter((person) => person.group === group),
+  }));
+  const keepUpNudge = {
+    person: {
+      name: "Kate Irving",
+      initials: "KI",
+      avatar: "/avatars/kate-irving.jpg",
+      role: "Partner, Sequoia Capital",
+    },
+    suggested:
+      "Hey Kate, hope Davos was good. I'd love to hear what you're seeing in vertical SaaS this year. Free for coffee at Blue Bottle this week? I also have our latest growth numbers to share.",
+  };
+
+  return (
+    <section className="bg-[#f2f2f7] px-4 py-16 sm:px-6">
+      <div className="mx-auto flex max-w-[440px] flex-col gap-12">
+        <MobileStage
+          label="01 — Your Network"
+          title={
+            <>
+              Brace maps
+              <br />
+              your world.
+            </>
+          }
+          subtext={
+            <>
+              From one profile, we find who matters and why. Relationships you
+              already have, organized by how you know them.
+            </>
+          }
+        >
+          <div className="relative overflow-hidden rounded-[28px] border border-white/60 bg-[rgba(242,242,247,0.9)] p-4 shadow-[0_8px_28px_rgba(0,0,0,0.05),0_20px_48px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.7)] backdrop-blur-3xl">
+            <PaperGrain id="mobile-network-map" opacity={0.03} />
+            <div className="relative z-10 space-y-4">
+              <div className="rounded-[22px] border border-white/60 bg-white/70 p-4 shadow-[0_6px_18px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.7)]">
+                <div className="flex items-center gap-3">
+                  <div className="h-12 w-12 overflow-hidden rounded-full shadow-[0_2px_10px_rgba(0,0,0,0.18)]">
+                    <img src={founder.avatar} alt={founder.name} className="h-full w-full object-cover" />
+                  </div>
+                  <div className="min-w-0">
+                    <div
+                      style={{ fontFamily: fonts.sans }}
+                      className="text-[17px] font-semibold tracking-tight text-zinc-900"
+                    >
+                      {founder.name}
+                    </div>
+                    <div
+                      style={{ fontFamily: fonts.sans }}
+                      className="text-[13px] text-zinc-500"
+                    >
+                      {founder.role}
+                    </div>
+                  </div>
+                </div>
+                <div
+                  style={{ fontFamily: fonts.sans }}
+                  className="mt-3 line-clamp-2 text-[13px] leading-relaxed text-zinc-600"
+                >
+                  {founder.background}. {founder.knownFor}.
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                {groupedPeople.map(({ group, theme, people: members }) => (
+                  <div
+                    key={group}
+                    className="rounded-[22px] border border-white/55 bg-white/62 p-3.5 shadow-[0_4px_14px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.68)]"
+                  >
+                    <div className="mb-3 flex items-center justify-between gap-3">
+                      <div
+                        style={{ fontFamily: fonts.mono, color: theme.color }}
+                        className="line-clamp-2 text-[9px] font-semibold uppercase tracking-[0.16em]"
+                      >
+                        {group}
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span
+                          className="h-2.5 w-2.5 rounded-full"
+                          style={{ backgroundColor: theme.color }}
+                        />
+                        <span
+                          style={{ fontFamily: fonts.mono, color: "rgba(80,80,88,0.42)" }}
+                          className="text-[8px] uppercase tracking-[0.14em]"
+                        >
+                          {members.length}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      {members.slice(0, 2).map((person) => (
+                        <div
+                          key={person.id}
+                          className="rounded-[16px] border border-white/55 bg-[rgba(242,242,247,0.82)] px-3 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]"
+                        >
+                          <div
+                            style={{ fontFamily: fonts.sans }}
+                            className="line-clamp-1 text-[13px] font-medium tracking-tight text-zinc-800"
+                          >
+                            {person.name}
+                          </div>
+                          <div
+                            style={{ fontFamily: fonts.sans }}
+                            className="line-clamp-1 text-[11px] text-zinc-500"
+                          >
+                            {person.role}
+                          </div>
+                          <div
+                            style={{ fontFamily: fonts.serif }}
+                            className="mt-1 line-clamp-2 text-[11px] italic leading-snug text-zinc-500"
+                          >
+                            {person.context}
+                          </div>
+                        </div>
+                      ))}
+                      {members.length > 2 && (
+                        <div
+                          style={{ fontFamily: fonts.mono, color: theme.color }}
+                          className="px-1 text-[9px] uppercase tracking-[0.14em]"
+                        >
+                          +{members.length - 2} more
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </MobileStage>
+
+        <MobileStage
+          label="02 — Insights"
+          title={
+            <>
+              Brace knows what
+              <br />
+              you&apos;d forget.
+            </>
+          }
+          subtext={
+            <>
+              What they&apos;re building, what they care about, and what just
+              changed.
+            </>
+          }
+        >
+          <div className="space-y-3">
+            <div className="rounded-[24px] border border-white/60 bg-[rgba(242,242,247,0.9)] p-4 shadow-[0_8px_24px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.7)] backdrop-blur-3xl">
+              <div
+                style={{ fontFamily: fonts.mono }}
+                className="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-500"
+              >
+                Recent signals
+              </div>
+              <div className="mt-3 space-y-2">
+                {insights.recent.map((item) => (
+                  <div
+                    key={item.text}
+                    className="rounded-[16px] border border-white/55 bg-white/72 px-3 py-2.5 text-[13px] leading-relaxed text-zinc-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]"
+                    style={{ fontFamily: fonts.sans }}
+                  >
+                    {item.text}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-[24px] border border-white/60 bg-[rgba(242,242,247,0.88)] p-4 shadow-[0_8px_24px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.7)] backdrop-blur-3xl">
+              <div
+                style={{ fontFamily: fonts.mono }}
+                className="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-500"
+              >
+                Personal context
+              </div>
+              <div className="mt-3 space-y-2">
+                {insights.personal.map((item) => (
+                  <div
+                    key={item.text}
+                    className="rounded-[16px] border border-white/55 bg-white/72 px-3 py-2.5 text-[13px] leading-relaxed text-zinc-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]"
+                    style={{ fontFamily: fonts.sans }}
+                  >
+                    {item.text}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-[24px] border border-white/60 bg-[rgba(242,242,247,0.88)] p-4 shadow-[0_8px_24px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.7)] backdrop-blur-3xl">
+              <div
+                style={{ fontFamily: fonts.mono }}
+                className="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-500"
+              >
+                Strategic read
+              </div>
+              <p
+                style={{ fontFamily: fonts.serif }}
+                className="mt-3 text-[14px] italic leading-relaxed text-zinc-600"
+              >
+                {insights.strategic}
+              </p>
+            </div>
+          </div>
+        </MobileStage>
+
+        <MobileStage
+          label="02 — Insights"
+          title={
+            <>
+              And paths you
+              <br />
+              can&apos;t see.
+            </>
+          }
+          subtext={
+            <>
+              The warmest path, not the shortest.
+            </>
+          }
+        >
+          <div className="relative overflow-hidden rounded-[28px] border border-white/60 bg-[rgba(242,242,247,0.9)] p-5 shadow-[0_10px_28px_rgba(0,0,0,0.05),0_22px_52px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.72)] backdrop-blur-3xl">
+            <PaperGrain id="mobile-path-stage" opacity={0.025} />
+            <div className="relative z-10">
+              <div
+                style={{ fontFamily: fonts.mono }}
+                className="text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-400"
+              >
+                Warm intro path
+              </div>
+
+              <div className="relative mt-6 space-y-5 pl-9">
+                <div className="absolute bottom-7 left-[17px] top-5 w-px bg-gradient-to-b from-sky-300 via-emerald-300 to-amber-300" />
+
+                {[
+                  {
+                    avatar: null as string | null,
+                    initials: "You",
+                    name: "You",
+                    role: founder.role,
+                    context: intermediary.toYou,
+                  },
+                  {
+                    avatar: "/avatars/paige-vasquez.jpg",
+                    name: intermediary.name,
+                    role: intermediary.role,
+                    context: intermediary.toTarget,
+                  },
+                  {
+                    avatar: "/avatars/mark-jensen.jpg",
+                    name: target.name,
+                    role: target.role,
+                    context: "Skip the cold email. Start from shared trust.",
+                  },
+                ].map((node) => (
+                  <div key={node.name} className="relative">
+                    <div className={`absolute left-[-34px] top-2 h-8 w-8 rounded-full border border-white/70 shadow-[0_2px_10px_rgba(0,0,0,0.08)] ${node.avatar ? "overflow-hidden" : "flex items-center justify-center bg-white/85"}`}>
+                      {node.avatar ? (
+                        <img src={node.avatar} alt={node.name} className="h-full w-full object-cover" />
+                      ) : (
+                        <span style={{ fontFamily: fonts.mono }} className="text-[10px] font-semibold tracking-[0.1em] text-zinc-600">{node.initials}</span>
+                      )}
+                    </div>
+                    <div className="rounded-[20px] border border-white/60 bg-white/78 px-4 py-3 shadow-[0_6px_18px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.72)]">
+                      <div
+                        style={{ fontFamily: fonts.sans }}
+                        className="text-[15px] font-semibold tracking-tight text-zinc-800"
+                      >
+                        {node.name}
+                      </div>
+                      <div
+                        style={{ fontFamily: fonts.mono }}
+                        className="mt-1 text-[11px] text-zinc-500"
+                      >
+                        {node.role}
+                      </div>
+                      <div
+                        style={{ fontFamily: fonts.serif }}
+                        className="mt-2 text-[12px] italic leading-relaxed text-zinc-500"
+                      >
+                        {node.context}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </MobileStage>
+
+        <MobileStage
+          label="03 — Keep Up"
+          title={
+            <>
+              Relationships don&apos;t
+              <br />
+              die in silence.
+            </>
+          }
+          subtext={
+            <>
+              Brace nudges you before connections fade, so you show up while it
+              still matters.
+            </>
+          }
+        >
+          <div className="relative overflow-hidden rounded-[30px] border border-white/70 bg-white/48 p-5 shadow-[0_10px_30px_rgba(0,0,0,0.05),0_24px_64px_rgba(0,0,0,0.07),inset_0_2px_4px_rgba(255,255,255,0.82)] backdrop-blur-[36px]">
+            <PaperGrain id="mobile-keepup-card" opacity={0.035} />
+            <motion.div
+              animate={{
+                scale: [1, 1.12, 1],
+                rotate: [0, 60, 0],
+                opacity: [0.22, 0.36, 0.22],
+              }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+              className="pointer-events-none absolute -right-[12%] -top-[8%] h-40 w-40 rounded-full bg-amber-400/25 blur-[42px]"
+            />
+            <div className="relative z-10 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="h-12 w-12 overflow-hidden rounded-full border border-white/70 shadow-[0_4px_14px_rgba(0,0,0,0.05)]">
+                  <img src={keepUpNudge.person.avatar} alt={keepUpNudge.person.name} className="h-full w-full object-cover" />
+                </div>
+                <div>
+                  <div
+                    style={{ fontFamily: fonts.sans }}
+                    className="text-[17px] font-semibold tracking-tight text-zinc-900"
+                  >
+                    {keepUpNudge.person.name}
+                  </div>
+                  <div
+                    style={{ fontFamily: fonts.mono }}
+                    className="text-[11px] text-zinc-500"
+                  >
+                    {keepUpNudge.person.role}
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-[20px] border border-red-200/80 bg-white/72 px-4 py-3">
+                <div
+                  style={{ fontFamily: fonts.mono }}
+                  className="text-[10px] font-bold uppercase tracking-[0.16em] text-red-500"
+                >
+                  Fading connection
+                </div>
+                <p
+                  style={{ fontFamily: fonts.sans }}
+                  className="mt-2 text-[13px] leading-relaxed text-zinc-600"
+                >
+                  No contact for 3 months. She usually allocates capital in Q1.
+                </p>
+              </div>
+
+              <div className="rounded-[22px] border border-white/80 bg-white/76 p-4 shadow-[0_8px_22px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.92)]">
+                <div className="mb-3 flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-amber-400" />
+                  <span
+                    style={{ fontFamily: fonts.mono }}
+                    className="text-[10px] font-bold uppercase tracking-[0.14em] text-amber-600"
+                  >
+                    Brace suggestion
+                  </span>
+                </div>
+                <p
+                  style={{ fontFamily: fonts.serif }}
+                  className="text-[13px] italic leading-relaxed text-zinc-800"
+                >
+                  “{keepUpNudge.suggested}”
+                </p>
+                <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-white/[0.1] bg-[rgba(9,9,11,0.62)] py-3 text-[13px] font-medium text-white shadow-[0_2px_12px_rgba(0,0,0,0.08),0_6px_24px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-2xl transition-all duration-300 hover:bg-[rgba(9,9,11,0.50)]">
+                  Review Draft
+                  <svg
+                    className="h-3.5 w-3.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2.5}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M14 5l7 7m0 0l-7 7m7-7H3"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </MobileStage>
+      </div>
+    </section>
+  );
+}
+
+export default function NetworkSection({ isNarrow = false }: { isNarrow?: boolean }) {
+  return isNarrow ? <MobileNetworkSection /> : <DesktopNetworkSection />;
 }

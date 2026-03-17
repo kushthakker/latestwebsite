@@ -64,3 +64,28 @@
 - **Full mockup centering belongs in `page.tsx`**: If the requirement is to center the complete demo, including the bottom use-case pill, fix the hero lift in `page.tsx`, not `DemoMockup`. The full mockup already uses symmetric outer padding; the anchored-state mismatch came from a hardcoded `demoY` guess (`-6vh`) instead of using the expanded clip height to derive the true centered lift (`-(100 - expandedHeight) / 2`).
 - **Reasoning chain scroll ownership**: The inner reasoning text in `DemoMockup` only scrolls because it sits inside a dedicated `overflow-y-auto` wrapper. If the user wants that section to expand naturally, remove the wrapper scroll itself instead of tuning the surrounding card heights.
 - **Extra breathing room should come from expanded hero height**: When the reasoning chain becomes non-scrollable and starts clipping against the suggested-action card, increase the expanded demo height slightly in `page.tsx` and keep the fixed inner wrapper height matched. A small bump (`92vh` -> `94vh`) is enough to reveal the full reasoning block without disturbing the anchor math.
+
+## 2026-03-17 — Narrow Layout Branching for Mobile
+
+- **Preserve desktop by branching at the section level**: For this landing page, wide-screen motion is too geometry-heavy to make mobile-safe with a few breakpoints. The cleanest approach is a shared `isNarrow` switch at the page level and separate narrow branches for hero/demo, comparison, network, and the final CTA section.
+- **Use `svh` for mobile hero math**: The hero clip-window reveal works on phones only when height values move off `vh` and onto `svh`; otherwise mobile browser chrome makes the expansion and centering feel jumpy.
+- **`DemoMockup` mobile needs purposeful compaction**: A good phone version is not the desktop 2-column grid collapsed to one column. The narrow path should use stacked cards, smaller paddings, a horizontally scrollable use-case rail, and selective line clamps/trims so the mockup still fits inside the animated hero shell.
+- **Mobile network story reads better as cards than as viewport geometry**: The desktop network section depends on `vw`/`vh` coordinates, sticky split panes, and long scrub ranges. On mobile, the same narrative is clearer as sequential content-flow stages with shorter reveal animations.
+- **Disable hover-first affordances on touch**: The constellation ending can stay visually alive on mobile, but tooltips, mouse parallax, and full desktop pixel density are unnecessary. Lower node count, clamp pixel ratio, and let the canvas behave like an ambient backdrop rather than an interactive scene.
+- **Phone demos should show hierarchy, not completeness**: The hero mockup looked awkward when mobile tried to show the full signal detail and full rolodex stack at once. A better pattern is one dominant action card plus a compact secondary preview card, which reads like a real phone product surface instead of a squeezed desktop panel.
+- **Mobile relationship maps need summaries, not directories**: The first mobile network branch was too tall because each group expanded into a full people list. A 2x2 group summary grid with a couple of representative people and a count cue preserves the idea without turning the section into a long roster.
+- **Do not use `scrollIntoView` inside autoplaying horizontal rails on mobile**: In the hero mockup, advancing the active use-case chip with `scrollIntoView` caused the page itself to jump back up on mobile. Use `container.scrollTo({ left })` against the chip-row scroller instead so only the horizontal rail moves.
+- **Headline sequencing is coupled to subtitle timing**: In `BoldTruth`, delaying one of the animated headline words also means shifting the subtitle trigger. Otherwise the subtitle starts before the keyword sequence has actually finished.
+
+## 2026-03-17 — BoldTruth → NetworkSection Transition Fix
+
+- **Dead space between sections**: BoldTruth's `min-h-screen` + centered flex left ~50vh of white space below text. NetworkSection's sticky frame (split panel, borders, bg) was visible at progress=0 with all content at opacity 0, creating an empty layout flash.
+- **Scroll-driven exit on BoldTruth**: Added `useScroll`/`useTransform` to fade out text (opacity 1→0, y 0→-40px) from progress 0.5→0.85. The section keeps its `min-h-screen` height but the text departs gracefully.
+- **BoldTruthBridge component**: A 60vh bridge between sections with a connecting phrase ("So we built something that remembers for you."). Fades in/out via scroll progress. Provides narrative continuity without dead space.
+- **NetworkSection entrance opacity**: Added `sectionEnterOpacity` (0→1 at progress 0→0.008) combined with existing exit opacity via `Math.min()`. Prevents the empty frame flash — the split-panel layout only appears once content is ready.
+
+## 2026-03-17 — Hero Background Tint Revert
+
+- **Gray hero came from overlay layers, not base canvas**: The hero section already had a white fixed base (`bg-white`), but a blurred `hero-bg.png` layer plus warm radial gradients on top introduced an unintended gray/beige cast.
+- **Safest revert is flattening to one fixed white layer**: Replacing the multi-layer background block with a single `fixed inset-0 bg-white` div restores the original white hero without affecting scroll math, sticky behavior, or demo transforms.
+- **Penflow descenders can sit behind the next line without explicit stacking**: The handwritten `Concierge` SVG needs a higher z-index (`relative z-20` on the word wrapper and `z-30` on the absolute Penflow layer) so letters like `g` render above "Your Network" instead of being visually cut by the line below.

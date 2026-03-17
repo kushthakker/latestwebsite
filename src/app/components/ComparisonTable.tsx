@@ -137,7 +137,74 @@ function TableRow({
   );
 }
 
-export default function ComparisonTable() {
+function MobileStatCard({ row, index }: { row: Row; index: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-10%" }}
+      transition={{ duration: 0.45, delay: index * 0.06, ease: [0.25, 0.1, 0.25, 1] }}
+      className="rounded-[22px] border border-black/[0.06] bg-[#fafaf8] p-5 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.03)]"
+    >
+      <div
+        style={{ fontFamily: fonts.serif }}
+        className="text-[1.1rem] font-semibold italic text-[#3d3d3d]"
+      >
+        {row.label}
+      </div>
+
+      <div className="mt-4 space-y-3">
+        <div className="rounded-[18px] border border-black/[0.05] bg-white/65 px-4 py-3">
+          <div
+            style={{ fontFamily: fonts.serif }}
+            className="text-[12px] font-medium italic text-[#999]"
+          >
+            everyone else
+          </div>
+          <div
+            style={{ fontFamily: fonts.serif }}
+            className="mt-1 text-[1.7rem] italic text-[#888]"
+          >
+            {row.everyoneElse.value}
+          </div>
+          {row.everyoneElse.sub && (
+            <div
+              style={{ fontFamily: fonts.serif }}
+              className="mt-1 text-[13px] italic text-[#aaa]"
+            >
+              {row.everyoneElse.sub}
+            </div>
+          )}
+        </div>
+
+        <div className="rounded-[18px] border border-[#b8860b]/15 bg-[#fffaf0] px-4 py-3">
+          <div
+            style={{ fontFamily: fonts.serif }}
+            className="text-[12px] font-semibold italic text-[#b8860b]"
+          >
+            with brace
+          </div>
+          <div
+            style={{ fontFamily: fonts.serif }}
+            className="mt-1 text-[1.9rem] font-semibold italic text-[#b8860b]"
+          >
+            {row.theOnePercent.value}
+          </div>
+          {row.theOnePercent.sub && (
+            <div
+              style={{ fontFamily: fonts.serif }}
+              className="mt-1 text-[13px] italic text-[#c4975a]"
+            >
+              {row.theOnePercent.sub}
+            </div>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+export default function ComparisonTable({ isNarrow = false }: { isNarrow?: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -209,70 +276,78 @@ export default function ComparisonTable() {
         </motion.p>
 
         {/* Table card */}
-        <motion.div
-          style={{
-            opacity: tableOpacity,
-            background: "#fafaf8",
-            borderRadius: 20,
-            border: "1px solid rgba(0,0,0,0.06)",
-            boxShadow: "0 4px 40px -8px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.03)",
-            overflow: "hidden",
-          }}
-        >
-          <table
+        {isNarrow ? (
+          <motion.div style={{ opacity: tableOpacity }} className="space-y-4">
+            {rows.map((row, i) => (
+              <MobileStatCard key={row.label} row={row} index={i} />
+            ))}
+          </motion.div>
+        ) : (
+          <motion.div
             style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              tableLayout: "fixed",
+              opacity: tableOpacity,
+              background: "#fafaf8",
+              borderRadius: 20,
+              border: "1px solid rgba(0,0,0,0.06)",
+              boxShadow: "0 4px 40px -8px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.03)",
+              overflow: "hidden",
             }}
           >
-            <thead>
-              <tr>
-                <th style={{ width: "25%", padding: "24px 32px" }} />
-                <th
-                  style={{
-                    width: "40%",
-                    padding: "24px 32px",
-                    textAlign: "left",
-                    fontFamily: fonts.serif,
-                    fontSize: "clamp(14px, 1.3vw, 18px)",
-                    fontWeight: 400,
-                    fontStyle: "italic",
-                    color: "#999",
-                    borderBottom: "1px solid rgba(0,0,0,0.06)",
-                  }}
-                >
-                  everyone else
-                </th>
-                <th
-                  style={{
-                    width: "35%",
-                    padding: "24px 32px",
-                    textAlign: "left",
-                    fontFamily: fonts.serif,
-                    fontSize: "clamp(14px, 1.3vw, 18px)",
-                    fontWeight: 600,
-                    fontStyle: "italic",
-                    color: "#b8860b",
-                    borderBottom: "1px solid rgba(0,0,0,0.06)",
-                  }}
-                >
-                  with brace
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row, i) => (
-                <TableRow
-                  key={row.label}
-                  row={row}
-                  index={i}
-                  scrollYProgress={scrollYProgress}
-                />
-              ))}
-            </tbody>
-          </table>
-        </motion.div>
+            <table
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                tableLayout: "fixed",
+              }}
+            >
+              <thead>
+                <tr>
+                  <th style={{ width: "25%", padding: "24px 32px" }} />
+                  <th
+                    style={{
+                      width: "40%",
+                      padding: "24px 32px",
+                      textAlign: "left",
+                      fontFamily: fonts.serif,
+                      fontSize: "clamp(14px, 1.3vw, 18px)",
+                      fontWeight: 400,
+                      fontStyle: "italic",
+                      color: "#999",
+                      borderBottom: "1px solid rgba(0,0,0,0.06)",
+                    }}
+                  >
+                    everyone else
+                  </th>
+                  <th
+                    style={{
+                      width: "35%",
+                      padding: "24px 32px",
+                      textAlign: "left",
+                      fontFamily: fonts.serif,
+                      fontSize: "clamp(14px, 1.3vw, 18px)",
+                      fontWeight: 600,
+                      fontStyle: "italic",
+                      color: "#b8860b",
+                      borderBottom: "1px solid rgba(0,0,0,0.06)",
+                    }}
+                  >
+                    with brace
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row, i) => (
+                  <TableRow
+                    key={row.label}
+                    row={row}
+                    index={i}
+                    scrollYProgress={scrollYProgress}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </motion.div>
+        )}
       </motion.div>
     </section>
   );

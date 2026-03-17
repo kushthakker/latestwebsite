@@ -2,7 +2,7 @@
 "use client";
 
 import { useRef, useState, useEffect, useCallback } from "react";
-import { motion, useInView, useAnimation } from "framer-motion";
+import { motion, useInView, useAnimation, useScroll, useTransform } from "framer-motion";
 
 const SCRAMBLE_CHARS =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -503,12 +503,20 @@ export default function BoldTruth() {
   const [keywordsPlay, setKeywordsPlay] = useState(false);
   const [subtitlePlay, setSubtitlePlay] = useState(false);
 
+  // Scroll-driven exit: fade out + drift up as user scrolls past
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const exitOpacity = useTransform(scrollYProgress, [0.5, 0.85], [1, 0]);
+  const exitY = useTransform(scrollYProgress, [0.5, 0.85], [0, -40]);
+
   useEffect(() => {
     if (!isInView) return;
     // Phase 2: after headline fade-in completes
     const t1 = setTimeout(() => setKeywordsPlay(true), 900);
     // Phase 3: after headline keywords have had their moment
-    const t2 = setTimeout(() => setSubtitlePlay(true), 4500);
+    const t2 = setTimeout(() => setSubtitlePlay(true), 6000);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
@@ -518,9 +526,12 @@ export default function BoldTruth() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex items-center justify-center min-h-screen bg-white px-6 py-24"
+      className="relative flex min-h-screen items-center justify-center bg-white px-5 py-20 sm:px-6 sm:py-24"
     >
-      <div className="max-w-[58rem] text-center">
+      <motion.div
+        className="max-w-[58rem] text-center"
+        style={{ opacity: exitOpacity, y: exitY }}
+      >
         {/* ── Main statement ── */}
         <motion.p
           initial={{ opacity: 0, y: 24 }}
@@ -535,7 +546,7 @@ export default function BoldTruth() {
           <HireCursorWord play={keywordsPlay} delay={1000} />.{" "}
           <StampDealWord play={keywordsPlay} delay={2000} />{" "}
           that changed everything. Every one was decided by{" "}
-          <RelationshipWord play={keywordsPlay} delay={3000} />.
+          <RelationshipWord play={keywordsPlay} delay={4500} />.
         </motion.p>
 
         {/* ── Subtitle with anti-pattern contrast + warm reveal ── */}
@@ -571,7 +582,7 @@ export default function BoldTruth() {
             and thought of you at the right moment.
           </WarmPhrase>
         </motion.p>
-      </div>
+      </motion.div>
     </section>
   );
 }
