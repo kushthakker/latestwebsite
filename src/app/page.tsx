@@ -266,22 +266,19 @@ function HeroSection({ isNarrow }: { isNarrow: boolean }) {
           >
             <a
               href="#"
-              className="pointer-events-auto group inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[15px] font-medium text-white transition-all duration-300 backdrop-blur-2xl bg-[rgba(9,9,11,0.68)] border border-white/[0.12] shadow-[0_2px_16px_rgba(0,0,0,0.10),0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.10)] hover:bg-[rgba(9,9,11,0.55)] hover:shadow-[0_2px_20px_rgba(0,0,0,0.12),0_12px_40px_rgba(0,0,0,0.10),inset_0_1px_0_rgba(255,255,255,0.14)] hover:scale-[1.03]"
+              className="pointer-events-auto group relative isolate inline-flex items-center overflow-hidden rounded-full border border-[rgba(255,244,230,0.7)] bg-[linear-gradient(135deg,rgba(255,196,123,0.72),rgba(255,142,42,0.62))] px-7 py-3.5 text-[15px] font-semibold text-[rgba(62,31,8,0.95)] shadow-[0_8px_24px_rgba(226,120,24,0.28),0_2px_10px_rgba(105,54,13,0.20),inset_0_1px_0_rgba(255,255,255,0.65)] transition-all duration-300 backdrop-blur-2xl hover:bg-[linear-gradient(135deg,rgba(255,205,136,0.78),rgba(255,151,52,0.70))] hover:shadow-[0_12px_32px_rgba(226,120,24,0.35),0_4px_14px_rgba(105,54,13,0.24),inset_0_1px_0_rgba(255,255,255,0.72)] hover:scale-[1.03]"
             >
-              Get Early Access
-              <svg
-                className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
+              <span className="pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <span className="absolute -left-1/4 top-1/2 h-24 w-24 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.55)_0%,rgba(255,255,255,0)_72%)] blur-[1px] transition-transform duration-700 group-hover:translate-x-[190%]" />
+                <span className="absolute -right-1/4 top-1/2 h-20 w-20 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.42)_0%,rgba(255,255,255,0)_75%)] blur-[1px] transition-transform duration-[900ms] group-hover:-translate-x-[220%]" />
+              </span>
+              <span className="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(255,255,255,0.32),rgba(255,255,255,0.05))] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              <span className="relative z-20 inline-flex items-center gap-2">
+                Get Early Access
+                <span className="text-[16px] transition-transform duration-300 group-hover:translate-x-0.5">
+                  →
+                </span>
+              </span>
             </a>
           </motion.div>
         </motion.div>
