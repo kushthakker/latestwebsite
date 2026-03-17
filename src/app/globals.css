@@ -8,8 +8,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-uncut-sans);
+  --font-mono: var(--font-paper-mono);
+  --font-serif: var(--font-tabular);
 }
 
 body {
@@ -39,4 +40,70 @@ body {
 .demo-no-scrollbar::-webkit-scrollbar,
 .demo-no-scrollbar *::-webkit-scrollbar {
   display: none;
+}
+
+/* ——— BoldTruth micro-interactions ——— */
+
+/* Gold shimmer: a warm light sweeps through the word */
+@keyframes goldShimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+
+.bold-truth-shimmer {
+  background: linear-gradient(
+    90deg,
+    #18181b 0%,
+    #18181b 40%,
+    #a78036 46%,
+    #c9a84c 50%,
+    #a78036 54%,
+    #18181b 60%,
+    #18181b 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: goldShimmer 1.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Cursor blink: realistic text-insertion cursor */
+@keyframes cursorBlink {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  10%,
+  50% {
+    opacity: 1;
+  }
+}
+
+.bold-truth-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 0.7em;
+  background: currentColor;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: cursorBlink 600ms ease 3 forwards;
+}
+
+/* Accessibility: respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .bold-truth-shimmer {
+    animation: none;
+    background: none;
+    -webkit-text-fill-color: inherit;
+    color: inherit;
+  }
+  .bold-truth-cursor {
+    display: none;
+  }
 }

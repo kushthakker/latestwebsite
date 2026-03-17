@@ -1,15 +1,36 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const uncutSans = localFont({
+  src: "./fonts/UncutSans-Variable.woff2",
+  variable: "--font-uncut-sans",
+  display: "swap",
+  weight: "300 700",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const paperMono = localFont({
+  src: "./fonts/PaperMono[wght].woff2",
+  variable: "--font-paper-mono",
+  display: "swap",
+  weight: "400 800",
+});
+
+const tabular = localFont({
+  src: [
+    {
+      path: "./fonts/Tabular-Variable.woff2",
+      style: "normal",
+      weight: "300 700",
+    },
+    {
+      path: "./fonts/Tabular-VariableItalic.woff2",
+      style: "italic",
+      weight: "300 700",
+    },
+  ],
+  variable: "--font-tabular",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -26,7 +47,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${uncutSans.variable} ${paperMono.variable} ${tabular.variable} antialiased`}
       >
         {children}
       </body>

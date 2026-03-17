@@ -1,9 +1,16 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import dynamic from "next/dynamic";
+
+const Penflow = dynamic(
+  () => import("penflow/react").then((mod) => mod.Penflow),
+  { ssr: false }
+);
 import DemoMockup from "./components/DemoMockup";
 import SignalNoise from "./components/SignalNoise";
+import BoldTruth from "./components/BoldTruth";
 import NetworkSection from "./components/NetworkSection";
 import ComparisonTable from "./components/ComparisonTable";
 import OnePercentClub from "./components/OnePercentClub";
@@ -28,6 +35,52 @@ function GrainOverlay() {
 
 function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const [penflowSize, setPenflowSize] = useState(84);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [hasPlayedOnce, setHasPlayedOnce] = useState(false);
+  const animationTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  // Compute penflow size from the heading's computed font size
+  useEffect(() => {
+    const updateSize = () => {
+      if (headingRef.current) {
+        const fs = parseFloat(getComputedStyle(headingRef.current).fontSize);
+        setPenflowSize(Math.round(fs * 1.2));
+      }
+    };
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
+  // Pre-load the handwriting font
+  useEffect(() => {
+    fetch("/fonts/BrittanySignature.ttf");
+  }, []);
+
+  // Auto-play animation once after 3s on page load
+  useEffect(() => {
+    const timer = setTimeout(() => triggerAnimation(), 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const triggerAnimation = () => {
+    setIsAnimating(true);
+    clearTimeout(animationTimerRef.current);
+    // Revert to normal text after animation completes (~4s for "Concierge" at speed 0.7)
+    animationTimerRef.current = setTimeout(() => {
+      setIsAnimating(false);
+      setHasPlayedOnce(true);
+    }, 4000);
+  };
+
+  const handleConciergeHover = () => {
+    if (hasPlayedOnce && !isAnimating) {
+      triggerAnimation();
+    }
+  };
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
@@ -62,7 +115,7 @@ function HeroSection() {
   // Grow from the bottom, land in true center when expanded, then drift upward on exit.
   const demoY = useTransform(
     [demoCenteredLiftVh, demoExitLiftVh],
-    ([centeredLiftVh, exitLiftVh]) => `${centeredLiftVh + exitLiftVh}vh`
+    ([centeredLiftVh, exitLiftVh]) => `${(centeredLiftVh as number) + (exitLiftVh as number)}vh`
   );
 
   // Phase 3: Demo fades out smoothly
@@ -126,13 +179,46 @@ function HeroSection() {
           style={{ opacity: headlineOpacity, y: headlineY, paddingBottom: "18vh" }}
         >
           <motion.h1
+            ref={headingRef}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-            className="text-[clamp(2.5rem,5vw,4rem)] leading-[1.1] font-medium tracking-tight"
+            className="text-[clamp(2.8rem,5.5vw,4.5rem)] leading-[1.1] font-semibold tracking-tight"
             style={{ color: "rgba(9,9,11,0.95)" }}
           >
-            AI Concierge For
+            AI{" "}
+            <span
+              className="relative inline-block cursor-pointer pointer-events-auto"
+              style={{ overflow: "visible" }}
+              onMouseEnter={handleConciergeHover}
+            >
+              {/* Normal font — visible when not animating */}
+              <span
+                className="transition-opacity duration-500"
+                style={{ opacity: isAnimating ? 0 : 1 }}
+              >
+                Concierge
+              </span>
+              {/* Penflow handwriting overlay — absolutely positioned, overflow visible */}
+              <span
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                style={{ overflow: "visible" }}
+              >
+                {isAnimating && (
+                  <Penflow
+                    text="Concierge"
+                    fontUrl="/fonts/BrittanySignature.ttf"
+                    size={penflowSize}
+                    speed={0.7}
+                    quality="balanced"
+                    color="rgba(9,9,11,0.90)"
+                    animate
+                    incremental={false}
+                  />
+                )}
+              </span>
+            </span>{" "}
+            For
             <br />
             Your Network
           </motion.h1>
@@ -165,7 +251,7 @@ function HeroSection() {
           >
             <a
               href="#"
-              className="pointer-events-auto group inline-flex items-center gap-2 rounded-full bg-[#09090b] px-6 py-3 text-[15px] font-medium text-white transition-all hover:bg-zinc-800"
+              className="pointer-events-auto group inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[15px] font-medium text-white transition-all duration-300 backdrop-blur-2xl bg-[rgba(9,9,11,0.68)] border border-white/[0.12] shadow-[0_2px_16px_rgba(0,0,0,0.10),0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.10)] hover:bg-[rgba(9,9,11,0.55)] hover:shadow-[0_2px_20px_rgba(0,0,0,0.12),0_12px_40px_rgba(0,0,0,0.10),inset_0_1px_0_rgba(255,255,255,0.14)] hover:scale-[1.03]"
             >
               Get Early Access
               <svg
@@ -220,41 +306,6 @@ function HeroSection() {
             </motion.div>
           </motion.div>
         </motion.div>
-      </div>
-    </section>
-  );
-}
-
-function BoldTruth() {
-  return (
-    <section className="relative flex items-center justify-center min-h-screen bg-white px-6 py-24">
-      <div className="max-w-[58rem] text-center">
-        <motion.p
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-15%" }}
-          transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
-          className="text-[clamp(1.75rem,3.8vw,3.5rem)] leading-[1.2] tracking-tight text-zinc-900 font-medium"
-        >
-          Every important outcome in your career — the funding, the hire, the deal that changed everything — was
-          decided by a relationship.
-        </motion.p>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-10%" }}
-          transition={{
-            duration: 0.9,
-            delay: 0.25,
-            ease: [0.25, 0.1, 0.25, 1],
-          }}
-          className="mt-8 text-[clamp(1.1rem,1.8vw,1.5rem)] leading-relaxed text-zinc-400 font-normal tracking-tight"
-        >
-          Not an algorithm. Not an application.
-          <br className="hidden sm:block" />
-          A person who knew you, trusted you, and thought of you at the right moment.
-        </motion.p>
       </div>
     </section>
   );

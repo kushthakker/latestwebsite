@@ -3,6 +3,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { fonts } from "../lib/fonts";
 
 export default function SourceMapping() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -70,10 +71,10 @@ export default function SourceMapping() {
             <motion.div style={{ opacity: textOpacity, y: textY }}>
               <h2
                 style={{
-                  fontFamily: "ui-serif, 'Georgia', 'Times New Roman', serif",
-                  fontSize: "clamp(1.8rem, 3vw, 2.6rem)",
+                  fontFamily: fonts.serif,
+                  fontSize: "clamp(2rem, 3.2vw, 2.8rem)",
                   lineHeight: 1.25,
-                  fontWeight: 400,
+                  fontWeight: 500,
                   letterSpacing: "-0.03em",
                   color: "#1d1d1f",
                   margin: 0,
@@ -83,7 +84,7 @@ export default function SourceMapping() {
               </h2>
               <p
                 style={{
-                  fontFamily: "ui-serif, 'Georgia', 'Times New Roman', serif",
+                  fontFamily: fonts.serif,
                   fontSize: "clamp(1.05rem, 1.6vw, 1.25rem)",
                   lineHeight: 1.6,
                   color: "#86868b",

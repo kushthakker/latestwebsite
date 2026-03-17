@@ -9,6 +9,7 @@ import {
   useMotionTemplate,
   type MotionValue,
 } from "framer-motion";
+import { fonts } from "../lib/fonts";
 
 // ─────────────────────────────────────────────────────
 // Noise card data — realistic digital clutter
@@ -37,8 +38,7 @@ const cardBase: React.CSSProperties = {
   boxShadow:
     "0 4px 24px -4px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.4)",
   border: "1px solid rgba(0,0,0,0.06)",
-  fontFamily:
-    "var(--font-sans), -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
+  fontFamily: fonts.sans,
   width: "100%",
   borderRadius: 16,
 } as const;
@@ -349,7 +349,7 @@ function LinearCard({
             fontSize: 12,
             color: "#86868b",
             fontWeight: 500,
-            fontFamily: "ui-monospace, monospace",
+            fontFamily: fonts.mono,
           }}
         >
           {id}
@@ -695,7 +695,7 @@ function BraceSignalCard({
         boxShadow:
           "0 12px 32px -4px rgba(100,80,60,0.12), 0 2px 8px rgba(100,80,60,0.06), inset 0 1px 0 rgba(255,255,255,0.9)",
         border: "1px solid rgba(160,140,110,0.25)",
-        fontFamily: "ui-serif, 'Georgia', 'Times New Roman', serif",
+        fontFamily: fonts.serif,
         width: "100%",
         position: "relative",
         overflow: "hidden",
@@ -1612,10 +1612,10 @@ export default function SignalNoise() {
           >
             <h2
               style={{
-                fontFamily: "ui-serif, 'Georgia', 'Times New Roman', serif",
-                fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
+                fontFamily: fonts.serif,
+                fontSize: "clamp(2rem, 3.8vw, 3rem)",
                 lineHeight: 1.2,
-                fontWeight: 400,
+                fontWeight: 500,
                 letterSpacing: "-0.03em",
                 color: "#1d1d1f",
                 margin: 0,
@@ -1625,7 +1625,7 @@ export default function SignalNoise() {
             </h2>
             <p
               style={{
-                fontFamily: "ui-serif, 'Georgia', 'Times New Roman', serif",
+                fontFamily: fonts.serif,
                 fontSize: "clamp(1.1rem, 2vw, 1.35rem)",
                 lineHeight: 1.6,
                 color: "#86868b",

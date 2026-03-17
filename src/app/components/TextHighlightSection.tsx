@@ -9,6 +9,7 @@ import {
   useMotionTemplate,
   type MotionValue,
 } from "framer-motion";
+import { fonts } from "../lib/fonts";
 
 function FadeWord({
   children,
@@ -92,12 +93,12 @@ export default function TextHighlightSection() {
           {/* Heading: "relationships don't break. they fade." */}
           <h2
             style={{
-              fontSize: "clamp(2.4rem, 5vw, 3.8rem)",
+              fontSize: "clamp(2.6rem, 5.2vw, 4rem)",
               lineHeight: 1.12,
-              fontWeight: 400,
+              fontWeight: 500,
               letterSpacing: "-0.035em",
               color: "#1d1d1f",
-              fontFamily: "ui-serif, 'Georgia', 'Times New Roman', serif",
+              fontFamily: fonts.serif,
               margin: 0,
             }}
           >
@@ -126,7 +127,7 @@ export default function TextHighlightSection() {
           <div
             style={{
               marginTop: "56px",
-              fontFamily: "ui-serif, 'Georgia', 'Times New Roman', serif",
+              fontFamily: fonts.serif,
               fontSize: "clamp(1.1rem, 1.5vw, 1.3rem)",
               lineHeight: 1.8,
               color: "#86868b",

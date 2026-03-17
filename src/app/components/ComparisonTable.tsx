@@ -2,12 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-
-const fonts = {
-  sans: "var(--font-geist-sans), system-ui, -apple-system, sans-serif",
-  mono: "var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-  serif: "ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif",
-};
+import { fonts } from "../lib/fonts";
 
 interface Row {
   label: string;
@@ -185,7 +180,7 @@ export default function ComparisonTable() {
           <h2
             style={{
               fontFamily: fonts.serif,
-              fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
+              fontSize: "clamp(2rem, 3.8vw, 3rem)",
               fontWeight: 700,
               color: "#2d2d2d",
               fontStyle: "italic",

@@ -697,9 +697,9 @@ export default function OnePercentClub() {
               y: phase1Y,
               filter: phase1Blur,
             }}
-            className="absolute max-w-2xl text-center text-[clamp(1.5rem,3vw,2.5rem)] font-medium tracking-tight text-white/90 leading-snug"
+            className="absolute max-w-2xl text-center text-[clamp(1.6rem,3.2vw,2.8rem)] font-semibold tracking-tight text-white/90 leading-snug"
           >
-            you don&rsquo;t have to network harder.
+            You don&rsquo;t have to network harder.
           </motion.h3>
 
           {/* Phase 2 */}
@@ -709,9 +709,9 @@ export default function OnePercentClub() {
               y: phase2Y,
               filter: phase2Blur,
             }}
-            className="absolute max-w-2xl text-center text-[clamp(1.5rem,3vw,2.5rem)] font-medium tracking-tight text-white/90 leading-snug"
+            className="absolute max-w-2xl text-center text-[clamp(1.6rem,3.2vw,2.8rem)] font-semibold tracking-tight text-white/90 leading-snug"
           >
-            you don&rsquo;t have to send more cold emails.
+            You don&rsquo;t have to send more cold emails.
           </motion.h3>
 
           {/* Phase 3 */}
@@ -721,12 +721,12 @@ export default function OnePercentClub() {
               y: phase3Y,
               filter: phase3Blur,
             }}
-            className="absolute max-w-3xl text-center text-[clamp(1.5rem,3vw,2.5rem)] font-medium tracking-tight text-white/80 leading-snug"
+            className="absolute max-w-3xl text-center text-[clamp(1.6rem,3.2vw,2.8rem)] font-semibold tracking-tight text-white/80 leading-snug"
           >
-            just focus on the work.{" "}
+            Just focus on the work.{" "}
             <br className="hidden sm:block" />
             <span className="text-white/40">
-              brace keeps the people.
+              Brace keeps the people.
             </span>
           </motion.h3>
 
@@ -742,11 +742,11 @@ export default function OnePercentClub() {
 
           <div className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center pb-[8vh] px-6">
             <motion.div style={{ y: phase4Y }}>
-              <h2 className="text-[clamp(2.5rem,5vw,4.5rem)] font-semibold tracking-tighter text-white leading-none">
-                nothing goes unnoticed.
+              <h2 className="text-[clamp(2.8rem,5.5vw,5rem)] font-bold tracking-tighter text-white leading-none">
+                Nothing Goes Unnoticed.
               </h2>
-              <p className="mt-5 text-[clamp(0.9rem,1.1vw,1.1rem)] tracking-wide text-white/50 font-medium">
-                brace — the intelligence layer for human relationships.
+              <p className="mt-5 text-[clamp(1rem,1.3vw,1.25rem)] tracking-normal text-white/50 font-medium">
+                Brace — the intelligence layer for human relationships.
               </p>
             </motion.div>
 
@@ -757,7 +757,7 @@ export default function OnePercentClub() {
             >
               <a
                 href="#"
-                className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-white px-8 py-4 text-[15px] font-semibold text-black transition-all duration-300 hover:scale-105 hover:bg-white/90 hover:shadow-[0_0_40px_rgba(255,255,255,0.2)]"
+                className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full px-8 py-4 text-[15px] font-semibold text-black transition-all duration-300 backdrop-blur-2xl bg-white/75 border border-white/80 shadow-[0_2px_16px_rgba(255,255,255,0.12),0_8px_32px_rgba(255,255,255,0.06),inset_0_1px_0_rgba(255,255,255,0.9)] hover:scale-105 hover:bg-white/85 hover:shadow-[0_2px_24px_rgba(255,255,255,0.18),0_12px_48px_rgba(255,255,255,0.10),inset_0_1px_0_rgba(255,255,255,1)]"
               >
                 <span>Get Early Access</span>
                 <svg
