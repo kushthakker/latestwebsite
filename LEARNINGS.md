@@ -91,3 +91,18 @@
 - **Penflow descenders can sit behind the next line without explicit stacking**: The handwritten `Concierge` SVG needs a higher z-index (`relative z-20` on the word wrapper and `z-30` on the absolute Penflow layer) so letters like `g` render above "Your Network" instead of being visually cut by the line below.
 - **Hero CTA can keep glassmorphism while shifting warm**: For an orange glass button, keep the same structural recipe (backdrop blur, translucent border, specular inset, layered shadow), then swap to warm gradient tones and darker amber text for contrast; this preserves the premium look without reverting to a flat orange pill.
 - **Water hover effect works best as moving radial highlights under the label**: Two absolute, blurred radial-gradient circles moving in opposite directions on `group-hover` (`overflow-hidden` + `isolate` on the button) create a believable internal water ripple without JS animation.
+- **Minimal logo refresh can preserve brand shape while reducing visual weight**: Reusing the original logo path geometry with `fill="none"`, rounded joins/caps, and a medium stroke creates a cleaner top-left mark that stays recognizable.
+- **Subtle logo ambiance should be layered, not flashy**: A slow breathing radial glow behind the mark plus tiny, staggered twinkle stars around it gives premium motion without stealing attention from hero content.
+- **For stronger brand anchoring, a larger filled mark reads better than decorative particles**: When the icon itself becomes solid black and scales up, auxiliary micro-elements (stars/circles) can be removed without losing visual presence.
+
+## 2026-03-17 — Desktop Fixed CTA After Demo Exit
+
+- **Use existing hero scroll progress as the trigger source**: `HeroSection` already drives the `DemoMockup` lifecycle with `scrollYProgress`, so the fixed top-right CTA can appear at the same exit threshold (`> 0.86`) without introducing extra observers or duplicated scroll listeners.
+- **Prefer motion-value transforms over effect-driven state for scroll UI flags**: Driving `opacity`, `y`, `scale`, and `pointerEvents` with `useTransform` avoids `setState`-in-effect lint errors and keeps the interaction purely scroll-synced.
+- **Desktop-only CTA should be gated twice**: Keep both the `!isNarrow` branch and `hidden lg:block` on the fixed element so mobile/tablet flows stay unchanged while desktop gets the persistent post-demo CTA.
+- **Hide global fixed CTA when entering endcap section via section observer**: Assign a stable id to the final black section (`one-percent-club-section`) and use an `IntersectionObserver` in `HeroSection` to force the top-right CTA opacity/pointer events to off while the endcap is on screen, so it doesn’t compete with the bottom CTA there.
+
+## 2026-03-17 — Sticky Brand Lockup
+
+- **Top-left logo should be a lockup, not an icon-only chip**: In `FixedLogo`, pairing the animated mark with a `Brace` wordmark (`font-serif`, tight tracking, semibold) reads more intentional and makes the sticky brand anchor legible at a glance while preserving the existing glow/float motion.
+- **Collapse wordmark on initial scroll to reduce chrome weight**: Keep the icon persistent, but map the `Brace` wordmark `opacity`, `maxWidth`, and left spacing to `scrollY` over a longer range (0→~140px) so the lockup compacts smoothly instead of disappearing abruptly.

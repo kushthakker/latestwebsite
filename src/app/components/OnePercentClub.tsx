@@ -666,6 +666,7 @@ export default function OnePercentClub({ isNarrow = false }: { isNarrow?: boolea
   return (
     <section
       ref={sectionRef}
+      id="one-percent-club-section"
       className="relative font-sans"
       style={{ height: isNarrow ? "260svh" : "500vh" }}
     >
