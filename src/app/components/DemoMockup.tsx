@@ -150,7 +150,7 @@ const DEMO_SIGNALS: Record<string, DemoSignal> = {
     timestamp: "today",
     content: "3 months since you last talked. She just keynoted Shopify Editions this week",
     insight:
-      "This relationship is going quiet. Her big launch gives you a natural reason to show back up",
+      "Lisa just keynoted Editions and you haven\u2019t spoken in 3 months",
     because:
       "You haven\u2019t spoken since SaaStr in December. She was excited about adding your product to Shopify\u2019s partner marketplace.",
     and: "She\u2019s riding the high from keynoting Shopify Editions. People are most open to conversations right after a big moment.",
@@ -167,7 +167,7 @@ const DEMO_SIGNALS: Record<string, DemoSignal> = {
     source: "quiet",
     timestamp: "today",
     content: "Alex can connect you to Megan\u2019s clinical partner at HealthBridge",
-    insight: "Warm path to Bloom Health. Alex\u2019s Stanford circle gets you in",
+    insight: "Alex can get you a warm intro into Bloom Health",
     because:
       "You\u2019re exploring a partnership with Bloom Health, and Alex\u2019s Stanford circle overlaps with their clinical advisory team.",
     and: "Understanding the people around a company tells you whether there\u2019s real alignment.",
@@ -204,7 +204,7 @@ const DEMO_SIGNALS: Record<string, DemoSignal> = {
     timestamp: "4h ago",
     content: "Posted about developer tooling fragmentation slowing her team down",
     insight:
-      "She\u2019s wrestling with exactly the problem you solve, and you already have a relationship",
+      "Priya just posted about the exact problem you solve",
     because:
       "You had a great conversation at re:Invent about platform engineering pain points. She was curious about how you\u2019re approaching tooling consolidation.",
     and: "Her post is getting traction. She\u2019s clearly thinking hard about this and looking for answers right now.",
@@ -648,7 +648,7 @@ function DemoSignalDetail({
                 </span>
               </div>
 
-              <div>
+              <div className="min-h-0 flex-1 overflow-hidden">
                 <div className="relative space-y-3.5 pl-4 pr-1">
                   <div
                     className="absolute bottom-2 left-[5px] top-2 w-px"
@@ -721,7 +721,7 @@ function DemoSignalDetail({
                     fontFamily: fonts.sans,
                     color: "rgba(35,40,30,0.72)",
                   }}
-                  className="line-clamp-2 text-[15px] leading-snug"
+                  className="line-clamp-3 text-[15px] leading-snug"
                 >
                   {signal.suggestedText}
                 </p>

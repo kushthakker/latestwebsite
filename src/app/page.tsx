@@ -86,7 +86,7 @@ function HeroSection() {
     offset: ["start start", "end start"],
   });
   const demoStartHeightVh = 25;
-  const demoExpandedHeightVh = 94;
+  const demoExpandedHeightVh = 96;
   const demoExitDriftVh = -5;
 
   // Phase 1: Headline fades out
@@ -300,7 +300,7 @@ function HeroSection() {
                 background: "#fff",
               }}
             >
-              <div style={{ height: "94vh", width: "100%" }}>
+              <div style={{ height: "96vh", width: "100%" }}>
                 <DemoMockup />
               </div>
             </motion.div>
