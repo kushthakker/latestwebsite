@@ -1321,17 +1321,17 @@ function DesktopNetworkSection() {
               style={{ opacity: h2Opacity, y: h2Y, fontFamily: fonts.sans }}
               className={headlineClass}
             >
-              Brace knows what
+              Brace helps you
               <br />
-              you&apos;d forget.
+              remember.
             </motion.h2>
             <motion.h2
               style={{ opacity: h3Opacity, y: h3Y, fontFamily: fonts.sans }}
               className={headlineClass}
             >
-              And paths you
+              And paths you didn&apos;t
               <br />
-              can&apos;t see.
+              know you had.
             </motion.h2>
             <motion.h2
               style={{ opacity: h4Opacity, y: h4Y, fontFamily: fonts.sans }}
@@ -1354,13 +1354,13 @@ function DesktopNetworkSection() {
             >
               From one profile, we find
               <br />
-              who matters — and why.
+              who matters and why.
             </motion.p>
             <motion.p
               style={{ opacity: sub2Opacity, fontFamily: fonts.sans }}
               className={subtextClass}
             >
-              Relationships you already have —<br />
+              Relationships you already have,<br />
               organized by how you know them.
             </motion.p>
             <motion.p
@@ -1387,7 +1387,7 @@ function DesktopNetworkSection() {
             >
               Brace nudges you before
               <br />
-              connections fade — so you
+              connections fade, so you
               <br />
               show up while it still matters.
             </motion.p>
@@ -1632,9 +1632,9 @@ function MobileNetworkSection() {
           label="02 — Insights"
           title={
             <>
-              Brace knows what
+              Brace helps you
               <br />
-              you&apos;d forget.
+              remember.
             </>
           }
           subtext={
@@ -1706,9 +1706,9 @@ function MobileNetworkSection() {
           label="02 — Insights"
           title={
             <>
-              And paths you
+              And paths you didn&apos;t
               <br />
-              can&apos;t see.
+              know you had.
             </>
           }
           subtext={

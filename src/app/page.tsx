@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import dynamic from "next/dynamic";
 import { useIsNarrowLayout } from "./lib/useIsNarrowLayout";
 
@@ -34,53 +34,50 @@ function GrainOverlay() {
   );
 }
 
-function FixedLogo() {
-  const { scrollY } = useScroll();
-  const braceOpacity = useTransform(scrollY, [0, 140], [1, 0]);
-  const braceMaxWidth = useTransform(scrollY, [0, 140], ["4.8rem", "0rem"]);
-  const braceMarginLeft = useTransform(scrollY, [0, 140], [10, 0]);
+function FixedLogo({ demoProgress }: { demoProgress: MotionValue<number> }) {
+  const logoOpacity = useTransform(demoProgress, [0.10, 0.28], [1, 0]);
 
   return (
-    <motion.a
-      href="#"
-      aria-label="Brace home"
-      className="fixed left-4 top-4 z-50 inline-flex items-center justify-center rounded-2xl px-2.5 py-2 text-black sm:left-6 sm:top-6"
-      initial={{ opacity: 0, y: -8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: [0.2, 0.65, 0.3, 1] }}
+    <motion.div
+      className="fixed left-4 top-4 z-50 sm:left-6 sm:top-6"
     >
-      <motion.span
-        className="pointer-events-none absolute inset-0 -z-10 rounded-2xl bg-[radial-gradient(circle_at_45%_45%,rgba(251,146,60,0.24),rgba(251,146,60,0)_70%)]"
-        animate={{ opacity: [0.35, 0.6, 0.35], scale: [0.96, 1.03, 0.96] }}
-        transition={{ duration: 3.4, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      <motion.svg
-        viewBox="0 0 334 354"
-        className="h-11 w-auto sm:h-12"
-        fill="currentColor"
-        xmlns="http://www.w3.org/2000/svg"
-        animate={{ y: [0, -1.5, 0] }}
-        transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut" }}
+      <motion.a
+        href="#"
+        aria-label="Brace home"
+        className="inline-flex items-center justify-center rounded-2xl px-2.5 py-2 text-black"
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.2, 0.65, 0.3, 1] }}
       >
-        <g>
-          <path d="M253.499 220.733C212.861 149.164 163.35 116.113 59.3917 105.375C53.3539 104.751 52.3564 114.778 58.9151 116.519C163.687 126.496 214.232 170.146 243.954 225.017C237.886 229.57 233.5 236.627 233.5 245C233.5 258.846 244.678 269.5 258 269.5C271.322 269.5 282.5 258.846 282.5 245C282.5 231.154 271.38 220.286 258.059 220.286C256.499 220.286 254.975 220.44 253.499 220.733Z" />
-          <path d="M307 112.5C320.5 112 330.5 103 331.5 89C331.5 75.1536 322.5 64.5 308 63.5C299.115 63.5 289.66 67.743 285.475 75.1773C119.422 37.7053 46.4716 236.947 53.3686 345.5C53.7225 351.071 62.414 354.902 66.4344 345.5C66.4344 227.194 126.516 59.8708 282.206 88.8085C282.705 102.197 293.997 112.5 307 112.5Z" />
-          <path d="M204.861 48.1279C210.718 43.5537 214.506 36.2724 214.506 28.0714C214.506 14.2248 203.707 3 190.385 3C177.063 3 166.263 14.2248 166.263 28.0714C166.263 41.918 177.063 53.1429 190.385 53.1429C191.614 53.1429 192.82 53.0475 193.999 52.8633C251.356 193.304 117.527 294.603 10.0001 242C0.337605 244.234 2.96307 253.061 8 255C126.884 300.767 264.612 208.079 204.861 48.1279Z" />
-        </g>
-      </motion.svg>
+        <motion.span
+          className="pointer-events-none absolute inset-0 -z-10 rounded-2xl bg-[radial-gradient(circle_at_45%_45%,rgba(251,146,60,0.24),rgba(251,146,60,0)_70%)]"
+          animate={{ opacity: [0.35, 0.6, 0.35], scale: [0.96, 1.03, 0.96] }}
+          transition={{ duration: 3.4, repeat: Infinity, ease: "easeInOut" }}
+        />
 
-      <motion.span
-        style={{
-          opacity: braceOpacity,
-          maxWidth: braceMaxWidth,
-          marginLeft: braceMarginLeft,
-        }}
-        className="overflow-hidden whitespace-nowrap text-[1.15rem] font-serif font-semibold leading-none tracking-[-0.02em] text-black/90 sm:text-[1.28rem]"
-      >
-        Brace
-      </motion.span>
-    </motion.a>
+        <motion.svg
+          viewBox="0 0 334 354"
+          className="h-11 w-auto sm:h-12"
+          fill="currentColor"
+          xmlns="http://www.w3.org/2000/svg"
+          animate={{ y: [0, -1.5, 0] }}
+          transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <g>
+            <path d="M253.499 220.733C212.861 149.164 163.35 116.113 59.3917 105.375C53.3539 104.751 52.3564 114.778 58.9151 116.519C163.687 126.496 214.232 170.146 243.954 225.017C237.886 229.57 233.5 236.627 233.5 245C233.5 258.846 244.678 269.5 258 269.5C271.322 269.5 282.5 258.846 282.5 245C282.5 231.154 271.38 220.286 258.059 220.286C256.499 220.286 254.975 220.44 253.499 220.733Z" />
+            <path d="M307 112.5C320.5 112 330.5 103 331.5 89C331.5 75.1536 322.5 64.5 308 63.5C299.115 63.5 289.66 67.743 285.475 75.1773C119.422 37.7053 46.4716 236.947 53.3686 345.5C53.7225 351.071 62.414 354.902 66.4344 345.5C66.4344 227.194 126.516 59.8708 282.206 88.8085C282.705 102.197 293.997 112.5 307 112.5Z" />
+            <path d="M204.861 48.1279C210.718 43.5537 214.506 36.2724 214.506 28.0714C214.506 14.2248 203.707 3 190.385 3C177.063 3 166.263 14.2248 166.263 28.0714C166.263 41.918 177.063 53.1429 190.385 53.1429C191.614 53.1429 192.82 53.0475 193.999 52.8633C251.356 193.304 117.527 294.603 10.0001 242C0.337605 244.234 2.96307 253.061 8 255C126.884 300.767 264.612 208.079 204.861 48.1279Z" />
+          </g>
+        </motion.svg>
+
+        <motion.span
+          style={{ opacity: logoOpacity, marginLeft: 10 }}
+          className="overflow-hidden whitespace-nowrap text-[1.15rem] font-serif font-semibold leading-none tracking-[-0.02em] text-black/90 sm:text-[1.28rem]"
+        >
+          Brace
+        </motion.span>
+      </motion.a>
+    </motion.div>
   );
 }
 
@@ -253,6 +250,8 @@ function HeroSection({ isNarrow }: { isNarrow: boolean }) {
 
   return (
     <section ref={sectionRef} className="relative" style={{ height: sectionHeight }}>
+      <FixedLogo demoProgress={scrollYProgress} />
+
       {/* Background — fixed */}
       <div className="pointer-events-none fixed inset-0 z-0 bg-white" />
 
@@ -323,9 +322,9 @@ function HeroSection({ isNarrow }: { isNarrow: boolean }) {
             className="mt-6 max-w-lg text-[16px] leading-relaxed"
             style={{ color: "rgba(9,9,11,0.5)" }}
           >
-            The people who matter most are already in your network.
+            Your next opportunity is one relationship away.
             <br className="hidden sm:block" />
-            Brace makes sure you stay on their mind.
+            Brace makes sure you don&apos;t miss it.
           </motion.p>
 
           <motion.div
@@ -431,7 +430,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white">
-      <FixedLogo />
       <GrainOverlay />
       <HeroSection isNarrow={isNarrow} />
       {/* <SignalNoise /> */}

@@ -46,7 +46,7 @@ export default function BoldTruthBridge() {
         />
 
         <p className="text-[clamp(1.15rem,2vw,1.45rem)] leading-relaxed text-zinc-400 font-normal tracking-tight">
-          So we built something that remembers for you.
+          <strong>So we built something that remembers for you.</strong>
         </p>
       </motion.div>
     </div>

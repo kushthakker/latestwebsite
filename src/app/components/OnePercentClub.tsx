@@ -763,7 +763,7 @@ export default function OnePercentClub({ isNarrow = false }: { isNarrow?: boolea
                 Nothing Goes Unnoticed.
               </h2>
               <p className="mt-5 text-[clamp(1rem,1.3vw,1.25rem)] tracking-normal text-white/50 font-medium">
-                Brace — the intelligence layer for human relationships.
+                Brace. The concierge your network deserves.
               </p>
             </motion.div>
 
