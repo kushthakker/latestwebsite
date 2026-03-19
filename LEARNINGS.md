@@ -9,11 +9,12 @@
 
 - **Layered glass on pale backgrounds needs stronger card contrast**: The desktop `Warm Intro Path` card sits on top of a light mesh and a translucent section shell, so `text-zinc-400/500` plus a low-opacity glass fill made the names, roles, and context lines wash out. A more opaque card fill and darker copy (`zinc-500/600/900`) keeps the path legible without redesigning the layout.
 - **Subtle dashed SVG paths still need a halo on white**: The cold-outreach arc looked lost against the light background until it used a two-pass stroke (soft light halo + darker dashed line). A single faint dashed stroke is not enough once the card is nested inside multiple white/glass layers.
+- **If the alternate path is just visual noise, remove it entirely**: In the same desktop warm-intro card, the cleanest follow-up was deleting the `cold outreach` arc and label instead of continuing to tune a decorative path that competed with the main warm-intro story.
 - **Headless Chromium trips an unrelated WebGL overlay here**: Visual checks in headless Playwright currently hit a `THREE.WebGLRenderer` failure inside `OnePercentClub`, which throws the Next dev error overlay over the whole page. For future visual checks of earlier sections, expect that interference or use a non-headless browser path.
 
 ## 2026-03-19 — First Network Stage Label Spacing
 
-- **Lower group pills need their own vertical lane**: In the first desktop `NetworkSection` stage, the lower group labels (`Industry Peers`, `Close Friends`) started overlapping the top cards once those groups were moved upward. Keep those label pills around `5vh` while the top card centers sit around `13–15vh`, or they visually collide.
+- **Lower group pills need a true lane, not just a higher pill**: In the first desktop `NetworkSection` stage, the lower labels (`Industry Peers`, `Close Friends`) still felt jammed when only the pill moved. The stable fix is to raise the pill slightly (`~4vh`) and also push the lower two-card stack slightly down (`~16/28vh`) so the pill has breathing room above and below.
 - **Move top group pills and people together**: For the upper desktop groups (`Previous Colleagues`, `College Alumni`), shifting only the title pill makes the composition feel detached. If those sections need to move up, nudge the pill and the full three-card stack by the same amount so the internal spacing stays constant.
 
 ## 2026-03-18 — Mobile Bridge Spacing

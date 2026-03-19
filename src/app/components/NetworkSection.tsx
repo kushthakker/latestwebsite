@@ -27,22 +27,22 @@ const groupConfig: Record<string, GroupConfig> = {
   "Previous Colleagues": {
     color: "#2d7d4f",
     bg: "rgba(45,125,79,0.08)",
-    labelPos: { x: -18, y: -34 },
+    labelPos: { x: -18, y: -37 },
   },
   "College Alumni": {
     color: "#5856d6",
     bg: "rgba(88,86,214,0.08)",
-    labelPos: { x: 18, y: -34 },
+    labelPos: { x: 18, y: -37 },
   },
   "Industry Peers": {
     color: "#b3601e",
     bg: "rgba(179,96,30,0.07)",
-    labelPos: { x: -18, y: 5 },
+    labelPos: { x: -18, y: 7 },
   },
   "Close Friends": {
     color: "#2c7be5",
     bg: "rgba(44,123,229,0.07)",
-    labelPos: { x: 18, y: 5 },
+    labelPos: { x: 18, y: 7 },
   },
 };
 
@@ -71,7 +71,7 @@ const people: Person[] = [
     context: "Stripe Infra together '16–'19",
     group: "Previous Colleagues",
     radial: { x: -20, y: -16 },
-    grouped: { x: -18, y: -26 },
+    grouped: { x: -18, y: -28 },
     enterAt: 0.07,
   },
   {
@@ -83,7 +83,7 @@ const people: Person[] = [
     context: "Stripe Payments team '15–'19",
     group: "Previous Colleagues",
     radial: { x: -22, y: 4 },
-    grouped: { x: -18, y: -14 },
+    grouped: { x: -18, y: -16 },
     enterAt: 0.08,
   },
   {
@@ -95,7 +95,7 @@ const people: Person[] = [
     context: "Shipped Stripe Connect together",
     group: "Previous Colleagues",
     radial: { x: -17, y: 20 },
-    grouped: { x: -18, y: -2 },
+    grouped: { x: -18, y: -4 },
     enterAt: 0.1,
   },
   {
@@ -107,7 +107,7 @@ const people: Person[] = [
     context: "Stanford CS '13, same lab group",
     group: "College Alumni",
     radial: { x: -6, y: -26 },
-    grouped: { x: 18, y: -26 },
+    grouped: { x: 18, y: -28 },
     enterAt: 0.11,
   },
   {
@@ -119,7 +119,7 @@ const people: Person[] = [
     context: "Stanford CS '14, classmate",
     group: "College Alumni",
     radial: { x: 10, y: -26 },
-    grouped: { x: 18, y: -14 },
+    grouped: { x: 18, y: -16 },
     enterAt: 0.12,
   },
   {
@@ -131,7 +131,7 @@ const people: Person[] = [
     context: "Stanford MBA '15, same dorm",
     group: "College Alumni",
     radial: { x: 20, y: -16 },
-    grouped: { x: 18, y: -2 },
+    grouped: { x: 18, y: -4 },
     enterAt: 0.14,
   },
   {
@@ -143,7 +143,7 @@ const people: Person[] = [
     context: "Co-invested in Arcline Series A",
     group: "Industry Peers",
     radial: { x: 22, y: 4 },
-    grouped: { x: -18, y: 15 },
+    grouped: { x: -18, y: 16 },
     enterAt: 0.15,
   },
   {
@@ -155,7 +155,7 @@ const people: Person[] = [
     context: "Sequoia portfolio, same batch",
     group: "Industry Peers",
     radial: { x: 17, y: 20 },
-    grouped: { x: -18, y: 27 },
+    grouped: { x: -18, y: 28 },
     enterAt: 0.16,
   },
   {
@@ -167,7 +167,7 @@ const people: Person[] = [
     context: "Stanford roommate '11–'14",
     group: "Close Friends",
     radial: { x: -4, y: 28 },
-    grouped: { x: 18, y: 15 },
+    grouped: { x: 18, y: 16 },
     enterAt: 0.18,
   },
   {
@@ -179,7 +179,7 @@ const people: Person[] = [
     context: "Stanford ACM club together",
     group: "Close Friends",
     radial: { x: 6, y: 28 },
-    grouped: { x: 18, y: 27 },
+    grouped: { x: 18, y: 28 },
     enterAt: 0.19,
   },
 ];
@@ -714,13 +714,6 @@ function InsightsMovementB({
   const ctx1Op = useTransform(scrollYProgress, [0.64, 0.66], [0, 1]);
   const ctx2Op = useTransform(scrollYProgress, [0.665, 0.685], [0, 1]);
 
-  // ── Cold arc (subtle, enters last) ──
-  const coldOp = useTransform(
-    scrollYProgress,
-    [0.67, 0.695, 0.73, 0.76],
-    [0, 0.4, 0.4, 0],
-  );
-
   // ── CTA ──
   const ctaOp = useTransform(scrollYProgress, [0.69, 0.71], [0, 1]);
   const ctaY = useTransform(scrollYProgress, [0.69, 0.71], [10, 0]);
@@ -773,49 +766,6 @@ function InsightsMovementB({
 
               {/* ── Path visualization ── */}
               <div className="relative">
-                {/* Cold arc (SVG) */}
-                <motion.svg
-                  viewBox="0 0 100 16"
-                  preserveAspectRatio="none"
-                  className="absolute -top-10 inset-x-[8%] h-14 pointer-events-none"
-                  style={{
-                    opacity: coldOp,
-                    filter: "drop-shadow(0 1px 0 rgba(255,255,255,0.9))",
-                  }}
-                >
-                  <path
-                    d="M 2 14 Q 50 0 98 14"
-                    fill="none"
-                    stroke="rgba(255,255,255,0.72)"
-                    strokeWidth={2.2}
-                    strokeDasharray="4 5"
-                    strokeLinecap="round"
-                    vectorEffect="non-scaling-stroke"
-                  />
-                  <path
-                    d="M 2 14 Q 50 0 98 14"
-                    fill="none"
-                    stroke="rgba(113,113,122,0.62)"
-                    strokeWidth={1.15}
-                    strokeDasharray="4 5"
-                    strokeLinecap="round"
-                    vectorEffect="non-scaling-stroke"
-                  />
-                </motion.svg>
-
-                {/* Cold label */}
-                <motion.div
-                  style={{ opacity: coldOp }}
-                  className="absolute -top-4 left-1/2 -translate-x-1/2 z-10"
-                >
-                  <span
-                    style={{ fontFamily: fonts.mono }}
-                    className="text-[10px] text-zinc-500/85 tracking-[0.12em] uppercase whitespace-nowrap"
-                  >
-                    cold outreach
-                  </span>
-                </motion.div>
-
                 {/* Grid: [avatar] [line] [avatar] [line] [avatar] */}
                 <div
                   className="grid items-center"
