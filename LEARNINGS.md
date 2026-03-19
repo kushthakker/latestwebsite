@@ -1,5 +1,18 @@
 # Learnings
 
+## 2026-03-19 — Build Verification
+
+- **`next build` warns about multiple lockfiles above this repo**: Next.js 16 inferred the workspace root from `/Users/kushthakker/package-lock.json` because this project also has its own `package-lock.json`. The app still built successfully, but if Turbopack root-sensitive behavior becomes confusing, set `turbopack.root` explicitly or remove the extra parent lockfile.
+
+## 2026-03-19 — DemoMockup Manual Workflow State
+
+- **Completed demo cases should normalize back to `idle + completed` after auto-advance**: Keeping a revisitable case in `sent` status makes it behave like an in-flight transition and can unintentionally lock the chip rail. Reserve `sent` for the brief active success dwell only.
+- **Manual demo rails need persistent progress markers once autoplay is removed**: Without the old timer bar, the rail needs checked completed chips plus a compact `x / n complete` readout or the user loses orientation after each auto-advance.
+- **Sliding selector pills must account for content width changes**: In `DemoMockup`, adding a completion check to the active chip made the moving pill look undersized because the chip width changed after measurement. Reserve the check icon slot on every chip and remeasure when completion state changes.
+- **Do not permanently reserve a hidden check slot in demo chips**: That fixes width drift but leaves a visibly awkward leading gap on pending chips. The better fix is `useLayoutEffect` remeasurement when completion changes, while rendering the check only for completed cases.
+- **Keep the progress count centered across breakpoints**: The `x / n complete` footer under the mobile demo rail looks visually off when left-aligned under a centered chip group. Use centered alignment on both narrow and desktop layouts unless there is another left-edge element anchoring it.
+- **When asked to remove demo copy, remove only the chrome text, not the interaction state**: In `DemoMockup`, the send/completion logic can stay intact while helper status lines and footer counters are hidden. That preserves the feel of the interaction without adding extra visual noise.
+
 ## 2026-03-18 — Mobile Network Title Flicker
 
 - **Do not animate mobile section headlines together with heavy glass cards**: In `NetworkSection` mobile stages, fading/translating the entire stage caused the title block to flicker on mobile Chrome while the blurred glass card below it was compositing. Keep the label/title/subtext on a stable layer and animate only the content card body.

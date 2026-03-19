@@ -1,10 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { fonts } from "../lib/fonts";
-
-const AUTOPLAY_MS = 7000;
 
 // ─────────────────────────────────────────────────────
 // Types & Data
@@ -248,6 +253,30 @@ const USE_CASES = [
   },
 ];
 
+type DemoCaseStatus = "idle" | "sending" | "sent";
+
+interface DemoCaseRuntimeState {
+  status: DemoCaseStatus;
+  completed: boolean;
+}
+
+type DemoCaseStateMap = Record<string, DemoCaseRuntimeState>;
+
+type DemoActionTone = "neutral" | "success";
+
+interface DemoActionState {
+  buttonLabel: string;
+  helperText: string;
+  tone: DemoActionTone;
+  disabled: boolean;
+  showArrow: boolean;
+  showCheck: boolean;
+}
+
+const SEND_DELAY_MS = 850;
+const ADVANCE_DELAY_MS = 950;
+const RESET_DELAY_MS = 1800;
+
 // ─────────────────────────────────────────────────────
 // UI Themes (light, matching minimalistic/signal-new)
 // ─────────────────────────────────────────────────────
@@ -331,6 +360,145 @@ function getInitials(name: string) {
     .join("")
     .slice(0, 2)
     .toUpperCase();
+}
+
+function createInitialCaseStateMap(): DemoCaseStateMap {
+  return Object.fromEntries(
+    USE_CASES.map((useCase) => [
+      useCase.id,
+      createCaseRuntimeState("idle", false),
+    ]),
+  ) as DemoCaseStateMap;
+}
+
+function createCaseRuntimeState(
+  status: DemoCaseStatus,
+  completed: boolean,
+): DemoCaseRuntimeState {
+  return { status, completed };
+}
+
+function getCompletedCount(caseStates: DemoCaseStateMap) {
+  return USE_CASES.reduce(
+    (count, useCase) => count + (caseStates[useCase.id]?.completed ? 1 : 0),
+    0,
+  );
+}
+
+function getNextIncompleteIndex(
+  caseStates: DemoCaseStateMap,
+  fromIdx: number,
+): number | null {
+  for (let offset = 1; offset <= USE_CASES.length; offset += 1) {
+    const nextIdx = (fromIdx + offset) % USE_CASES.length;
+    if (!caseStates[USE_CASES[nextIdx].id]?.completed) {
+      return nextIdx;
+    }
+  }
+
+  return null;
+}
+
+function buildActionState({
+  useCaseLabel,
+  actionLabel,
+  caseState,
+  completedCount,
+  nextLabel,
+  isCelebrating,
+}: {
+  useCaseLabel: string;
+  actionLabel: string;
+  caseState: DemoCaseRuntimeState;
+  completedCount: number;
+  nextLabel: string | null;
+  isCelebrating: boolean;
+}): DemoActionState {
+  if (isCelebrating) {
+    return {
+      buttonLabel: "Sent",
+      helperText: "All 4 complete. Resetting...",
+      tone: "success",
+      disabled: true,
+      showArrow: false,
+      showCheck: true,
+    };
+  }
+
+  if (caseState.status === "sending") {
+    return {
+      buttonLabel: "Sending...",
+      helperText: "Sending now...",
+      tone: "neutral",
+      disabled: true,
+      showArrow: false,
+      showCheck: false,
+    };
+  }
+
+  if (caseState.status === "sent") {
+    return {
+      buttonLabel: "Sent",
+      helperText: nextLabel
+        ? `${useCaseLabel} finished. Next: ${nextLabel}.`
+        : `${useCaseLabel} finished.`,
+      tone: "success",
+      disabled: true,
+      showArrow: false,
+      showCheck: true,
+    };
+  }
+
+  if (caseState.completed) {
+    return {
+      buttonLabel: "Sent",
+      helperText: nextLabel
+        ? `${useCaseLabel} finished. Next: ${nextLabel}.`
+        : `${useCaseLabel} finished.`,
+      tone: "success",
+      disabled: true,
+      showArrow: false,
+      showCheck: true,
+    };
+  }
+
+  return {
+    buttonLabel: actionLabel,
+    helperText: `${completedCount}/${USE_CASES.length} complete. Click send to run.`,
+    tone: "neutral",
+    disabled: false,
+    showArrow: true,
+    showCheck: false,
+  };
+}
+
+function getSendButtonStyles(actionState: DemoActionState) {
+  if (!actionState.disabled) {
+    return {
+      background:
+        "linear-gradient(180deg, rgba(80,100,60,0.65), rgba(80,100,60,0.50))",
+      border: "1px solid rgba(80,100,60,0.30)",
+      color: "white",
+      boxShadow: "0 14px 28px rgba(80,100,60,0.18)",
+    };
+  }
+
+  if (actionState.showCheck) {
+    return {
+      background: "rgba(80,100,60,0.55)",
+      border: "1px solid rgba(80,100,60,0.25)",
+      color: "white",
+      boxShadow: "0 14px 28px rgba(80,100,60,0.20)",
+      cursor: "default",
+    };
+  }
+
+  return {
+    background: "rgba(255,255,255,0.50)",
+    border: "1px solid rgba(255,255,255,0.60)",
+    color: "rgba(60,70,50,0.38)",
+    cursor: "not-allowed",
+  };
 }
 
 function PaperGrain({ id, opacity = 0.035 }: { id: string; opacity?: number }) {
@@ -521,17 +689,69 @@ function SourceIcon({
   }
 }
 
+function ArrowRightIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M14 5l7 7m0 0l-7 7m7-7H3"
+      />
+    </svg>
+  );
+}
+
+function CheckIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth="2.5"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M5 13l4 4L19 7"
+      />
+    </svg>
+  );
+}
+
+function ActionStatusLine({
+  message,
+  tone,
+  compact = false,
+}: {
+  message: string;
+  tone: DemoActionTone;
+  compact?: boolean;
+}) {
+  void message;
+  void tone;
+  void compact;
+
+  return null;
+}
+
 // ─────────────────────────────────────────────────────
 // Components
 // ─────────────────────────────────────────────────────
 
 function MobileDemoSignalDetail({
   signal,
-  sendState,
+  actionState,
   onSend,
 }: {
   signal: DemoSignal;
-  sendState: "idle" | "sending" | "sent";
+  actionState: DemoActionState;
   onSend: () => void;
 }) {
   const theme = SOURCE_THEMES[signal.source] ?? SOURCE_THEMES.email;
@@ -680,74 +900,61 @@ function MobileDemoSignalDetail({
               </p>
             </div>
 
-            <div className="mt-3 flex gap-2">
-              <motion.button
-                type="button"
-                onClick={onSend}
-                disabled={sendState !== "idle"}
-                whileHover={sendState === "idle" ? { y: -1 } : undefined}
-                whileTap={sendState === "idle" ? { scale: 0.985 } : undefined}
-                className="inline-flex h-[40px] min-w-[8.5rem] items-center justify-center gap-2 rounded-full px-4 text-[13px] font-medium transition-all duration-300"
-                style={{
-                  fontFamily: fonts.sans,
-                  ...(sendState === "idle"
-                    ? {
-                        background:
-                          "linear-gradient(180deg, rgba(80,100,60,0.65), rgba(80,100,60,0.50))",
-                        border: "1px solid rgba(80,100,60,0.30)",
-                        color: "white",
-                        boxShadow: "0 14px 28px rgba(80,100,60,0.18)",
-                      }
-                    : sendState === "sending"
-                      ? {
-                          background: "rgba(255,255,255,0.50)",
-                          border: "1px solid rgba(255,255,255,0.60)",
-                          color: "rgba(60,70,50,0.38)",
-                          cursor: "not-allowed",
-                        }
-                      : {
-                          background: "rgba(80,100,60,0.55)",
-                          border: "1px solid rgba(80,100,60,0.25)",
-                          color: "white",
-                          boxShadow: "0 14px 28px rgba(80,100,60,0.20)",
-                        }),
-                }}
-              >
-                <span className="capitalize">
-                  {sendState === "idle"
-                    ? signal.actionLabel
-                    : sendState === "sending"
-                      ? "Sending..."
-                      : "Sent"}
-                </span>
-              </motion.button>
-
-              <div className="relative min-w-0 flex-1">
-                <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
-                  <svg
-                    className="h-3.5 w-3.5"
-                    style={{ color: "rgba(60,70,50,0.35)" }}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="1.75"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 6v12m6-6H6"
-                    />
-                  </svg>
-                </div>
-                <input
-                  type="text"
-                  placeholder="Refine..."
-                  className="h-[40px] w-full rounded-full border border-white/60 bg-white/48 pl-9 pr-3 text-[12px] backdrop-blur-xl focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/50 shadow-[0_4px_14px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.58)]"
+            <div className="mt-3">
+              <ActionStatusLine
+                message={actionState.helperText}
+                tone={actionState.tone}
+                compact
+              />
+              <div className="mt-2 flex gap-2">
+                <motion.button
+                  type="button"
+                  onClick={onSend}
+                  disabled={actionState.disabled}
+                  whileHover={!actionState.disabled ? { y: -1 } : undefined}
+                  whileTap={!actionState.disabled ? { scale: 0.985 } : undefined}
+                  className="inline-flex h-[40px] min-w-[8.5rem] items-center justify-center gap-2 rounded-full px-4 text-[13px] font-medium transition-all duration-300"
                   style={{
                     fontFamily: fonts.sans,
-                    color: "rgba(35,40,30,0.78)",
+                    ...getSendButtonStyles(actionState),
                   }}
-                />
+                >
+                  <span className="capitalize">{actionState.buttonLabel}</span>
+                  {actionState.showArrow && (
+                    <ArrowRightIcon className="h-3.5 w-3.5" />
+                  )}
+                  {actionState.showCheck && (
+                    <CheckIcon className="h-3.5 w-3.5" />
+                  )}
+                </motion.button>
+
+                <div className="relative min-w-0 flex-1">
+                  <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
+                    <svg
+                      className="h-3.5 w-3.5"
+                      style={{ color: "rgba(60,70,50,0.35)" }}
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="1.75"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 6v12m6-6H6"
+                      />
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Refine..."
+                    className="h-[40px] w-full rounded-full border border-white/60 bg-white/48 pl-9 pr-3 text-[12px] backdrop-blur-xl focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/50 shadow-[0_4px_14px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.58)]"
+                    style={{
+                      fontFamily: fonts.sans,
+                      color: "rgba(35,40,30,0.78)",
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -892,12 +1099,12 @@ function MobileDemoRolodexCard({ profile }: { profile: DemoProfile }) {
 
 function DemoSignalDetail({
   signal,
-  sendState,
+  actionState,
   onSend,
   isNarrow,
 }: {
   signal: DemoSignal;
-  sendState: "idle" | "sending" | "sent";
+  actionState: DemoActionState;
   onSend: () => void;
   isNarrow: boolean;
 }) {
@@ -905,7 +1112,7 @@ function DemoSignalDetail({
     return (
       <MobileDemoSignalDetail
         signal={signal}
-        sendState={sendState}
+        actionState={actionState}
         onSend={onSend}
       />
     );
@@ -1117,78 +1324,34 @@ function DemoSignalDetail({
                 </p>
               </div>
 
-              <div className={`flex gap-2.5 ${isNarrow ? "flex-col items-stretch" : "items-center"}`}>
+              <ActionStatusLine
+                message={actionState.helperText}
+                tone={actionState.tone}
+              />
+
+              <div className={`mt-2 flex gap-2.5 ${isNarrow ? "flex-col items-stretch" : "items-center"}`}>
                 <motion.button
                   type="button"
                   onClick={onSend}
-                  disabled={sendState !== "idle"}
-                  whileHover={sendState === "idle" ? { y: -1 } : undefined}
-                  whileTap={sendState === "idle" ? { scale: 0.985 } : undefined}
+                  disabled={actionState.disabled}
+                  whileHover={!actionState.disabled ? { y: -1 } : undefined}
+                  whileTap={!actionState.disabled ? { scale: 0.985 } : undefined}
                   className={`inline-flex h-[40px] items-center justify-center gap-2 rounded-full px-5 text-[14px] font-medium transition-all duration-300 ${
                     isNarrow ? "w-full" : ""
                   }`}
                   style={{
                     fontFamily: fonts.sans,
-                    ...(sendState === "idle"
-                      ? {
-                          background: `linear-gradient(180deg, rgba(80,100,60,0.65), rgba(80,100,60,0.50))`,
-                          border: "1px solid rgba(80,100,60,0.30)",
-                          color: "white",
-                          boxShadow: "0 14px 28px rgba(80,100,60,0.18)",
-                        }
-                      : sendState === "sending"
-                        ? {
-                            background: "rgba(255,255,255,0.50)",
-                            border: "1px solid rgba(255,255,255,0.60)",
-                            color: "rgba(60,70,50,0.38)",
-                            cursor: "not-allowed",
-                          }
-                        : {
-                            background: "rgba(80,100,60,0.55)",
-                            border: "1px solid rgba(80,100,60,0.25)",
-                            color: "white",
-                            boxShadow: "0 14px 28px rgba(80,100,60,0.20)",
-                          }),
+                    ...getSendButtonStyles(actionState),
                   }}
                 >
-                  <span className="capitalize">
-                    {sendState === "idle"
-                      ? signal.actionLabel
-                      : sendState === "sending"
-                        ? "Sending..."
-                        : "Sent"}
-                  </span>
+                  <span className="capitalize">{actionState.buttonLabel}</span>
 
-                  {sendState === "idle" && (
-                    <svg
-                      className="h-3.5 w-3.5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M14 5l7 7m0 0l-7 7m7-7H3"
-                      />
-                    </svg>
+                  {actionState.showArrow && (
+                    <ArrowRightIcon className="h-3.5 w-3.5" />
                   )}
 
-                  {sendState === "sent" && (
-                    <svg
-                      className="h-3.5 w-3.5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
+                  {actionState.showCheck && (
+                    <CheckIcon className="h-3.5 w-3.5" />
                   )}
                 </motion.button>
 
@@ -1480,22 +1643,21 @@ function DemoRolodexCard({
 function UseCaseCarousel({
   activeIdx,
   onSelect,
-  onAutoAdvance,
-  paused,
+  caseStates,
+  interactionLocked,
   isNarrow,
 }: {
   activeIdx: number;
   onSelect: (idx: number) => void;
-  onAutoAdvance: () => void;
-  paused: boolean;
+  caseStates: DemoCaseStateMap;
+  interactionLocked: boolean;
   isNarrow: boolean;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const progressRef = useRef<HTMLDivElement>(null);
   const [pill, setPill] = useState({ left: 0, width: 0 });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const btn = buttonRefs.current[activeIdx];
     const container = containerRef.current;
     if (!btn || !container) return;
@@ -1514,105 +1676,92 @@ function UseCaseCarousel({
         behavior: "smooth",
       });
     }
-  }, [activeIdx, isNarrow]);
-
-  useEffect(() => {
-    const el = progressRef.current;
-    if (!el) return;
-    // Wait one frame so the CSS animation is registered on the new DOM element
-    const raf = requestAnimationFrame(() => {
-      const anims = el.getAnimations();
-      for (const a of anims) {
-        a.playbackRate = paused ? 0 : 1;
-      }
-    });
-    return () => cancelAnimationFrame(raf);
-  }, [paused, activeIdx]);
+  }, [activeIdx, caseStates, isNarrow]);
 
   return (
-    <div
-      ref={containerRef}
-      className={`demo-no-scrollbar relative items-center gap-0.5 rounded-full p-1 backdrop-blur-xl ${
-        isNarrow
-          ? "flex w-full max-w-full overflow-x-auto overflow-y-hidden"
-          : "inline-flex"
-      }`}
-      style={{
-        background: "rgba(255,255,255,0.38)",
-        border: "1px solid rgba(0,0,0,0.04)",
-        boxShadow:
-          "0 2px 8px rgba(0,0,0,0.03), inset 0 1px 0 rgba(255,255,255,0.55)",
-      }}
-    >
-      {/* Single sliding pill — never unmounts */}
-      <motion.div
-        className="pointer-events-none absolute rounded-full"
-        initial={false}
-        animate={{
-          left: pill.left,
-          width: pill.width,
-          opacity: pill.width > 0 ? 1 : 0,
-        }}
-        transition={{
-          type: "tween",
-          duration: 0.4,
-          ease: [0.25, 0.1, 0.25, 1],
-        }}
+    <div className={isNarrow ? "w-full" : ""}>
+      <div
+        ref={containerRef}
+        className={`demo-no-scrollbar relative items-center gap-0.5 rounded-full p-1 backdrop-blur-xl ${
+          isNarrow
+            ? "flex w-full max-w-full overflow-x-auto overflow-y-hidden"
+            : "inline-flex"
+        }`}
         style={{
-          top: 4,
-          bottom: 4,
-          background: "rgba(240,238,235,0.85)",
+          background: "rgba(255,255,255,0.38)",
+          border: "1px solid rgba(0,0,0,0.04)",
           boxShadow:
-            "0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.9)",
+            "0 2px 8px rgba(0,0,0,0.03), inset 0 1px 0 rgba(255,255,255,0.55)",
         }}
-      />
+      >
+        <motion.div
+          className="pointer-events-none absolute rounded-full"
+          initial={false}
+          animate={{
+            left: pill.left,
+            width: pill.width,
+            opacity: pill.width > 0 ? 1 : 0,
+          }}
+          transition={{
+            type: "tween",
+            duration: 0.4,
+            ease: [0.25, 0.1, 0.25, 1],
+          }}
+          style={{
+            top: 4,
+            bottom: 4,
+            background: "rgba(240,238,235,0.85)",
+            boxShadow:
+              "0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.9)",
+          }}
+        />
 
-      {USE_CASES.map((uc, idx) => {
-        const isActive = idx === activeIdx;
-        return (
-          <button
-            key={uc.id}
-            ref={(el) => {
-              buttonRefs.current[idx] = el;
-            }}
-            type="button"
-            onClick={() => onSelect(idx)}
-            className={`relative cursor-pointer rounded-full whitespace-nowrap ${isNarrow ? "px-4 py-1.5" : "px-5 py-2.5"}`}
-          >
-            <span
-              className={`relative z-10 font-semibold uppercase tracking-[0.14em] transition-colors duration-300 ${isNarrow ? "text-[10px]" : "text-[11px]"}`}
-              style={{
-                fontFamily: fonts.mono,
-                color: isActive
-                  ? "rgba(35,40,30,0.82)"
-                  : "rgba(60,70,50,0.32)",
+        {USE_CASES.map((uc, idx) => {
+          const isActive = idx === activeIdx;
+          const isCompleted = caseStates[uc.id]?.completed;
+
+          return (
+            <button
+              key={uc.id}
+              ref={(el) => {
+                buttonRefs.current[idx] = el;
               }}
+              type="button"
+              disabled={interactionLocked}
+              onClick={() => onSelect(idx)}
+              className={`relative rounded-full whitespace-nowrap transition-opacity duration-200 ${
+                interactionLocked ? "cursor-default opacity-80" : "cursor-pointer"
+              } ${isNarrow ? "px-4 py-1.5" : "px-5 py-2.5"}`}
             >
-              {uc.label}
-            </span>
-
-            {isActive && (
-              <div className={`absolute h-[1.5px] overflow-hidden rounded-full bg-black/[0.03] ${isNarrow ? "bottom-1 left-3 right-3" : "bottom-1.5 left-4 right-4"}`}>
-                <div
-                  ref={progressRef}
-                  key={`prog-${activeIdx}`}
-                  className="h-full rounded-full"
-                  style={{
-                    backgroundColor: "rgba(80,100,60,0.28)",
-                    willChange: "transform",
-                    transformOrigin: "left",
-                    animation: `usecaseProgress ${AUTOPLAY_MS}ms cubic-bezier(0.4, 0, 0.2, 1) forwards`,
-                  }}
-                  onAnimationEnd={(e) => {
-                    e.stopPropagation();
-                    onAutoAdvance();
-                  }}
-                />
-              </div>
-            )}
-          </button>
-        );
-      })}
+              <span
+                className={`relative z-10 inline-flex items-center gap-1.5 font-semibold uppercase tracking-[0.14em] transition-colors duration-300 ${isNarrow ? "text-[10px]" : "text-[11px]"}`}
+                style={{
+                  fontFamily: fonts.mono,
+                  color: isActive
+                    ? "rgba(35,40,30,0.82)"
+                    : isCompleted
+                      ? "rgba(80,100,60,0.74)"
+                      : "rgba(60,70,50,0.32)",
+                }}
+              >
+                {isCompleted && (
+                  <span
+                    aria-hidden="true"
+                    className="inline-flex h-4 w-4 items-center justify-center rounded-full border transition-opacity duration-200"
+                    style={{
+                      background: "rgba(80,100,60,0.10)",
+                      borderColor: "rgba(80,100,60,0.16)",
+                    }}
+                  >
+                    <CheckIcon className="h-2.5 w-2.5" />
+                  </span>
+                )}
+                <span>{uc.label}</span>
+              </span>
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -1624,12 +1773,12 @@ function UseCaseCarousel({
 function MobileSignalCard({
   signal,
   profile,
-  sendState,
+  actionState,
   onSend,
 }: {
   signal: DemoSignal;
   profile: DemoProfile;
-  sendState: "idle" | "sending" | "sent";
+  actionState: DemoActionState;
   onSend: () => void;
 }) {
   const theme = SOURCE_THEMES[signal.source] ?? SOURCE_THEMES.email;
@@ -1822,105 +1971,60 @@ function MobileSignalCard({
                   className="mt-2.5 mb-2.5 h-px w-full"
                   style={{ background: "rgba(60,70,50,0.07)" }}
                 />
-              <div className="flex gap-2">
-                <motion.button
-                  type="button"
-                  onClick={onSend}
-                  disabled={sendState !== "idle"}
-                  whileHover={sendState === "idle" ? { y: -1 } : undefined}
-                  whileTap={sendState === "idle" ? { scale: 0.985 } : undefined}
-                  className="inline-flex h-[34px] min-w-[7.5rem] items-center justify-center gap-1.5 rounded-full px-3.5 text-[12px] font-medium transition-all duration-300"
-                  style={{
-                    fontFamily: fonts.sans,
-                    ...(sendState === "idle"
-                      ? {
-                          background:
-                            "linear-gradient(180deg, rgba(80,100,60,0.65), rgba(80,100,60,0.50))",
-                          border: "1px solid rgba(80,100,60,0.30)",
-                          color: "white",
-                          boxShadow: "0 8px 20px rgba(80,100,60,0.18)",
-                        }
-                      : sendState === "sending"
-                        ? {
-                            background: "rgba(255,255,255,0.50)",
-                            border: "1px solid rgba(255,255,255,0.60)",
-                            color: "rgba(60,70,50,0.38)",
-                            cursor: "not-allowed",
-                          }
-                        : {
-                            background: "rgba(80,100,60,0.55)",
-                            border: "1px solid rgba(80,100,60,0.25)",
-                            color: "white",
-                            boxShadow: "0 8px 20px rgba(80,100,60,0.20)",
-                          }),
-                  }}
-                >
-                  <span className="capitalize">
-                    {sendState === "idle"
-                      ? signal.actionLabel
-                      : sendState === "sending"
-                        ? "Sending..."
-                        : "Sent"}
-                  </span>
-                  {sendState === "idle" && (
-                    <svg
-                      className="h-3 w-3"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M14 5l7 7m0 0l-7 7m7-7H3"
-                      />
-                    </svg>
-                  )}
-                  {sendState === "sent" && (
-                    <svg
-                      className="h-3 w-3"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  )}
-                </motion.button>
-                <div className="relative flex-1">
-                  <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
-                    <svg
-                      className="h-3 w-3"
-                      style={{ color: "rgba(60,70,50,0.35)" }}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="1.75"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 6v12m6-6H6"
-                      />
-                    </svg>
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="Refine..."
-                    className="h-[34px] w-full rounded-full border border-white/60 bg-white/48 pl-8 pr-3 text-[11px] backdrop-blur-xl focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/50 shadow-[0_2px_10px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.58)]"
+                <ActionStatusLine
+                  message={actionState.helperText}
+                  tone={actionState.tone}
+                  compact
+                />
+                <div className="mt-2 flex gap-2">
+                  <motion.button
+                    type="button"
+                    onClick={onSend}
+                    disabled={actionState.disabled}
+                    whileHover={!actionState.disabled ? { y: -1 } : undefined}
+                    whileTap={!actionState.disabled ? { scale: 0.985 } : undefined}
+                    className="inline-flex h-[34px] min-w-[7.5rem] items-center justify-center gap-1.5 rounded-full px-3.5 text-[12px] font-medium transition-all duration-300"
                     style={{
                       fontFamily: fonts.sans,
-                      color: "rgba(35,40,30,0.78)",
+                      ...getSendButtonStyles(actionState),
                     }}
-                  />
+                  >
+                    <span className="capitalize">{actionState.buttonLabel}</span>
+                    {actionState.showArrow && (
+                      <ArrowRightIcon className="h-3 w-3" />
+                    )}
+                    {actionState.showCheck && (
+                      <CheckIcon className="h-3 w-3" />
+                    )}
+                  </motion.button>
+                  <div className="relative flex-1">
+                    <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
+                      <svg
+                        className="h-3 w-3"
+                        style={{ color: "rgba(60,70,50,0.35)" }}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="1.75"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 6v12m6-6H6"
+                        />
+                      </svg>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Refine..."
+                      className="h-[34px] w-full rounded-full border border-white/60 bg-white/48 pl-8 pr-3 text-[11px] backdrop-blur-xl focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/50 shadow-[0_2px_10px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.58)]"
+                      style={{
+                        fontFamily: fonts.sans,
+                        color: "rgba(35,40,30,0.78)",
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
               </div>{/* mt-auto */}
             </div>{/* inner card */}
           </div>{/* outer flex-1 wrapper */}
@@ -1936,111 +2040,221 @@ function MobileSignalCard({
 
 export default function DemoMockup({ isNarrow = false }: { isNarrow?: boolean }) {
   const [activeIdx, setActiveIdx] = useState(0);
-  const [sendState, setSendState] = useState<"idle" | "sending" | "sent">(
-    "idle",
+  const [caseStates, setCaseStates] = useState<DemoCaseStateMap>(
+    () => createInitialCaseStateMap(),
   );
-  const [paused, setPaused] = useState(false);
+  const [isCelebrating, setIsCelebrating] = useState(false);
 
-  const sendTimeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const caseStatesRef = useRef<DemoCaseStateMap>(createInitialCaseStateMap());
+  const transitionTimeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  const clearSendTimeouts = useCallback(() => {
-    sendTimeoutsRef.current.forEach(clearTimeout);
-    sendTimeoutsRef.current = [];
+  const updateCaseStates = useCallback((nextCaseStates: DemoCaseStateMap) => {
+    caseStatesRef.current = nextCaseStates;
+    setCaseStates(nextCaseStates);
   }, []);
 
+  const clearTransitionTimeouts = useCallback(() => {
+    transitionTimeoutsRef.current.forEach(clearTimeout);
+    transitionTimeoutsRef.current = [];
+  }, []);
+
+  const queueTransition = useCallback((callback: () => void, delay: number) => {
+    const timeoutId = setTimeout(() => {
+      transitionTimeoutsRef.current = transitionTimeoutsRef.current.filter(
+        (id) => id !== timeoutId,
+      );
+      callback();
+    }, delay);
+
+    transitionTimeoutsRef.current.push(timeoutId);
+  }, []);
+
+  const resetDemo = useCallback(() => {
+    clearTransitionTimeouts();
+    updateCaseStates(createInitialCaseStateMap());
+    setIsCelebrating(false);
+    setActiveIdx(0);
+  }, [clearTransitionTimeouts, updateCaseStates]);
+
   useEffect(() => {
-    return () => clearSendTimeouts();
-  }, [clearSendTimeouts]);
+    return () => clearTransitionTimeouts();
+  }, [clearTransitionTimeouts]);
 
   const useCase = USE_CASES[activeIdx];
+  const caseState =
+    caseStates[useCase.id] ?? createCaseRuntimeState("idle", false);
   const signal = DEMO_SIGNALS[useCase.signalId];
   const profile = DEMO_PROFILES[useCase.profileId];
-
-  const handleAutoAdvance = useCallback(() => {
-    clearSendTimeouts();
-    setActiveIdx((prev) => (prev + 1) % USE_CASES.length);
-    setSendState("idle");
-  }, [clearSendTimeouts]);
+  const completedCount = getCompletedCount(caseStates);
+  const nextIncompleteIdx = getNextIncompleteIndex(caseStates, activeIdx);
+  const nextIncompleteLabel =
+    nextIncompleteIdx === null ? null : USE_CASES[nextIncompleteIdx].label;
+  const actionState = buildActionState({
+    useCaseLabel: useCase.label,
+    actionLabel: signal.actionLabel,
+    caseState,
+    completedCount,
+    nextLabel: nextIncompleteLabel,
+    isCelebrating,
+  });
+  const interactionLocked =
+    caseState.status === "sending" ||
+    caseState.status === "sent" ||
+    isCelebrating;
 
   const handleSelectUseCase = useCallback(
     (idx: number) => {
-      if (idx === activeIdx) return;
-      clearSendTimeouts();
+      if (idx === activeIdx || interactionLocked) return;
+      clearTransitionTimeouts();
       setActiveIdx(idx);
-      setSendState("idle");
     },
-    [activeIdx, clearSendTimeouts],
+    [activeIdx, clearTransitionTimeouts, interactionLocked],
   );
 
   const handleSend = useCallback(() => {
-    clearSendTimeouts();
-    setSendState("sending");
-    sendTimeoutsRef.current = [
-      setTimeout(() => setSendState("sent"), 1200),
-      setTimeout(() => setSendState("idle"), 3000),
-    ];
-  }, [clearSendTimeouts]);
+    const currentUseCase = USE_CASES[activeIdx];
+    const currentState = caseStatesRef.current[currentUseCase.id];
 
-  const keyframes = `@keyframes usecaseProgress{from{transform:scaleX(0);opacity:0}4%{opacity:1}to{transform:scaleX(1);opacity:1}}`;
+    if (
+      !currentState ||
+      currentState.completed ||
+      currentState.status !== "idle" ||
+      isCelebrating
+    ) {
+      return;
+    }
+
+    clearTransitionTimeouts();
+
+    updateCaseStates({
+      ...caseStatesRef.current,
+      [currentUseCase.id]: createCaseRuntimeState("sending", false),
+    });
+
+    queueTransition(() => {
+      const sentStates: DemoCaseStateMap = {
+        ...caseStatesRef.current,
+        [currentUseCase.id]: createCaseRuntimeState("sent", true),
+      };
+
+      updateCaseStates(sentStates);
+
+      if (getCompletedCount(sentStates) === USE_CASES.length) {
+        setIsCelebrating(true);
+        queueTransition(() => {
+          resetDemo();
+        }, RESET_DELAY_MS);
+        return;
+      }
+
+      const nextIdx = getNextIncompleteIndex(sentStates, activeIdx);
+
+      queueTransition(() => {
+        updateCaseStates({
+          ...caseStatesRef.current,
+          [currentUseCase.id]: createCaseRuntimeState("idle", true),
+        });
+
+        if (nextIdx !== null) {
+          setActiveIdx(nextIdx);
+        }
+      }, ADVANCE_DELAY_MS);
+    }, SEND_DELAY_MS);
+  }, [
+    activeIdx,
+    clearTransitionTimeouts,
+    isCelebrating,
+    queueTransition,
+    resetDemo,
+    updateCaseStates,
+  ]);
+
+  const completionToast = (
+    <AnimatePresence>
+      {isCelebrating && (
+        <motion.div
+          className="pointer-events-none absolute inset-x-0 top-3 z-20 flex justify-center px-4"
+          initial={{ opacity: 0, y: -10, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -8, scale: 0.98 }}
+          transition={{ duration: 0.22, ease: [0.25, 0.1, 0.25, 1] }}
+        >
+          <div
+            className="inline-flex items-center gap-2 rounded-full px-4 py-2 backdrop-blur-xl"
+            style={{
+              fontFamily: fonts.mono,
+              color: "rgba(35,40,30,0.84)",
+              background: "rgba(255,255,255,0.72)",
+              border: "1px solid rgba(255,255,255,0.72)",
+              boxShadow:
+                "0 8px 24px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.72)",
+            }}
+          >
+            <span
+              className="inline-flex h-5 w-5 items-center justify-center rounded-full"
+              style={{ background: "rgba(80,100,60,0.12)", color: "rgba(80,100,60,0.82)" }}
+            >
+              <CheckIcon className="h-3 w-3" />
+            </span>
+            <span className="text-[10px] uppercase tracking-[0.16em]">
+              All 4 workflows complete
+            </span>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 
   if (isNarrow) {
     return (
-      <>
-        <style>{keyframes}</style>
-        <div className="relative box-border flex h-full w-full flex-col px-4 py-4">
-          <div className="mx-auto min-h-0 w-full flex-1 flex max-w-[420px] flex-col">
-            <MobileSignalCard
-              signal={signal}
-              profile={profile}
-              sendState={sendState}
-              onSend={handleSend}
-            />
-          </div>
-          <div className="mt-3 flex shrink-0">
-            <UseCaseCarousel
-              activeIdx={activeIdx}
-              onSelect={handleSelectUseCase}
-              onAutoAdvance={handleAutoAdvance}
-              paused={paused}
-              isNarrow={true}
-            />
-          </div>
+      <div className="relative box-border flex h-full w-full flex-col px-4 py-4">
+        {completionToast}
+        <div className="mx-auto min-h-0 w-full flex-1 flex max-w-[420px] flex-col">
+          <MobileSignalCard
+            signal={signal}
+            profile={profile}
+            actionState={actionState}
+            onSend={handleSend}
+          />
         </div>
-      </>
+        <div className="mt-3 flex shrink-0">
+          <UseCaseCarousel
+            activeIdx={activeIdx}
+            onSelect={handleSelectUseCase}
+            caseStates={caseStates}
+            interactionLocked={interactionLocked}
+            isNarrow={true}
+          />
+        </div>
+      </div>
     );
   }
 
   return (
-    <>
-      <style>{keyframes}</style>
-      <div className="relative box-border flex h-full w-full flex-col px-6 py-5">
-        <div
-          className="mx-auto min-h-0 w-full flex-1 grid max-w-[1100px] grid-cols-[10fr_7fr] gap-4"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-        >
-          <div className="h-full min-h-0 min-w-0">
-            <DemoSignalDetail
-              signal={signal}
-              sendState={sendState}
-              onSend={handleSend}
-              isNarrow={false}
-            />
-          </div>
-          <div className="h-full min-h-0 min-w-0">
-            <DemoRolodexCard profile={profile} isNarrow={false} />
-          </div>
-        </div>
-        <div className="mt-4 flex shrink-0 justify-center">
-          <UseCaseCarousel
-            activeIdx={activeIdx}
-            onSelect={handleSelectUseCase}
-            onAutoAdvance={handleAutoAdvance}
-            paused={paused}
+    <div className="relative box-border flex h-full w-full flex-col px-6 py-5">
+      {completionToast}
+      <div className="mx-auto min-h-0 w-full flex-1 grid max-w-[1100px] grid-cols-[10fr_7fr] gap-4">
+        <div className="h-full min-h-0 min-w-0">
+          <DemoSignalDetail
+            signal={signal}
+            actionState={actionState}
+            onSend={handleSend}
             isNarrow={false}
           />
         </div>
+        <div className="h-full min-h-0 min-w-0">
+          <DemoRolodexCard profile={profile} isNarrow={false} />
+        </div>
       </div>
-    </>
+      <div className="mt-4 flex shrink-0 justify-center">
+        <UseCaseCarousel
+          activeIdx={activeIdx}
+          onSelect={handleSelectUseCase}
+          caseStates={caseStates}
+          interactionLocked={interactionLocked}
+          isNarrow={false}
+        />
+      </div>
+    </div>
   );
 }
