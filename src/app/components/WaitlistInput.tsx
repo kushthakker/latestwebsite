@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { supabase } from "../lib/supabase";
+import { getSupabaseClient } from "../lib/supabase";
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -95,6 +95,14 @@ export default function WaitlistInput({
     setErrorMsg("");
 
     try {
+      const supabase = getSupabaseClient();
+
+      if (!supabase) {
+        setState("error");
+        setErrorMsg("Waitlist is unavailable right now.");
+        return;
+      }
+
       const { error } = await supabase
         .from("waitlist")
         .insert([{ email: email.trim(), created_at: new Date().toISOString() }]);

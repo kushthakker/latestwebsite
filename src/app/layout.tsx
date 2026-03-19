@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -53,6 +54,7 @@ export default function RootLayout({
         className={`${uncutSans.variable} ${paperMono.variable} ${tabular.variable} antialiased`}
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );
