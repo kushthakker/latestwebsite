@@ -18,6 +18,10 @@ export default function BoldTruthBridge() {
   );
   const y = useTransform(scrollYProgress, [0, 0.3, 0.55, 0.85], [30, 0, 0, -20]);
 
+  // Payoff line — fades in later with a gentle rise
+  const payoffOpacity = useTransform(scrollYProgress, [0.35, 0.50, 0.55, 0.85], [0, 1, 1, 0]);
+  const payoffY = useTransform(scrollYProgress, [0.35, 0.50, 0.55, 0.85], [16, 0, 0, -20]);
+
   // Subtle line that draws in
   const lineScale = useTransform(scrollYProgress, [0.1, 0.45], [0, 1]);
   const lineOpacity = useTransform(
@@ -29,11 +33,10 @@ export default function BoldTruthBridge() {
   return (
     <div
       ref={ref}
-      className="relative flex items-center justify-center bg-white px-5"
-      style={{ height: "60vh" }}
+      className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-white px-5 sm:min-h-0 sm:h-[60vh] sm:px-6"
     >
       <motion.div
-        className="max-w-[40rem] text-center"
+        className="max-w-[32rem] text-center sm:max-w-[40rem]"
         style={{ opacity, y }}
       >
         {/* Decorative line above */}
@@ -45,9 +48,19 @@ export default function BoldTruthBridge() {
           }}
         />
 
-        <p className="text-[clamp(1.15rem,2vw,1.45rem)] leading-relaxed text-zinc-400 font-normal tracking-tight">
-          <strong>So we built something that remembers for you.</strong>
+        <p className="text-[clamp(1.05rem,1.6vw,1.3rem)] leading-relaxed text-zinc-500 font-normal tracking-tight">
+          Soon every AI agent will send a thousand perfect cold emails.{" "}
+          <br className="hidden sm:block" />
+          When everyone can outreach at scale, the only thing that still opens doors{" "}
+          <br className="hidden sm:block" />
+          is someone who actually knows you.
         </p>
+        <motion.p
+          className="mt-6 text-[clamp(1.15rem,2vw,1.45rem)] leading-relaxed text-zinc-500 font-normal tracking-tight"
+          style={{ opacity: payoffOpacity, y: payoffY }}
+        >
+          <strong>So we built something that remembers for you.</strong>
+        </motion.p>
       </motion.div>
     </div>
   );

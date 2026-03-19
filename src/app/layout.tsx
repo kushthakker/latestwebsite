@@ -34,9 +34,12 @@ const tabular = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Brace — AI Concierge for Your Network",
+  title: "Brace | AI Concierge for Your Network",
   description:
     "Brace connects to your email, calendar, and LinkedIn — and each morning, surfaces who needs your care, and why.",
+  icons: {
+    icon: "/brace-logo.svg",
+  },
 };
 
 export default function RootLayout({

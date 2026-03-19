@@ -15,6 +15,7 @@ import BoldTruthBridge from "./components/BoldTruthBridge";
 import NetworkSection from "./components/NetworkSection";
 import ComparisonTable from "./components/ComparisonTable";
 import OnePercentClub from "./components/OnePercentClub";
+import WaitlistInput from "./components/WaitlistInput";
 
 
 function GrainOverlay() {
@@ -56,18 +57,16 @@ function FixedLogo({ demoProgress }: { demoProgress: MotionValue<number> }) {
         />
 
         <motion.svg
-          viewBox="0 0 334 354"
+          viewBox="0 0 529 530"
           className="h-11 w-auto sm:h-12"
-          fill="currentColor"
+          fill="none"
           xmlns="http://www.w3.org/2000/svg"
           animate={{ y: [0, -1.5, 0] }}
           transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut" }}
         >
-          <g>
-            <path d="M253.499 220.733C212.861 149.164 163.35 116.113 59.3917 105.375C53.3539 104.751 52.3564 114.778 58.9151 116.519C163.687 126.496 214.232 170.146 243.954 225.017C237.886 229.57 233.5 236.627 233.5 245C233.5 258.846 244.678 269.5 258 269.5C271.322 269.5 282.5 258.846 282.5 245C282.5 231.154 271.38 220.286 258.059 220.286C256.499 220.286 254.975 220.44 253.499 220.733Z" />
-            <path d="M307 112.5C320.5 112 330.5 103 331.5 89C331.5 75.1536 322.5 64.5 308 63.5C299.115 63.5 289.66 67.743 285.475 75.1773C119.422 37.7053 46.4716 236.947 53.3686 345.5C53.7225 351.071 62.414 354.902 66.4344 345.5C66.4344 227.194 126.516 59.8708 282.206 88.8085C282.705 102.197 293.997 112.5 307 112.5Z" />
-            <path d="M204.861 48.1279C210.718 43.5537 214.506 36.2724 214.506 28.0714C214.506 14.2248 203.707 3 190.385 3C177.063 3 166.263 14.2248 166.263 28.0714C166.263 41.918 177.063 53.1429 190.385 53.1429C191.614 53.1429 192.82 53.0475 193.999 52.8633C251.356 193.304 117.527 294.603 10.0001 242C0.337605 244.234 2.96307 253.061 8 255C126.884 300.767 264.612 208.079 204.861 48.1279Z" />
-          </g>
+          <path d="M80.0005 522.01C80.0005 526.428 83.5822 530.01 88.0005 530.01C92.4188 530.01 96.0005 526.428 96.0005 522.01L80.0005 522.01ZM442.834 167.01C442.834 190.574 461.936 209.677 485.501 209.677C509.065 209.677 528.167 190.574 528.167 167.01C528.167 143.446 509.065 124.343 485.501 124.343C461.936 124.343 442.834 143.446 442.834 167.01ZM96.0005 522.01C96.0005 394.103 138.866 281.255 208.334 213.552C277.337 146.302 373.132 122.929 482.092 174.247L488.909 159.772C373.869 105.591 270.914 130.219 197.167 202.093C123.885 273.514 80.0005 390.917 80.0005 522.01L96.0005 522.01Z" fill="currentColor" />
+          <path d="M88.6265 176.034C84.2218 175.689 80.3708 178.979 80.025 183.384C79.6793 187.788 82.9697 191.639 87.3744 191.985L88.6265 176.034ZM349.334 395.51C349.334 419.074 368.436 438.176 392 438.176C415.565 438.176 434.667 419.074 434.667 395.51C434.667 371.946 415.565 352.843 392 352.843C368.436 352.843 349.334 371.946 349.334 395.51ZM87.3744 191.985C159.692 197.662 222.649 216.008 273.087 249.37C323.41 282.656 361.717 331.177 384.425 398.081L399.576 392.939C375.784 322.843 335.341 271.364 281.914 236.025C228.602 200.762 162.809 181.858 88.6265 176.034L87.3744 191.985Z" fill="currentColor" />
+          <path d="M5.30815 387.544C1.14763 386.057 -1.01964 381.478 0.46741 377.318C1.95446 373.157 6.53271 370.99 10.6932 372.477L5.30815 387.544ZM249.778 83.2362C227.562 75.3811 215.919 51.0035 223.774 28.7871C231.629 6.57068 256.007 -5.07152 278.224 2.78348C300.44 10.6385 312.082 35.0162 304.227 57.2326C296.372 79.449 271.994 91.0912 249.778 83.2362ZM10.6932 372.477C135.428 417.06 228.282 373.719 274.573 301.325C321.238 228.348 321.258 125.035 257.828 48.0989L270.173 37.9208C338.244 120.485 338.264 231.422 288.053 309.945C237.47 389.051 136.574 434.461 5.30815 387.544L10.6932 372.477Z" fill="currentColor" />
         </motion.svg>
 
         <motion.span
@@ -137,8 +136,8 @@ function HeroSection({ isNarrow }: { isNarrow: boolean }) {
   });
   const sectionHeight = isNarrow ? "180svh" : "250vh";
   const viewportUnit = isNarrow ? "svh" : "vh";
-  const demoStartHeight = isNarrow ? 24 : 25;
-  const demoExpandedHeight = isNarrow ? 82 : 96;
+  const demoStartHeight = isNarrow ? 22 : 25;
+  const demoExpandedHeight = isNarrow ? 94 : 96;
   const demoExitDrift = isNarrow ? -3 : -5;
 
   // Phase 1: Headline fades out
@@ -250,7 +249,7 @@ function HeroSection({ isNarrow }: { isNarrow: boolean }) {
 
   return (
     <section ref={sectionRef} className="relative" style={{ height: sectionHeight }}>
-      <FixedLogo demoProgress={scrollYProgress} />
+      {!isNarrow && <FixedLogo demoProgress={scrollYProgress} />}
 
       {/* Background — fixed */}
       <div className="pointer-events-none fixed inset-0 z-0 bg-white" />
@@ -322,7 +321,7 @@ function HeroSection({ isNarrow }: { isNarrow: boolean }) {
             className="mt-6 max-w-lg text-[16px] leading-relaxed"
             style={{ color: "rgba(9,9,11,0.5)" }}
           >
-            Your next opportunity is one relationship away.
+            Your next opportunity is one relationship away.{" "}
             <br className="hidden sm:block" />
             Brace makes sure you don&apos;t miss it.
           </motion.p>
@@ -335,24 +334,9 @@ function HeroSection({ isNarrow }: { isNarrow: boolean }) {
               delay: 0.3,
               ease: [0.25, 0.1, 0.25, 1],
             }}
-            className="mt-8"
+            className="mt-8 pointer-events-auto"
           >
-            <a
-              href="#"
-              className="pointer-events-auto group relative isolate inline-flex items-center overflow-hidden rounded-full border border-[rgba(255,244,230,0.7)] bg-[linear-gradient(135deg,rgba(255,196,123,0.72),rgba(255,142,42,0.62))] px-7 py-3.5 text-[15px] font-semibold text-[rgba(62,31,8,0.95)] shadow-[0_8px_24px_rgba(226,120,24,0.28),0_2px_10px_rgba(105,54,13,0.20),inset_0_1px_0_rgba(255,255,255,0.65)] transition-all duration-300 backdrop-blur-2xl hover:bg-[linear-gradient(135deg,rgba(255,205,136,0.78),rgba(255,151,52,0.70))] hover:shadow-[0_12px_32px_rgba(226,120,24,0.35),0_4px_14px_rgba(105,54,13,0.24),inset_0_1px_0_rgba(255,255,255,0.72)] hover:scale-[1.03]"
-            >
-              <span className="pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <span className="absolute -left-1/4 top-1/2 h-24 w-24 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.55)_0%,rgba(255,255,255,0)_72%)] blur-[1px] transition-transform duration-700 group-hover:translate-x-[190%]" />
-                <span className="absolute -right-1/4 top-1/2 h-20 w-20 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.42)_0%,rgba(255,255,255,0)_75%)] blur-[1px] transition-transform duration-[900ms] group-hover:-translate-x-[220%]" />
-              </span>
-              <span className="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(255,255,255,0.32),rgba(255,255,255,0.05))] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              <span className="relative z-20 inline-flex items-center gap-2">
-                Get Early Access
-                <span className="text-[16px] transition-transform duration-300 group-hover:translate-x-0.5">
-                  →
-                </span>
-              </span>
-            </a>
+            <WaitlistInput variant="orange" isNarrow={isNarrow} />
           </motion.div>
         </motion.div>
 
@@ -403,22 +387,7 @@ function HeroSection({ isNarrow }: { isNarrow: boolean }) {
             pointerEvents: isFinalSectionVisible ? "none" : desktopEarlyAccessPointerEvents,
           }}
         >
-          <a
-            href="#"
-            className="group relative isolate inline-flex items-center overflow-hidden rounded-full border border-[rgba(255,244,230,0.72)] bg-[linear-gradient(135deg,rgba(255,196,123,0.78),rgba(255,142,42,0.66))] px-5 py-2.5 text-[14px] font-semibold text-[rgba(62,31,8,0.95)] shadow-[0_8px_22px_rgba(226,120,24,0.25),0_2px_8px_rgba(105,54,13,0.16),inset_0_1px_0_rgba(255,255,255,0.68)] transition-all duration-300 backdrop-blur-2xl hover:bg-[linear-gradient(135deg,rgba(255,205,136,0.82),rgba(255,151,52,0.74))] hover:shadow-[0_12px_30px_rgba(226,120,24,0.32),0_4px_12px_rgba(105,54,13,0.22),inset_0_1px_0_rgba(255,255,255,0.72)] hover:scale-[1.02]"
-          >
-            <span className="pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-              <span className="absolute -left-1/4 top-1/2 h-20 w-20 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.50)_0%,rgba(255,255,255,0)_72%)] blur-[1px] transition-transform duration-700 group-hover:translate-x-[190%]" />
-              <span className="absolute -right-1/4 top-1/2 h-16 w-16 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.40)_0%,rgba(255,255,255,0)_75%)] blur-[1px] transition-transform duration-[900ms] group-hover:-translate-x-[220%]" />
-            </span>
-            <span className="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(255,255,255,0.32),rgba(255,255,255,0.05))] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            <span className="relative z-20 inline-flex items-center gap-2">
-              Get Early Access
-              <span className="text-[15px] transition-transform duration-300 group-hover:translate-x-0.5">
-                →
-              </span>
-            </span>
-          </a>
+          <WaitlistInput variant="orange" isNarrow={false} size="compact" />
         </motion.div>
       )}
     </section>

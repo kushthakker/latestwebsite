@@ -570,7 +570,7 @@ export default function BoldTruth() {
           <StrikethroughWord play={subtitlePlay} delay={800}>
             an application
           </StrikethroughWord>
-          .
+          .{" "}
           <br className="hidden sm:block" />
           <WarmPhrase play={subtitlePlay} delay={1500}>
             A person who knew you,

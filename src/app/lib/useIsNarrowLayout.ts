@@ -5,10 +5,8 @@ import { useEffect, useState } from "react";
 const NARROW_LAYOUT_QUERY = "(max-width: 1023px)";
 
 export function useIsNarrowLayout() {
-  const [isNarrow, setIsNarrow] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return window.matchMedia(NARROW_LAYOUT_QUERY).matches;
-  });
+  // Always start false to match SSR output, then sync in useEffect
+  const [isNarrow, setIsNarrow] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia(NARROW_LAYOUT_QUERY);
@@ -16,13 +14,8 @@ export function useIsNarrowLayout() {
 
     update();
 
-    if (typeof mediaQuery.addEventListener === "function") {
-      mediaQuery.addEventListener("change", update);
-      return () => mediaQuery.removeEventListener("change", update);
-    }
-
-    mediaQuery.addListener(update);
-    return () => mediaQuery.removeListener(update);
+    mediaQuery.addEventListener("change", update);
+    return () => mediaQuery.removeEventListener("change", update);
   }, []);
 
   return isNarrow;

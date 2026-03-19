@@ -1577,10 +1577,10 @@ function UseCaseCarousel({
             }}
             type="button"
             onClick={() => onSelect(idx)}
-            className="relative cursor-pointer rounded-full px-5 py-2.5"
+            className={`relative cursor-pointer rounded-full whitespace-nowrap ${isNarrow ? "px-4 py-1.5" : "px-5 py-2.5"}`}
           >
             <span
-              className="relative z-10 text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors duration-300"
+              className={`relative z-10 font-semibold uppercase tracking-[0.14em] transition-colors duration-300 ${isNarrow ? "text-[10px]" : "text-[11px]"}`}
               style={{
                 fontFamily: fonts.mono,
                 color: isActive
@@ -1592,7 +1592,7 @@ function UseCaseCarousel({
             </span>
 
             {isActive && (
-              <div className="absolute bottom-1.5 left-4 right-4 h-[1.5px] overflow-hidden rounded-full bg-black/[0.03]">
+              <div className={`absolute h-[1.5px] overflow-hidden rounded-full bg-black/[0.03] ${isNarrow ? "bottom-1 left-3 right-3" : "bottom-1.5 left-4 right-4"}`}>
                 <div
                   ref={progressRef}
                   key={`prog-${activeIdx}`}
@@ -1614,6 +1614,319 @@ function UseCaseCarousel({
         );
       })}
     </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────
+// Mobile Unified Card (replaces two-card mobile layout)
+// ─────────────────────────────────────────────────────
+
+function MobileSignalCard({
+  signal,
+  profile,
+  sendState,
+  onSend,
+}: {
+  signal: DemoSignal;
+  profile: DemoProfile;
+  sendState: "idle" | "sending" | "sent";
+  onSend: () => void;
+}) {
+  const theme = SOURCE_THEMES[signal.source] ?? SOURCE_THEMES.email;
+  const proximity = PROXIMITY_THEMES[profile.proximity];
+
+  return (
+    <CardSurface
+      grainId="mobile-signal-grain"
+      variant="signal"
+      className="flex h-full min-h-0 flex-col"
+    >
+      {/* Ambient glow */}
+      <div
+        className="pointer-events-none absolute -left-[10%] top-[-8%] h-[42%] w-[60%] rounded-full blur-3xl"
+        style={{ backgroundColor: theme.soft }}
+      />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.48),transparent_34%)]" />
+
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={signal.id}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.32, ease: [0.25, 0.1, 0.25, 1] }}
+          className="relative z-10 flex h-full min-h-0 flex-col"
+        >
+          {/* ── Person + signal meta strip ── */}
+          <div
+            className="shrink-0 px-4 pt-3.5 pb-2.5"
+            style={{ borderBottom: "1px solid rgba(60,70,50,0.07)" }}
+          >
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex min-w-0 items-center gap-2">
+                <div
+                  className="h-7 w-7 shrink-0 overflow-hidden rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.65)]"
+                  style={{ border: `1px solid ${proximity.border}` }}
+                >
+                  <img
+                    src={profile.avatar}
+                    alt={profile.name}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                <div className="min-w-0">
+                  <div
+                    style={{ fontFamily: fonts.sans, color: "rgba(35,25,15,0.90)" }}
+                    className="truncate text-[13.5px] font-semibold tracking-[-0.01em]"
+                  >
+                    {profile.name}
+                  </div>
+                  <div
+                    style={{ fontFamily: fonts.sans, color: "rgba(80,50,30,0.46)" }}
+                    className="truncate text-[11px] leading-tight"
+                  >
+                    {profile.role}
+                  </div>
+                </div>
+              </div>
+              <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5">
+                <span
+                  style={{
+                    fontFamily: fonts.mono,
+                    color: proximity.color,
+                    backgroundColor: proximity.bg,
+                    borderColor: proximity.border,
+                  }}
+                  className="rounded-full border px-2 py-0.5 text-[8px] font-semibold uppercase tracking-[0.16em]"
+                >
+                  {proximity.label}
+                </span>
+                <span
+                  style={{
+                    fontFamily: fonts.mono,
+                    color: theme.color,
+                    backgroundColor: theme.bg,
+                    borderColor: theme.border,
+                  }}
+                  className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[8px] font-semibold uppercase tracking-[0.16em] shadow-[inset_0_1px_0_rgba(255,255,255,0.55)]"
+                >
+                  <SourceIcon source={signal.source} className="h-2.5 w-2.5" />
+                  {SOURCE_THEMES[signal.source]?.label ?? signal.source}
+                </span>
+                <span
+                  style={{ fontFamily: fonts.mono, color: "rgba(60,70,50,0.34)" }}
+                  className="text-[8px] uppercase tracking-[0.14em]"
+                >
+                  {signal.timestamp}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Insight + snapshot ── */}
+          <div
+            className="shrink-0 px-4 pt-2.5 pb-2.5"
+            style={{ borderBottom: "1px solid rgba(60,70,50,0.06)" }}
+          >
+            <h2
+              style={{ fontFamily: fonts.sans, color: "rgba(35,40,30,0.88)" }}
+              className="text-[21px] font-medium leading-[1.22] tracking-[-0.03em]"
+            >
+              {signal.insight}
+            </h2>
+            <div className="mt-2 rounded-[13px] border border-white/55 bg-white/42 px-3 py-1.5 shadow-[0_4px_16px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.64)] backdrop-blur-xl">
+              <p
+                style={{ fontFamily: fonts.sans, color: "rgba(35,40,30,0.62)" }}
+                className="line-clamp-2 text-[13px] leading-[1.4]"
+              >
+                {signal.content}
+              </p>
+            </div>
+          </div>
+
+          {/* ── Why now reasoning ── */}
+          <div className="shrink-0 px-4 pt-2.5 pb-2">
+            <div className="mb-1.5 flex items-center justify-between">
+              <SectionEyebrow label="Why now" color={theme.color} />
+              <span
+                style={{ fontFamily: fonts.mono, color: "rgba(60,70,50,0.28)" }}
+                className="text-[8px] uppercase tracking-[0.16em]"
+              >
+                reasoning
+              </span>
+            </div>
+            <div className="relative pl-3.5 space-y-1.5">
+              <div
+                className="absolute bottom-2 left-[3.5px] top-2 w-px"
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(60,70,50,0.14), rgba(60,70,50,0.04))",
+                }}
+              />
+              {[
+                { label: "because", text: signal.because, active: false },
+                { label: "and", text: signal.and, active: false },
+                { label: "so", text: signal.so, active: true },
+              ].map((step) => (
+                <div key={step.label} className="relative">
+                  <div
+                    className="absolute left-[-12px] top-[5px] h-[7px] w-[7px] rounded-full border-[1.5px] border-white shadow-sm"
+                    style={{
+                      backgroundColor: step.active
+                        ? "rgba(80,100,60,0.60)"
+                        : "rgba(60,70,50,0.16)",
+                    }}
+                  />
+                  <div
+                    style={{
+                      fontFamily: fonts.mono,
+                      color: step.active
+                        ? "rgba(80,100,60,0.78)"
+                        : "rgba(60,70,50,0.44)",
+                    }}
+                    className="mb-0.5 text-[8.5px] font-semibold uppercase tracking-[0.16em]"
+                  >
+                    {step.label}
+                  </div>
+                  <p
+                    style={{
+                      fontFamily: step.active ? fonts.serif : fonts.sans,
+                      color: step.active
+                        ? "rgba(35,40,30,0.84)"
+                        : "rgba(35,40,30,0.55)",
+                    }}
+                    className={`line-clamp-2 text-[14px] leading-[1.38] ${step.active ? "italic" : ""}`}
+                  >
+                    {step.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Suggested message + actions ── */}
+          <div className="min-h-0 flex-1 px-4 pb-3 pt-0 flex flex-col">
+            <div className="min-h-0 flex-1 rounded-[18px] border border-white/50 bg-white/36 px-3.5 py-3 shadow-[0_6px_20px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.55)] backdrop-blur-xl flex flex-col">
+              <SectionEyebrow
+                label={`Suggested ${CHANNEL_LABELS[signal.actionChannel] ?? signal.actionChannel}`}
+                color={theme.color}
+              />
+              <p
+                style={{ fontFamily: fonts.sans, color: "rgba(35,40,30,0.68)" }}
+                className="mt-1.5 line-clamp-[4] text-[14px] leading-[1.45]"
+              >
+                {signal.suggestedText}
+              </p>
+              <div className="mt-auto">
+                <div
+                  className="mt-2.5 mb-2.5 h-px w-full"
+                  style={{ background: "rgba(60,70,50,0.07)" }}
+                />
+              <div className="flex gap-2">
+                <motion.button
+                  type="button"
+                  onClick={onSend}
+                  disabled={sendState !== "idle"}
+                  whileHover={sendState === "idle" ? { y: -1 } : undefined}
+                  whileTap={sendState === "idle" ? { scale: 0.985 } : undefined}
+                  className="inline-flex h-[34px] min-w-[7.5rem] items-center justify-center gap-1.5 rounded-full px-3.5 text-[12px] font-medium transition-all duration-300"
+                  style={{
+                    fontFamily: fonts.sans,
+                    ...(sendState === "idle"
+                      ? {
+                          background:
+                            "linear-gradient(180deg, rgba(80,100,60,0.65), rgba(80,100,60,0.50))",
+                          border: "1px solid rgba(80,100,60,0.30)",
+                          color: "white",
+                          boxShadow: "0 8px 20px rgba(80,100,60,0.18)",
+                        }
+                      : sendState === "sending"
+                        ? {
+                            background: "rgba(255,255,255,0.50)",
+                            border: "1px solid rgba(255,255,255,0.60)",
+                            color: "rgba(60,70,50,0.38)",
+                            cursor: "not-allowed",
+                          }
+                        : {
+                            background: "rgba(80,100,60,0.55)",
+                            border: "1px solid rgba(80,100,60,0.25)",
+                            color: "white",
+                            boxShadow: "0 8px 20px rgba(80,100,60,0.20)",
+                          }),
+                  }}
+                >
+                  <span className="capitalize">
+                    {sendState === "idle"
+                      ? signal.actionLabel
+                      : sendState === "sending"
+                        ? "Sending..."
+                        : "Sent"}
+                  </span>
+                  {sendState === "idle" && (
+                    <svg
+                      className="h-3 w-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+                      />
+                    </svg>
+                  )}
+                  {sendState === "sent" && (
+                    <svg
+                      className="h-3 w-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  )}
+                </motion.button>
+                <div className="relative flex-1">
+                  <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
+                    <svg
+                      className="h-3 w-3"
+                      style={{ color: "rgba(60,70,50,0.35)" }}
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="1.75"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 6v12m6-6H6"
+                      />
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Refine..."
+                    className="h-[34px] w-full rounded-full border border-white/60 bg-white/48 pl-8 pr-3 text-[11px] backdrop-blur-xl focus:border-white/80 focus:outline-none focus:ring-2 focus:ring-white/50 shadow-[0_2px_10px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.58)]"
+                    style={{
+                      fontFamily: fonts.sans,
+                      color: "rgba(35,40,30,0.78)",
+                    }}
+                  />
+                </div>
+              </div>
+              </div>{/* mt-auto */}
+            </div>{/* inner card */}
+          </div>{/* outer flex-1 wrapper */}
+        </motion.div>
+      </AnimatePresence>
+    </CardSurface>
   );
 }
 
@@ -1668,44 +1981,63 @@ export default function DemoMockup({ isNarrow = false }: { isNarrow?: boolean })
     ];
   }, [clearSendTimeouts]);
 
+  const keyframes = `@keyframes usecaseProgress{from{transform:scaleX(0);opacity:0}4%{opacity:1}to{transform:scaleX(1);opacity:1}}`;
+
+  if (isNarrow) {
+    return (
+      <>
+        <style>{keyframes}</style>
+        <div className="relative box-border flex h-full w-full flex-col px-4 py-4">
+          <div className="mx-auto min-h-0 w-full flex-1 flex max-w-[420px] flex-col">
+            <MobileSignalCard
+              signal={signal}
+              profile={profile}
+              sendState={sendState}
+              onSend={handleSend}
+            />
+          </div>
+          <div className="mt-3 flex shrink-0">
+            <UseCaseCarousel
+              activeIdx={activeIdx}
+              onSelect={handleSelectUseCase}
+              onAutoAdvance={handleAutoAdvance}
+              paused={paused}
+              isNarrow={true}
+            />
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
-      <style>{`@keyframes usecaseProgress{from{transform:scaleX(0);opacity:0}4%{opacity:1}to{transform:scaleX(1);opacity:1}}`}</style>
-      <div
-        className={`relative box-border flex h-full w-full flex-col ${
-          isNarrow ? "px-4 py-4" : "px-6 py-5"
-        }`}
-      >
+      <style>{keyframes}</style>
+      <div className="relative box-border flex h-full w-full flex-col px-6 py-5">
         <div
-          className={`mx-auto min-h-0 w-full flex-1 ${
-            isNarrow
-              ? "flex max-w-[420px] flex-col gap-3"
-              : "grid max-w-[1100px] grid-cols-[10fr_7fr] gap-4"
-          }`}
-          onMouseEnter={isNarrow ? undefined : () => setPaused(true)}
-          onMouseLeave={isNarrow ? undefined : () => setPaused(false)}
+          className="mx-auto min-h-0 w-full flex-1 grid max-w-[1100px] grid-cols-[10fr_7fr] gap-4"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
         >
-          <div className={`min-w-0 ${isNarrow ? "min-h-0 flex-[1.15]" : "h-full min-h-0"}`}>
+          <div className="h-full min-h-0 min-w-0">
             <DemoSignalDetail
               signal={signal}
               sendState={sendState}
               onSend={handleSend}
-              isNarrow={isNarrow}
+              isNarrow={false}
             />
           </div>
-
-          <div className={`min-w-0 ${isNarrow ? "min-h-0 flex-1" : "h-full min-h-0"}`}>
-            <DemoRolodexCard profile={profile} isNarrow={isNarrow} />
+          <div className="h-full min-h-0 min-w-0">
+            <DemoRolodexCard profile={profile} isNarrow={false} />
           </div>
         </div>
-
-        <div className={`mt-4 flex shrink-0 ${isNarrow ? "justify-stretch" : "justify-center"}`}>
+        <div className="mt-4 flex shrink-0 justify-center">
           <UseCaseCarousel
             activeIdx={activeIdx}
             onSelect={handleSelectUseCase}
             onAutoAdvance={handleAutoAdvance}
             paused={paused}
-            isNarrow={isNarrow}
+            isNarrow={false}
           />
         </div>
       </div>

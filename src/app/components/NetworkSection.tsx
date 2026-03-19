@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { useRef, useState, useEffect, type ReactNode } from "react";
 import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 import { fonts } from "../lib/fonts";
 
@@ -27,22 +27,22 @@ const groupConfig: Record<string, GroupConfig> = {
   "Previous Colleagues": {
     color: "#2d7d4f",
     bg: "rgba(45,125,79,0.08)",
-    labelPos: { x: -18, y: -32 },
+    labelPos: { x: -18, y: -34 },
   },
   "College Alumni": {
     color: "#5856d6",
     bg: "rgba(88,86,214,0.08)",
-    labelPos: { x: 18, y: -32 },
+    labelPos: { x: 18, y: -34 },
   },
   "Industry Peers": {
     color: "#b3601e",
     bg: "rgba(179,96,30,0.07)",
-    labelPos: { x: -18, y: 10 },
+    labelPos: { x: -18, y: 5 },
   },
   "Close Friends": {
     color: "#2c7be5",
     bg: "rgba(44,123,229,0.07)",
-    labelPos: { x: 18, y: 10 },
+    labelPos: { x: 18, y: 5 },
   },
 };
 
@@ -71,7 +71,7 @@ const people: Person[] = [
     context: "Stripe Infra together '16–'19",
     group: "Previous Colleagues",
     radial: { x: -20, y: -16 },
-    grouped: { x: -18, y: -24 },
+    grouped: { x: -18, y: -26 },
     enterAt: 0.07,
   },
   {
@@ -83,7 +83,7 @@ const people: Person[] = [
     context: "Stripe Payments team '15–'19",
     group: "Previous Colleagues",
     radial: { x: -22, y: 4 },
-    grouped: { x: -18, y: -12 },
+    grouped: { x: -18, y: -14 },
     enterAt: 0.08,
   },
   {
@@ -95,7 +95,7 @@ const people: Person[] = [
     context: "Shipped Stripe Connect together",
     group: "Previous Colleagues",
     radial: { x: -17, y: 20 },
-    grouped: { x: -18, y: 0 },
+    grouped: { x: -18, y: -2 },
     enterAt: 0.1,
   },
   {
@@ -107,7 +107,7 @@ const people: Person[] = [
     context: "Stanford CS '13, same lab group",
     group: "College Alumni",
     radial: { x: -6, y: -26 },
-    grouped: { x: 18, y: -24 },
+    grouped: { x: 18, y: -26 },
     enterAt: 0.11,
   },
   {
@@ -119,7 +119,7 @@ const people: Person[] = [
     context: "Stanford CS '14, classmate",
     group: "College Alumni",
     radial: { x: 10, y: -26 },
-    grouped: { x: 18, y: -12 },
+    grouped: { x: 18, y: -14 },
     enterAt: 0.12,
   },
   {
@@ -131,7 +131,7 @@ const people: Person[] = [
     context: "Stanford MBA '15, same dorm",
     group: "College Alumni",
     radial: { x: 20, y: -16 },
-    grouped: { x: 18, y: 0 },
+    grouped: { x: 18, y: -2 },
     enterAt: 0.14,
   },
   {
@@ -143,7 +143,7 @@ const people: Person[] = [
     context: "Co-invested in Arcline Series A",
     group: "Industry Peers",
     radial: { x: 22, y: 4 },
-    grouped: { x: -18, y: 18 },
+    grouped: { x: -18, y: 15 },
     enterAt: 0.15,
   },
   {
@@ -155,7 +155,7 @@ const people: Person[] = [
     context: "Sequoia portfolio, same batch",
     group: "Industry Peers",
     radial: { x: 17, y: 20 },
-    grouped: { x: -18, y: 30 },
+    grouped: { x: -18, y: 27 },
     enterAt: 0.16,
   },
   {
@@ -167,7 +167,7 @@ const people: Person[] = [
     context: "Stanford roommate '11–'14",
     group: "Close Friends",
     radial: { x: -4, y: 28 },
-    grouped: { x: 18, y: 18 },
+    grouped: { x: 18, y: 15 },
     enterAt: 0.18,
   },
   {
@@ -179,7 +179,7 @@ const people: Person[] = [
     context: "Stanford ACM club together",
     group: "Close Friends",
     radial: { x: 6, y: 28 },
-    grouped: { x: 18, y: 30 },
+    grouped: { x: 18, y: 27 },
     enterAt: 0.19,
   },
 ];
@@ -758,7 +758,7 @@ function InsightsMovementB({
           />
 
           {/* ── Liquid glass card ── */}
-          <div className="relative overflow-hidden rounded-[2rem] bg-[rgba(242,242,247,0.84)] backdrop-blur-3xl border border-white/50 shadow-[0_8px_28px_rgba(0,0,0,0.05),0_24px_64px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.6)] px-10 pt-9 pb-9">
+          <div className="relative overflow-hidden rounded-[2rem] border border-white/70 bg-[rgba(248,248,251,0.92)] px-10 pt-9 pb-9 shadow-[0_10px_32px_rgba(0,0,0,0.05),0_28px_72px_rgba(0,0,0,0.09),inset_0_1px_0_rgba(255,255,255,0.76)] backdrop-blur-2xl">
             <PaperGrain id="path-stage-glass" opacity={0.025} />
             <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/90 to-transparent" />
 
@@ -766,7 +766,7 @@ function InsightsMovementB({
               {/* Eyebrow */}
               <div
                 style={{ fontFamily: fonts.mono }}
-                className="text-[12px] font-bold uppercase tracking-[0.18em] text-zinc-400 mb-12"
+                className="mb-12 text-[12px] font-bold uppercase tracking-[0.18em] text-zinc-500"
               >
                 Warm Intro Path
               </div>
@@ -778,14 +778,28 @@ function InsightsMovementB({
                   viewBox="0 0 100 16"
                   preserveAspectRatio="none"
                   className="absolute -top-10 inset-x-[8%] h-14 pointer-events-none"
-                  style={{ opacity: coldOp }}
+                  style={{
+                    opacity: coldOp,
+                    filter: "drop-shadow(0 1px 0 rgba(255,255,255,0.9))",
+                  }}
                 >
                   <path
                     d="M 2 14 Q 50 0 98 14"
                     fill="none"
-                    stroke="rgba(161,161,170,0.5)"
-                    strokeWidth={0.35}
-                    strokeDasharray="0.8 0.8"
+                    stroke="rgba(255,255,255,0.72)"
+                    strokeWidth={2.2}
+                    strokeDasharray="4 5"
+                    strokeLinecap="round"
+                    vectorEffect="non-scaling-stroke"
+                  />
+                  <path
+                    d="M 2 14 Q 50 0 98 14"
+                    fill="none"
+                    stroke="rgba(113,113,122,0.62)"
+                    strokeWidth={1.15}
+                    strokeDasharray="4 5"
+                    strokeLinecap="round"
+                    vectorEffect="non-scaling-stroke"
                   />
                 </motion.svg>
 
@@ -796,7 +810,7 @@ function InsightsMovementB({
                 >
                   <span
                     style={{ fontFamily: fonts.mono }}
-                    className="text-[10px] text-zinc-400/70 tracking-[0.12em] uppercase whitespace-nowrap"
+                    className="text-[10px] text-zinc-500/85 tracking-[0.12em] uppercase whitespace-nowrap"
                   >
                     cold outreach
                   </span>
@@ -814,10 +828,10 @@ function InsightsMovementB({
                     style={{ opacity: youOp, y: youY, scale: youScale }}
                     className="flex justify-center"
                   >
-                    <div className="w-[4.5rem] h-[4.5rem] rounded-full bg-white/80 backdrop-blur-md border border-white/60 flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.6)]">
+                    <div className="flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-full border border-white/70 bg-white/90 shadow-[0_2px_8px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.72)] backdrop-blur-md">
                       <span
                         style={{ fontFamily: fonts.mono }}
-                        className="text-[15px] font-semibold text-zinc-600 tracking-wider"
+                        className="text-[15px] font-semibold tracking-wider text-zinc-700"
                       >
                         You
                       </span>
@@ -831,14 +845,14 @@ function InsightsMovementB({
                         scaleX: line1Scale,
                         transformOrigin: "left center",
                       }}
-                      className="absolute inset-x-1.5 h-[8px] rounded-full bg-gradient-to-r from-blue-400/30 via-cyan-400/30 to-emerald-400/30 blur-[4px]"
+                      className="absolute inset-x-1.5 h-[10px] rounded-full bg-gradient-to-r from-blue-400/40 via-cyan-400/40 to-emerald-400/40 blur-[5px]"
                     />
                     <motion.div
                       style={{
                         scaleX: line1Scale,
                         transformOrigin: "left center",
                       }}
-                      className="h-[2px] w-full rounded-full bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 relative z-10"
+                      className="relative z-10 h-[2.5px] w-full rounded-full bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400"
                     />
                   </div>
 
@@ -860,7 +874,7 @@ function InsightsMovementB({
                         }}
                         className="absolute inset-0 rounded-full border border-emerald-400/40"
                       />
-                      <div className="w-[4.5rem] h-[4.5rem] rounded-full overflow-hidden border border-emerald-200/40 shadow-[0_2px_8px_rgba(5,150,105,0.1),inset_0_1px_0_rgba(255,255,255,0.6)]">
+                      <div className="h-[4.5rem] w-[4.5rem] overflow-hidden rounded-full border border-emerald-200/55 shadow-[0_2px_8px_rgba(5,150,105,0.12),inset_0_1px_0_rgba(255,255,255,0.68)]">
                         <img src="/avatars/paige-vasquez.jpg" alt="Paige Vasquez" className="h-full w-full object-cover" />
                       </div>
                     </div>
@@ -873,14 +887,14 @@ function InsightsMovementB({
                         scaleX: line2Scale,
                         transformOrigin: "left center",
                       }}
-                      className="absolute inset-x-1.5 h-[8px] rounded-full bg-gradient-to-r from-emerald-400/30 via-yellow-400/30 to-amber-400/30 blur-[4px]"
+                      className="absolute inset-x-1.5 h-[10px] rounded-full bg-gradient-to-r from-emerald-400/40 via-yellow-400/42 to-amber-400/40 blur-[5px]"
                     />
                     <motion.div
                       style={{
                         scaleX: line2Scale,
                         transformOrigin: "left center",
                       }}
-                      className="h-[2px] w-full rounded-full bg-gradient-to-r from-emerald-400 via-yellow-400 to-amber-400 relative z-10"
+                      className="relative z-10 h-[2.5px] w-full rounded-full bg-gradient-to-r from-emerald-400 via-yellow-400 to-amber-400"
                     />
                   </div>
 
@@ -889,7 +903,7 @@ function InsightsMovementB({
                     style={{ opacity: markOp, y: markY, scale: markScale }}
                     className="flex justify-center"
                   >
-                    <div className="w-[4.5rem] h-[4.5rem] rounded-full overflow-hidden border border-amber-200/40 shadow-[0_2px_8px_rgba(180,83,9,0.08),inset_0_1px_0_rgba(255,255,255,0.6)]">
+                    <div className="h-[4.5rem] w-[4.5rem] overflow-hidden rounded-full border border-amber-200/55 shadow-[0_2px_8px_rgba(180,83,9,0.1),inset_0_1px_0_rgba(255,255,255,0.68)]">
                       <img src="/avatars/mark-jensen.jpg" alt="Mark Jensen" className="h-full w-full object-cover" />
                     </div>
                   </motion.div>
@@ -903,7 +917,7 @@ function InsightsMovementB({
                   >
                     <div
                       style={{ fontFamily: fonts.sans }}
-                      className="text-[17px] font-semibold text-zinc-800 tracking-tight"
+                      className="text-[17px] font-semibold tracking-tight text-zinc-900"
                     >
                       You
                     </div>
@@ -916,7 +930,7 @@ function InsightsMovementB({
                   >
                     <span
                       style={{ fontFamily: fonts.serif }}
-                      className="text-[12px] italic text-zinc-500 text-center leading-snug"
+                      className="text-center text-[13px] italic leading-snug text-zinc-600"
                     >
                       {intermediary.toYou}
                     </span>
@@ -929,13 +943,13 @@ function InsightsMovementB({
                   >
                     <div
                       style={{ fontFamily: fonts.sans }}
-                      className="text-[16px] font-semibold text-zinc-800 tracking-tight leading-tight"
+                      className="text-[16px] font-semibold leading-tight tracking-tight text-zinc-900"
                     >
                       {intermediary.name}
                     </div>
                     <div
                       style={{ fontFamily: fonts.mono }}
-                      className="mt-1 text-[11px] text-zinc-500"
+                      className="mt-1 text-[11px] text-zinc-600"
                     >
                       {intermediary.role}
                     </div>
@@ -948,7 +962,7 @@ function InsightsMovementB({
                   >
                     <span
                       style={{ fontFamily: fonts.serif }}
-                      className="text-[12px] italic text-zinc-500 text-center leading-snug"
+                      className="text-center text-[13px] italic leading-snug text-zinc-600"
                     >
                       {intermediary.toTarget}
                     </span>
@@ -961,13 +975,13 @@ function InsightsMovementB({
                   >
                     <div
                       style={{ fontFamily: fonts.sans }}
-                      className="text-[16px] font-semibold text-zinc-800 tracking-tight leading-tight"
+                      className="text-[16px] font-semibold leading-tight tracking-tight text-zinc-900"
                     >
                       {target.name}
                     </div>
                     <div
                       style={{ fontFamily: fonts.mono }}
-                      className="mt-1 text-[11px] text-zinc-500"
+                      className="mt-1 text-[11px] text-zinc-600"
                     >
                       {target.role}
                     </div>
@@ -976,7 +990,7 @@ function InsightsMovementB({
               </div>
 
               {/* Divider */}
-              <div className="h-px w-full bg-gradient-to-r from-zinc-200/60 via-zinc-200/30 to-transparent mt-10 mb-7" />
+              <div className="mt-10 mb-7 h-px w-full bg-gradient-to-r from-zinc-300/75 via-zinc-200/45 to-transparent" />
 
               {/* CTA — matches hero glass button language */}
               <motion.div
@@ -997,7 +1011,7 @@ function InsightsMovementB({
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      d="M17 8l4 4-4 4M21 12H3"
                     />
                   </svg>
                 </div>
@@ -1448,6 +1462,26 @@ function DesktopNetworkSection() {
   );
 }
 
+function useOnceInView(ref: React.RefObject<HTMLElement | null>, threshold = 0.12) {
+  const [seen, setSeen] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || seen) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setSeen(true);
+          io.disconnect();
+        }
+      },
+      { threshold },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [ref, seen, threshold]);
+  return seen;
+}
+
 function MobileStage({
   label,
   title,
@@ -1459,15 +1493,18 @@ function MobileStage({
   subtext: ReactNode;
   children: ReactNode;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useOnceInView(ref);
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-12%" }}
-      transition={{ duration: 0.55, ease: [0.25, 0.1, 0.25, 1] }}
-      className="space-y-5"
-    >
-      <div className="space-y-3">
+    <div ref={ref} className="space-y-5">
+      <div
+        className="space-y-3"
+        style={{
+          transform: "translateZ(0)",
+          backfaceVisibility: "hidden",
+          WebkitBackfaceVisibility: "hidden",
+        }}
+      >
         <div
           style={{ fontFamily: fonts.mono }}
           className="text-[11px] font-bold uppercase tracking-[0.18em] text-zinc-500"
@@ -1487,8 +1524,18 @@ function MobileStage({
           {subtext}
         </p>
       </div>
-      {children}
-    </motion.div>
+      <div
+        style={{
+          opacity: inView ? 1 : 0,
+          transform: inView ? "translate3d(0,0,0)" : "translate3d(0,24px,0)",
+          transition:
+            "opacity 0.55s cubic-bezier(0.25,0.1,0.25,1), transform 0.55s cubic-bezier(0.25,0.1,0.25,1)",
+          willChange: "opacity, transform",
+        }}
+      >
+        {children}
+      </div>
+    </div>
   );
 }
 
@@ -1511,8 +1558,10 @@ function MobileNetworkSection() {
   };
 
   return (
-    <section className="bg-[#f2f2f7] px-4 py-16 sm:px-6">
-      <div className="mx-auto flex max-w-[440px] flex-col gap-12">
+    <section className="bg-[#f2f2f7] px-5 py-16 sm:px-6">
+      <div className="mx-auto flex max-w-lg flex-col gap-16">
+
+        {/* ── 01 Your Network ── */}
         <MobileStage
           label="01 — Your Network"
           title={
@@ -1529,105 +1578,107 @@ function MobileNetworkSection() {
             </>
           }
         >
-          <div className="relative overflow-hidden rounded-[28px] border border-white/60 bg-[rgba(242,242,247,0.9)] p-4 shadow-[0_8px_28px_rgba(0,0,0,0.05),0_20px_48px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.7)] backdrop-blur-3xl">
-            <PaperGrain id="mobile-network-map" opacity={0.03} />
-            <div className="relative z-10 space-y-4">
-              <div className="rounded-[22px] border border-white/60 bg-white/70 p-4 shadow-[0_6px_18px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.7)]">
-                <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 overflow-hidden rounded-full shadow-[0_2px_10px_rgba(0,0,0,0.18)]">
-                    <img src={founder.avatar} alt={founder.name} className="h-full w-full object-cover" />
-                  </div>
-                  <div className="min-w-0">
-                    <div
-                      style={{ fontFamily: fonts.sans }}
-                      className="text-[17px] font-semibold tracking-tight text-zinc-900"
-                    >
-                      {founder.name}
-                    </div>
-                    <div
-                      style={{ fontFamily: fonts.sans }}
-                      className="text-[13px] text-zinc-500"
-                    >
-                      {founder.role}
-                    </div>
-                  </div>
+          <div className="space-y-4">
+
+            {/* Founder card */}
+            <div className="rounded-[22px] border border-white/60 bg-white/70 p-4 shadow-[0_6px_18px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.7)]">
+              <div className="flex items-center gap-3.5">
+                <div className="h-[52px] w-[52px] flex-shrink-0 overflow-hidden rounded-full shadow-[0_2px_12px_rgba(0,0,0,0.18)]">
+                  <img src={founder.avatar} alt={founder.name} className="h-full w-full object-cover" />
                 </div>
                 <div
-                  style={{ fontFamily: fonts.sans }}
-                  className="mt-3 line-clamp-2 text-[13px] leading-relaxed text-zinc-600"
+                  className="min-w-0"
                 >
-                  {founder.background}. {founder.knownFor}.
+                  <div
+                    style={{ fontFamily: fonts.sans }}
+                    className="text-[17px] font-semibold tracking-tight text-zinc-900 truncate"
+                  >
+                    {founder.name}
+                  </div>
+                  <div
+                    style={{ fontFamily: fonts.mono }}
+                    className="mt-0.5 text-[12px] text-zinc-500 truncate"
+                  >
+                    {founder.role}
+                  </div>
                 </div>
               </div>
+              <div className="my-3 h-px w-full bg-gradient-to-r from-zinc-200/80 to-transparent" />
+              <div
+                style={{ fontFamily: fonts.serif }}
+                className="text-[13px] italic leading-relaxed text-zinc-600"
+              >
+                {founder.background}
+              </div>
+              <div
+                style={{ fontFamily: fonts.sans }}
+                className="mt-1.5 text-[13px] font-medium text-zinc-700"
+              >
+                {founder.knownFor}
+              </div>
+            </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                {groupedPeople.map(({ group, theme, people: members }) => (
-                  <div
-                    key={group}
-                    className="rounded-[22px] border border-white/55 bg-white/62 p-3.5 shadow-[0_4px_14px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.68)]"
-                  >
-                    <div className="mb-3 flex items-center justify-between gap-3">
+            {/* 2×2 group grid */}
+            <div className="grid grid-cols-2 gap-3">
+              {groupedPeople.map(({ group, theme, people: members }) => (
+                <div
+                  key={group}
+                  className="rounded-[20px] border border-white/55 bg-white/62 p-3.5 shadow-[0_4px_14px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.68)]"
+                >
+                  <div className="mb-2.5 flex items-start justify-between gap-2">
+                    <div
+                      style={{ fontFamily: fonts.mono, color: theme.color }}
+                      className="text-[10px] font-bold uppercase tracking-[0.16em] leading-tight"
+                    >
+                      {group}
+                    </div>
+                    <span
+                      className="h-2 w-2 flex-shrink-0 rounded-full mt-0.5"
+                      style={{ backgroundColor: theme.color }}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    {members.slice(0, 2).map((person) => (
+                      <div
+                        key={person.id}
+                        className="rounded-[14px] border border-white/55 bg-[rgba(242,242,247,0.82)] px-3 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]"
+                      >
+                        <div
+                          style={{ fontFamily: fonts.sans }}
+                          className="text-[13px] font-medium tracking-tight text-zinc-800 truncate"
+                        >
+                          {person.name}
+                        </div>
+                        <div
+                          style={{ fontFamily: fonts.sans }}
+                          className="text-[11px] text-zinc-500 truncate"
+                        >
+                          {person.role}
+                        </div>
+                        <div
+                          style={{ fontFamily: fonts.serif, color: theme.color }}
+                          className="mt-1 text-[11px] italic line-clamp-2 leading-snug"
+                        >
+                          {person.context}
+                        </div>
+                      </div>
+                    ))}
+                    {members.length > 2 && (
                       <div
                         style={{ fontFamily: fonts.mono, color: theme.color }}
-                        className="line-clamp-2 text-[9px] font-semibold uppercase tracking-[0.16em]"
+                        className="px-1 text-[9px] uppercase tracking-[0.14em]"
                       >
-                        {group}
+                        +{members.length - 2} more
                       </div>
-                      <div className="flex items-center gap-1.5">
-                        <span
-                          className="h-2.5 w-2.5 rounded-full"
-                          style={{ backgroundColor: theme.color }}
-                        />
-                        <span
-                          style={{ fontFamily: fonts.mono, color: "rgba(80,80,88,0.42)" }}
-                          className="text-[8px] uppercase tracking-[0.14em]"
-                        >
-                          {members.length}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      {members.slice(0, 2).map((person) => (
-                        <div
-                          key={person.id}
-                          className="rounded-[16px] border border-white/55 bg-[rgba(242,242,247,0.82)] px-3 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]"
-                        >
-                          <div
-                            style={{ fontFamily: fonts.sans }}
-                            className="line-clamp-1 text-[13px] font-medium tracking-tight text-zinc-800"
-                          >
-                            {person.name}
-                          </div>
-                          <div
-                            style={{ fontFamily: fonts.sans }}
-                            className="line-clamp-1 text-[11px] text-zinc-500"
-                          >
-                            {person.role}
-                          </div>
-                          <div
-                            style={{ fontFamily: fonts.serif }}
-                            className="mt-1 line-clamp-2 text-[11px] italic leading-snug text-zinc-500"
-                          >
-                            {person.context}
-                          </div>
-                        </div>
-                      ))}
-                      {members.length > 2 && (
-                        <div
-                          style={{ fontFamily: fonts.mono, color: theme.color }}
-                          className="px-1 text-[9px] uppercase tracking-[0.14em]"
-                        >
-                          +{members.length - 2} more
-                        </div>
-                      )}
-                    </div>
+                    )}
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
         </MobileStage>
 
+        {/* ── 02a Insights (unified card mirroring desktop InsightsMovementA) ── */}
         <MobileStage
           label="02 — Insights"
           title={
@@ -1644,64 +1695,122 @@ function MobileNetworkSection() {
             </>
           }
         >
-          <div className="space-y-3">
-            <div className="rounded-[24px] border border-white/60 bg-[rgba(242,242,247,0.9)] p-4 shadow-[0_8px_24px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.7)] backdrop-blur-3xl">
-              <div
-                style={{ fontFamily: fonts.mono }}
-                className="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-500"
-              >
-                Recent signals
-              </div>
-              <div className="mt-3 space-y-2">
-                {insights.recent.map((item) => (
+          <div className="overflow-hidden rounded-[24px] border border-white/50 bg-[rgba(242,242,247,0.92)] shadow-[0_4px_16px_rgba(0,0,0,0.05),0_12px_40px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.6)] backdrop-blur-3xl">
+
+            {/* Header */}
+            <div className="px-5 pt-5 pb-4 border-b border-zinc-200/30">
+              <div className="flex items-center gap-3.5">
+                <div className="w-12 h-12 flex-shrink-0 rounded-full overflow-hidden border border-white/60 shadow-sm">
+                  <img src={founder.avatar} alt={founder.name} className="h-full w-full object-cover" />
+                </div>
+                <div>
                   <div
-                    key={item.text}
-                    className="rounded-[16px] border border-white/55 bg-white/72 px-3 py-2.5 text-[13px] leading-relaxed text-zinc-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]"
                     style={{ fontFamily: fonts.sans }}
+                    className="text-[19px] font-semibold text-zinc-900 tracking-tight leading-none"
                   >
-                    {item.text}
+                    {founder.name}
                   </div>
+                  <div
+                    style={{ fontFamily: fonts.mono }}
+                    className="text-[11px] text-zinc-500 mt-1"
+                  >
+                    {founder.role}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* What's New */}
+            <div className="px-5 pt-5 pb-4">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-600/[0.08] border border-blue-600/[0.12] mb-3.5">
+                <div className="w-1 h-1 rounded-full bg-blue-600" />
+                <span
+                  style={{ fontFamily: fonts.mono }}
+                  className="text-[9px] tracking-[0.12em] uppercase font-bold text-blue-600"
+                >
+                  What&apos;s New
+                </span>
+              </div>
+              <div className="mb-3">
+                <div
+                  style={{ fontFamily: fonts.sans }}
+                  className="text-[30px] font-bold text-zinc-900 tracking-tight leading-none"
+                >
+                  $5M ARR
+                </div>
+                <div
+                  style={{ fontFamily: fonts.mono }}
+                  className="text-[11px] text-zinc-400 mt-1.5"
+                >
+                  LinkedIn &middot; 2 days ago
+                </div>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <div
+                  style={{ fontFamily: fonts.sans }}
+                  className="text-[13px] font-medium text-zinc-600"
+                >
+                  Featured in TechCrunch Series A roundup
+                </div>
+                <div
+                  style={{ fontFamily: fonts.sans }}
+                  className="text-[13px] font-medium text-zinc-600"
+                >
+                  Seeking enterprise design partners
+                </div>
+              </div>
+            </div>
+
+            <div className="mx-5 h-px bg-gradient-to-r from-zinc-300/50 to-transparent" />
+
+            {/* Remember */}
+            <div className="px-5 pt-4 pb-4">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-600/[0.08] border border-emerald-600/[0.12] mb-3">
+                <div className="w-1 h-1 rounded-full bg-emerald-600" />
+                <span
+                  style={{ fontFamily: fonts.mono }}
+                  className="text-[9px] tracking-[0.12em] uppercase font-bold text-emerald-600"
+                >
+                  Remember
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {["Baby due April", "Runs 5K daily", "Blue Bottle fan"].map((item) => (
+                  <span
+                    key={item}
+                    style={{ fontFamily: fonts.sans }}
+                    className="px-3 py-1.5 rounded-lg bg-white/50 backdrop-blur-sm border border-white/40 text-[12px] font-medium text-zinc-600 shadow-[0_1px_3px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.5)]"
+                  >
+                    {item}
+                  </span>
                 ))}
               </div>
             </div>
 
-            <div className="rounded-[24px] border border-white/60 bg-[rgba(242,242,247,0.88)] p-4 shadow-[0_8px_24px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.7)] backdrop-blur-3xl">
-              <div
-                style={{ fontFamily: fonts.mono }}
-                className="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-500"
-              >
-                Personal context
-              </div>
-              <div className="mt-3 space-y-2">
-                {insights.personal.map((item) => (
-                  <div
-                    key={item.text}
-                    className="rounded-[16px] border border-white/55 bg-white/72 px-3 py-2.5 text-[13px] leading-relaxed text-zinc-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]"
-                    style={{ fontFamily: fonts.sans }}
-                  >
-                    {item.text}
-                  </div>
-                ))}
-              </div>
-            </div>
+            <div className="mx-5 h-px bg-gradient-to-r from-zinc-300/50 to-transparent" />
 
-            <div className="rounded-[24px] border border-white/60 bg-[rgba(242,242,247,0.88)] p-4 shadow-[0_8px_24px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.7)] backdrop-blur-3xl">
-              <div
-                style={{ fontFamily: fonts.mono }}
-                className="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-500"
-              >
-                Strategic read
+            {/* Why They Matter */}
+            <div className="px-5 pt-4 pb-5">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-600/[0.08] border border-purple-600/[0.12] mb-2">
+                <div className="w-1 h-1 rounded-full bg-purple-600" />
+                <span
+                  style={{ fontFamily: fonts.mono }}
+                  className="text-[9px] tracking-[0.12em] uppercase font-bold text-purple-600"
+                >
+                  Why They Matter
+                </span>
               </div>
-              <p
-                style={{ fontFamily: fonts.serif }}
-                className="mt-3 text-[14px] italic leading-relaxed text-zinc-600"
+              <div
+                style={{ fontFamily: fonts.sans }}
+                className="text-[14px] font-medium text-zinc-700 leading-snug"
               >
-                {insights.strategic}
-              </p>
+                Portfolio company &middot; Series A prep &middot; Fund I proof point
+              </div>
             </div>
           </div>
         </MobileStage>
 
+        {/* ── 02b Paths ── */}
         <MobileStage
           label="02 — Insights"
           title={
@@ -1722,13 +1831,14 @@ function MobileNetworkSection() {
             <div className="relative z-10">
               <div
                 style={{ fontFamily: fonts.mono }}
-                className="text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-400"
+                className="text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-400 mb-6"
               >
                 Warm intro path
               </div>
 
-              <div className="relative mt-6 space-y-5 pl-9">
-                <div className="absolute bottom-7 left-[17px] top-5 w-px bg-gradient-to-b from-sky-300 via-emerald-300 to-amber-300" />
+              <div className="relative space-y-5 pl-12">
+                {/* Warm gradient vertical line */}
+                <div className="absolute bottom-[5.5rem] left-[19px] top-6 w-[2px] rounded-full bg-gradient-to-b from-sky-400 via-emerald-400 to-amber-400 opacity-70" />
 
                 {[
                   {
@@ -1737,29 +1847,39 @@ function MobileNetworkSection() {
                     name: "You",
                     role: founder.role,
                     context: intermediary.toYou,
+                    ringColor: "rgba(96,165,250,0.35)",
                   },
                   {
                     avatar: "/avatars/paige-vasquez.jpg",
+                    initials: null as string | null,
                     name: intermediary.name,
                     role: intermediary.role,
                     context: intermediary.toTarget,
+                    ringColor: "rgba(52,211,153,0.35)",
                   },
                   {
                     avatar: "/avatars/mark-jensen.jpg",
+                    initials: null as string | null,
                     name: target.name,
                     role: target.role,
                     context: "Skip the cold email. Start from shared trust.",
+                    ringColor: "rgba(251,191,36,0.35)",
                   },
                 ].map((node) => (
                   <div key={node.name} className="relative">
-                    <div className={`absolute left-[-34px] top-2 h-8 w-8 rounded-full border border-white/70 shadow-[0_2px_10px_rgba(0,0,0,0.08)] ${node.avatar ? "overflow-hidden" : "flex items-center justify-center bg-white/85"}`}>
+                    <div
+                      className={`absolute left-[-46px] top-3 h-9 w-9 rounded-full border border-white/70 ${node.avatar ? "overflow-hidden" : "flex items-center justify-center bg-white/85"}`}
+                      style={{ boxShadow: `0 0 0 3px ${node.ringColor}, 0 2px 10px rgba(0,0,0,0.08)` }}
+                    >
                       {node.avatar ? (
                         <img src={node.avatar} alt={node.name} className="h-full w-full object-cover" />
                       ) : (
-                        <span style={{ fontFamily: fonts.mono }} className="text-[10px] font-semibold tracking-[0.1em] text-zinc-600">{node.initials}</span>
+                        <span style={{ fontFamily: fonts.mono }} className="text-[10px] font-semibold tracking-[0.08em] text-zinc-600">
+                          {node.initials}
+                        </span>
                       )}
                     </div>
-                    <div className="rounded-[20px] border border-white/60 bg-white/78 px-4 py-3 shadow-[0_6px_18px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.72)]">
+                    <div className="rounded-[20px] border border-white/60 bg-white/78 px-4 py-3.5 shadow-[0_6px_18px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.72)]">
                       <div
                         style={{ fontFamily: fonts.sans }}
                         className="text-[15px] font-semibold tracking-tight text-zinc-800"
@@ -1768,13 +1888,13 @@ function MobileNetworkSection() {
                       </div>
                       <div
                         style={{ fontFamily: fonts.mono }}
-                        className="mt-1 text-[11px] text-zinc-500"
+                        className="mt-0.5 text-[11px] text-zinc-500"
                       >
                         {node.role}
                       </div>
                       <div
                         style={{ fontFamily: fonts.serif }}
-                        className="mt-2 text-[12px] italic leading-relaxed text-zinc-500"
+                        className="mt-2 text-[13px] italic leading-relaxed text-zinc-500"
                       >
                         {node.context}
                       </div>
@@ -1782,10 +1902,21 @@ function MobileNetworkSection() {
                   </div>
                 ))}
               </div>
+
+              {/* CTA */}
+              <div className="mt-6">
+                <button className="w-full flex items-center justify-center gap-2.5 rounded-2xl border border-white/[0.12] bg-[rgba(9,9,11,0.68)] py-3.5 text-[14px] font-medium text-white shadow-[0_2px_16px_rgba(0,0,0,0.10),0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.10)] backdrop-blur-2xl transition-all duration-300">
+                  <span style={{ fontFamily: fonts.sans }}>Draft intro request</span>
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4-4 4M21 12H3" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </MobileStage>
 
+        {/* ── 03 Keep Up ── */}
         <MobileStage
           label="03 — Keep Up"
           title={
@@ -1814,77 +1945,80 @@ function MobileNetworkSection() {
               className="pointer-events-none absolute -right-[12%] -top-[8%] h-40 w-40 rounded-full bg-amber-400/25 blur-[42px]"
             />
             <div className="relative z-10 space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="h-12 w-12 overflow-hidden rounded-full border border-white/70 shadow-[0_4px_14px_rgba(0,0,0,0.05)]">
+
+              {/* Person header */}
+              <div className="flex items-center gap-3.5">
+                <div className="h-14 w-14 flex-shrink-0 overflow-hidden rounded-full border border-white/70 shadow-[0_4px_14px_rgba(0,0,0,0.05)]">
                   <img src={keepUpNudge.person.avatar} alt={keepUpNudge.person.name} className="h-full w-full object-cover" />
                 </div>
                 <div>
                   <div
                     style={{ fontFamily: fonts.sans }}
-                    className="text-[17px] font-semibold tracking-tight text-zinc-900"
+                    className="text-[18px] font-semibold tracking-tight text-zinc-900"
                   >
                     {keepUpNudge.person.name}
                   </div>
                   <div
                     style={{ fontFamily: fonts.mono }}
-                    className="text-[11px] text-zinc-500"
+                    className="text-[12px] text-zinc-500"
                   >
                     {keepUpNudge.person.role}
                   </div>
                 </div>
               </div>
 
-              <div className="rounded-[20px] border border-red-200/80 bg-white/72 px-4 py-3">
-                <div
-                  style={{ fontFamily: fonts.mono }}
-                  className="text-[10px] font-bold uppercase tracking-[0.16em] text-red-500"
-                >
-                  Fading connection
+              {/* Fading connection alert */}
+              <div className="relative rounded-[20px] border border-red-200/80 bg-white/72 px-4 py-3.5">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="h-2 w-2 rounded-full bg-red-400 shadow-[0_0_6px_rgba(248,113,113,0.6)] animate-pulse" />
+                  <div
+                    style={{ fontFamily: fonts.mono }}
+                    className="text-[10px] font-bold uppercase tracking-[0.16em] text-red-500"
+                  >
+                    Fading connection
+                  </div>
                 </div>
                 <p
                   style={{ fontFamily: fonts.sans }}
-                  className="mt-2 text-[13px] leading-relaxed text-zinc-600"
+                  className="text-[13px] leading-relaxed text-zinc-600"
                 >
                   No contact for 3 months. She usually allocates capital in Q1.
                 </p>
               </div>
 
-              <div className="rounded-[22px] border border-white/80 bg-white/76 p-4 shadow-[0_8px_22px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.92)]">
-                <div className="mb-3 flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-amber-400" />
-                  <span
-                    style={{ fontFamily: fonts.mono }}
-                    className="text-[10px] font-bold uppercase tracking-[0.14em] text-amber-600"
+              {/* Brace suggestion */}
+              <div className="relative overflow-hidden rounded-[22px] border border-white/80 bg-white/76 shadow-[0_8px_22px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.92)]">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-300 to-orange-400" />
+                <div className="p-4 pt-5">
+                  <div className="mb-3 flex items-center gap-2">
+                    <svg className="w-3.5 h-3.5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
+                    <span
+                      style={{ fontFamily: fonts.mono }}
+                      className="text-[10px] font-bold uppercase tracking-[0.12em] text-amber-600"
+                    >
+                      Brace Suggestion
+                    </span>
+                  </div>
+                  <p
+                    style={{ fontFamily: fonts.serif }}
+                    className="text-[14px] italic leading-relaxed text-zinc-800 mb-4"
                   >
-                    Brace suggestion
-                  </span>
+                    &ldquo;{keepUpNudge.suggested}&rdquo;
+                  </p>
+                  <button className="w-full flex items-center justify-center gap-2 rounded-xl border border-white/[0.1] bg-[rgba(9,9,11,0.62)] py-3 text-[13px] font-medium text-white shadow-[0_2px_12px_rgba(0,0,0,0.08),0_6px_24px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-2xl transition-all duration-300">
+                    <span style={{ fontFamily: fonts.sans }}>Review Draft</span>
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </button>
                 </div>
-                <p
-                  style={{ fontFamily: fonts.serif }}
-                  className="text-[13px] italic leading-relaxed text-zinc-800"
-                >
-                  “{keepUpNudge.suggested}”
-                </p>
-                <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-white/[0.1] bg-[rgba(9,9,11,0.62)] py-3 text-[13px] font-medium text-white shadow-[0_2px_12px_rgba(0,0,0,0.08),0_6px_24px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-2xl transition-all duration-300 hover:bg-[rgba(9,9,11,0.50)]">
-                  Review Draft
-                  <svg
-                    className="h-3.5 w-3.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2.5}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M14 5l7 7m0 0l-7 7m7-7H3"
-                    />
-                  </svg>
-                </button>
               </div>
             </div>
           </div>
         </MobileStage>
+
       </div>
     </section>
   );

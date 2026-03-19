@@ -3,6 +3,7 @@
 import { useRef, useEffect, useCallback } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import * as THREE from "three";
+import WaitlistInput from "./WaitlistInput";
 
 // ─── Design Tokens ──────────────────────────────────────────────────────
 const DARK_BG = "#030303"; // Deep premium black
@@ -601,7 +602,11 @@ export default function OnePercentClub({ isNarrow = false }: { isNarrow?: boolea
   }, [init]);
 
   // ─── Animations & Transitions ──────────────────────────────────────────
-  const bgOpacity = useTransform(scrollYProgress, [0, 0.08], [0, 1]);
+  const bgOpacity = useTransform(
+    scrollYProgress,
+    isNarrow ? [0.04, 0.12] : [0, 0.08],
+    [0, 1],
+  );
 
   // Cinematic blur & opacity curves
   const phase1Op = useTransform(
@@ -772,25 +777,7 @@ export default function OnePercentClub({ isNarrow = false }: { isNarrow?: boolea
               style={{ opacity: ctaOp, y: ctaY }}
               className={`pointer-events-auto ${isNarrow ? "mt-8" : "mt-10"}`}
             >
-              <a
-                href="#"
-                className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full px-8 py-4 text-[15px] font-semibold text-black transition-all duration-300 backdrop-blur-2xl bg-white/75 border border-white/80 shadow-[0_2px_16px_rgba(255,255,255,0.12),0_8px_32px_rgba(255,255,255,0.06),inset_0_1px_0_rgba(255,255,255,0.9)] hover:scale-105 hover:bg-white/85 hover:shadow-[0_2px_24px_rgba(255,255,255,0.18),0_12px_48px_rgba(255,255,255,0.10),inset_0_1px_0_rgba(255,255,255,1)]"
-              >
-                <span>Get Early Access</span>
-                <svg
-                  className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2.5}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              </a>
+              <WaitlistInput variant="white" isNarrow={isNarrow} />
             </motion.div>
           </div>
         </motion.div>

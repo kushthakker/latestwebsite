@@ -1,5 +1,29 @@
 # Learnings
 
+## 2026-03-18 — Mobile Network Title Flicker
+
+- **Do not animate mobile section headlines together with heavy glass cards**: In `NetworkSection` mobile stages, fading/translating the entire stage caused the title block to flicker on mobile Chrome while the blurred glass card below it was compositing. Keep the label/title/subtext on a stable layer and animate only the content card body.
+- **`translate3d` + backface guards help text stability**: For mobile reveal wrappers, `translate3d(...)`, `backfaceVisibility: "hidden"`, and `WebkitBackfaceVisibility: "hidden"` are safer than a plain `translateY(...)` on the headline container when nearby elements use `backdrop-blur`.
+
+## 2026-03-19 — Desktop Warm Intro Path Contrast
+
+- **Layered glass on pale backgrounds needs stronger card contrast**: The desktop `Warm Intro Path` card sits on top of a light mesh and a translucent section shell, so `text-zinc-400/500` plus a low-opacity glass fill made the names, roles, and context lines wash out. A more opaque card fill and darker copy (`zinc-500/600/900`) keeps the path legible without redesigning the layout.
+- **Subtle dashed SVG paths still need a halo on white**: The cold-outreach arc looked lost against the light background until it used a two-pass stroke (soft light halo + darker dashed line). A single faint dashed stroke is not enough once the card is nested inside multiple white/glass layers.
+- **Headless Chromium trips an unrelated WebGL overlay here**: Visual checks in headless Playwright currently hit a `THREE.WebGLRenderer` failure inside `OnePercentClub`, which throws the Next dev error overlay over the whole page. For future visual checks of earlier sections, expect that interference or use a non-headless browser path.
+
+## 2026-03-19 — First Network Stage Label Spacing
+
+- **Lower group pills need their own vertical lane**: In the first desktop `NetworkSection` stage, the lower group labels (`Industry Peers`, `Close Friends`) started overlapping the top cards once those groups were moved upward. Keep those label pills around `5vh` while the top card centers sit around `13–15vh`, or they visually collide.
+- **Move top group pills and people together**: For the upper desktop groups (`Previous Colleagues`, `College Alumni`), shifting only the title pill makes the composition feel detached. If those sections need to move up, nudge the pill and the full three-card stack by the same amount so the internal spacing stays constant.
+
+## 2026-03-18 — Mobile Bridge Spacing
+
+- **Narrative bridge sections need a full mobile viewport**: The `BoldTruthBridge` copy ("So we built something that remembers for you.") looked off-center on phones because the bridge was only `60vh`, so the next section started appearing before the bridge copy reached visual center. Use `min-h-[100svh]` on mobile and keep the shorter bridge only on larger screens.
+
+## 2026-03-18 — Mobile Network Width Usage
+
+- **Do not wrap the first mobile network stage in an extra glass shell**: The mobile `Your Network` stage already contains cardized founder and group blocks. Keeping an additional padded outer container around them wastes horizontal space on phones. Let the inner cards sit directly in the stage flow so they can use the available width.
+
 ## 2026-03-05 — 3-Panel Signal Demo in Hero
 
 - **Inline styles vs Tailwind margin classes**: Never mix Tailwind `mb-*` classes with inline `style={{ margin: 0 }}` — the inline style wins and kills the Tailwind margin. Use inline `margin` consistently when the element already uses inline styles.
@@ -76,6 +100,23 @@
 - **Mobile relationship maps need summaries, not directories**: The first mobile network branch was too tall because each group expanded into a full people list. A 2x2 group summary grid with a couple of representative people and a count cue preserves the idea without turning the section into a long roster.
 - **Do not use `scrollIntoView` inside autoplaying horizontal rails on mobile**: In the hero mockup, advancing the active use-case chip with `scrollIntoView` caused the page itself to jump back up on mobile. Use `container.scrollTo({ left })` against the chip-row scroller instead so only the horizontal rail moves.
 - **Headline sequencing is coupled to subtitle timing**: In `BoldTruth`, delaying one of the animated headline words also means shifting the subtitle trigger. Otherwise the subtitle starts before the keyword sequence has actually finished.
+
+## 2026-03-18 — Mobile NetworkSection Redesign
+
+- **Unified insights card over separate mini-cards**: The old mobile insights section used 3 separate rounded cards (Recent signals, Personal context, Strategic read). Replacing with a single unified card (header + What's New section + divider + Remember section + divider + Why They Matter section) mirrors the desktop InsightsMovementA and is far more impactful — the $5M ARR headline becomes a hero number, Remember becomes scannable chips, and strategic read becomes a clear badge section.
+- **Colored avatar rings on path nodes**: Using `boxShadow: "0 0 0 3px rgba(R,G,B,0.35)"` for the avatar border ring (instead of a colored `border` class) lets the ring color be data-driven from each node without fighting Tailwind's border-color precedence. Sky/emerald/amber for You/Bridge/Target respectively.
+- **Edit tool introduces smart/curly quotes**: When using the Edit tool with long `old_string` replacements that contain quoted string values, the tool sometimes replaces straight ASCII double quotes (`"`) with Unicode typographic quotes (`"` / `"`). Fix with: `python3 -c "content = open(f).read(); open(f,'w').write(content.replace('\u201c','\"').replace('\u201d','\"'))"`. Always run `tsc --noEmit` after large edits to catch this.
+- **`max-w-lg` vs `max-w-[440px]`**: Changing the outer container from `max-w-[440px]` to `max-w-lg` (512px) gives the cards more breathing room on mid-size phones while still constraining on very wide viewports. The extra ~70px per side makes the group grid and insight card feel properly spacious.
+- **CTA button on path section**: Adding "Draft intro request →" as a full-width dark button at the bottom of the mobile path card is a meaningful UX improvement over the desktop version (which has it inside the scroll-driven animation). On mobile it's immediately actionable after reading the path.
+
+## 2026-03-18 — Full Mobile Pass: Text Spacing + Final Polish
+
+- **`<br className="hidden sm:block" />` needs a trailing `{" "}`**: When a `<br>` is hidden on mobile and the preceding text line ends without a space, the text runs together. Pattern: `...sentence end.{" "}<br className="hidden sm:block" />Next sentence`. This was needed in `page.tsx` (hero subtitle) and `BoldTruth.tsx` (subtitle after strikethrough animation). Always check every `hidden sm:block` br in JSX for this.
+- **Mobile section audit order**: After redesigning the main demo section, do a full scroll-through of each remaining section at ~390–500px viewport width before closing the task. The easiest way is to use `javascript_tool` to get section `top` offsets and screenshot each one at those scroll positions.
+- **`ComparisonTable` already has `MobileStatCard`**: The comparison section renders card-based layout on mobile (passed via `isNarrow`). The desktop HTML `<table>` is never used on mobile — no horizontal overflow risk.
+- **`OnePercentClub` self-adapts**: The constellation section already handles `isNarrow` — fewer nodes (72 vs 200), capped pixel ratio, tooltips hidden, reduced scroll height (`260svh` vs `500vh`). No additional changes needed for mobile.
+- **`TextHighlightSection` is not on the current page**: Component exists but is not imported in `page.tsx`. Don't waste time fixing its mobile layout.
+- **Browser window resize gives ~500px viewport at 390px target**: When using `resize_window` to 390×844, the actual `window.innerWidth` is ~500 because Chrome's extension panel consumes width. `isNarrow` still fires correctly (under 1023px), so all mobile branches are active.
 
 ## 2026-03-17 — BoldTruth → NetworkSection Transition Fix
 
