@@ -407,6 +407,18 @@ export default function Home() {
       <NetworkSection isNarrow={isNarrow} />
       <ComparisonTable isNarrow={isNarrow} />
       <OnePercentClub isNarrow={isNarrow} />
+
+      {/* Footer links */}
+      <footer className="relative z-10 bg-[#030303] border-t border-white/5 px-6 py-6">
+        <div className="mx-auto flex max-w-4xl items-center justify-between">
+          <p className="text-[13px] text-white/30">&copy; 2026 Brace</p>
+          <div className="flex items-center gap-5">
+            <a href="/privacy-policy" className="text-[13px] text-white/30 hover:text-white/60 transition-colors">Privacy Policy</a>
+            <a href="/terms-and-conditions" className="text-[13px] text-white/30 hover:text-white/60 transition-colors">Terms</a>
+            <a href="/support" className="text-[13px] text-white/30 hover:text-white/60 transition-colors">Support</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
