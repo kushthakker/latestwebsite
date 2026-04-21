@@ -35,11 +35,29 @@ const tabular = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : "https://brace.dev"
+  ),
   title: "Brace | AI Concierge for Your Network",
   description:
     "Brace connects to your email, calendar, and LinkedIn — and each morning, surfaces who needs your care, and why.",
   icons: {
     icon: "/brace-logo.svg",
+  },
+  openGraph: {
+    title: "Brace | AI Concierge for Your Network",
+    description:
+      "Brace connects to your email, calendar, and LinkedIn — and each morning, surfaces who needs your care, and why.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Brace | AI Concierge for Your Network",
+    description:
+      "Brace connects to your email, calendar, and LinkedIn — and each morning, surfaces who needs your care, and why.",
+    images: ["/og-image.png"],
   },
 };
 
