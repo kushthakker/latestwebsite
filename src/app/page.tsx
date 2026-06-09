@@ -409,8 +409,18 @@ export default function Home() {
       <OnePercentClub isNarrow={isNarrow} />
 
       {/* Footer links */}
-      <footer className="relative z-10 bg-[#030303] border-t border-white/5 px-6 py-6">
-        <div className="mx-auto flex max-w-4xl items-center justify-between">
+      <footer className="relative z-10 bg-[#030303] border-t border-white/5 px-6 py-10">
+        <div className="mx-auto max-w-4xl">
+          <p className="text-[13px] font-medium uppercase tracking-[0.16em] text-white/35">What Brace does</p>
+          <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-white/50">
+            Brace is a personal CRM that helps you find and stay connected with the people who matter
+            most to your work. It securely connects with your Gmail, Google Calendar, and LinkedIn to
+            map your professional relationships, surface the most relevant people to reach out to, and
+            make sure you never miss an important follow-up. You choose what to connect, and you can
+            disconnect at any time.
+          </p>
+        </div>
+        <div className="mx-auto mt-8 flex max-w-4xl items-center justify-between">
           <p className="text-[13px] text-white/30">&copy; 2026 Brace</p>
           <div className="flex items-center gap-5">
             <a href="/privacy-policy" className="text-[13px] text-white/30 hover:text-white/60 transition-colors">Privacy Policy</a>
@@ -420,8 +430,7 @@ export default function Home() {
         </div>
         <div className="mx-auto mt-4 max-w-4xl border-t border-white/5 pt-4">
           <p className="text-[11px] leading-relaxed text-white/20">
-            Brace integrates with Gmail and Google Calendar. Our use of information received from
-            Google APIs adheres to the{" "}
+            Our use of information received from Google APIs adheres to the{" "}
             <a
               href="https://developers.google.com/terms/api-services-user-data-policy"
               target="_blank"
