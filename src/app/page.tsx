@@ -394,6 +394,89 @@ function HeroSection({ isNarrow }: { isNarrow: boolean }) {
   );
 }
 
+function IntegrationsSection() {
+  const cards = [
+    {
+      title: "Reads your inbox",
+      body: "Brace reads your Gmail to surface who you've lost touch with and which conversations are still waiting on a reply.",
+      icon: (
+        <>
+          <rect width="20" height="16" x="2" y="4" rx="2" />
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+        </>
+      ),
+    },
+    {
+      title: "Sends only when you approve",
+      body: "Draft and send follow-ups from your own address. Every message is one you compose or explicitly approve — never automated spam.",
+      icon: (
+        <>
+          <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" />
+          <path d="m21.854 2.147-10.94 10.939" />
+        </>
+      ),
+    },
+    {
+      title: "Keeps calendar in sync",
+      body: "See your meetings with contacts, and schedule, create, or update Google Calendar events without leaving Brace.",
+      icon: (
+        <>
+          <path d="M8 2v4M16 2v4" />
+          <rect width="18" height="18" x="3" y="4" rx="2" />
+          <path d="M3 10h18" />
+        </>
+      ),
+    },
+  ];
+
+  return (
+    <section id="integrations" className="relative z-10 bg-white px-6 py-20 sm:py-28">
+      <div className="mx-auto max-w-4xl">
+        <p className="text-[13px] font-medium uppercase tracking-[0.18em] text-orange-500/90">Integrations</p>
+        <h2 className="mt-3 text-[clamp(1.9rem,3.5vw,2.75rem)] font-semibold tracking-tight text-zinc-900">
+          Works with your Gmail and Google Calendar
+        </h2>
+        <p className="mt-4 max-w-2xl text-[16px] leading-relaxed text-zinc-500">
+          Connect your Google account and Brace turns everyday email and meetings into a living map of
+          your relationships — so the right follow-up always finds you. You stay in control: connect or
+          disconnect anytime, and Brace only sends email you write or approve.
+        </p>
+
+        <div className="mt-10 grid gap-5 sm:grid-cols-3">
+          {cards.map((card) => (
+            <div key={card.title} className="rounded-2xl border border-zinc-200 bg-zinc-50/60 p-6">
+              <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white border border-zinc-200 text-orange-500">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                  {card.icon}
+                </svg>
+              </div>
+              <h3 className="text-[16px] font-semibold text-zinc-900">{card.title}</h3>
+              <p className="mt-2 text-[14px] leading-relaxed text-zinc-500">{card.body}</p>
+            </div>
+          ))}
+        </div>
+
+        <p className="mt-8 max-w-2xl text-[13px] leading-relaxed text-zinc-400">
+          Brace&apos;s use and transfer of information received from Google APIs adheres to the{" "}
+          <a
+            href="https://developers.google.com/terms/api-services-user-data-policy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline decoration-zinc-300 hover:decoration-zinc-500 hover:text-zinc-600 transition-colors"
+          >
+            Google API Services User Data Policy
+          </a>
+          , including the Limited Use requirements. Learn more in our{" "}
+          <a href="/privacy-policy" className="underline decoration-zinc-300 hover:decoration-zinc-500 hover:text-zinc-600 transition-colors">
+            Privacy Policy
+          </a>
+          .
+        </p>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   const isNarrow = useIsNarrowLayout();
 
@@ -407,6 +490,7 @@ export default function Home() {
       <NetworkSection isNarrow={isNarrow} />
       <ComparisonTable isNarrow={isNarrow} />
       <OnePercentClub isNarrow={isNarrow} />
+      <IntegrationsSection />
 
       {/* Footer links */}
       <footer className="relative z-10 bg-[#030303] border-t border-white/5 px-6 py-6">

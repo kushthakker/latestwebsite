@@ -19,7 +19,7 @@ export default function TermsAndConditionsPage() {
             Back to Brace
           </a>
           <h1 className="text-4xl font-bold tracking-tight text-zinc-900">Terms of Service</h1>
-          <p className="mt-2 text-sm text-zinc-500">Last Updated: January 30, 2026</p>
+          <p className="mt-2 text-sm text-zinc-500">Last Updated: June 9, 2026</p>
         </header>
 
         <article className="prose prose-zinc prose-lg max-w-none prose-headings:tracking-tight prose-a:text-zinc-900 prose-a:underline prose-a:decoration-zinc-300 hover:prose-a:decoration-zinc-500">
@@ -44,8 +44,15 @@ export default function TermsAndConditionsPage() {
           <ul>
             <li>A web application at app.brace.so for managing contacts and relationships</li>
             <li>A browser extension that syncs data from LinkedIn to your Brace CRM</li>
+            <li>Optional integrations with your Google Account that let Brace read your Gmail and Google Calendar to surface relationship insights, send follow-up emails you compose or approve, and create or update calendar events you schedule</li>
             <li>Features to organize, track, and engage with your professional network</li>
           </ul>
+          <p>
+            Google Account integrations are optional and used only after you connect your account and
+            grant the relevant permissions. How we handle Google data is described in our{" "}
+            <a href="/privacy-policy">Privacy Policy</a> and adheres to the Google API Services User
+            Data Policy, including its Limited Use requirements.
+          </p>
 
           <h2>3. Eligibility</h2>
           <p>To use Brace, you must:</p>
@@ -91,6 +98,7 @@ export default function TermsAndConditionsPage() {
             <li>Use the Service for any unlawful purpose or in violation of any laws</li>
             <li>Violate the terms of service of any third-party platform connected to Brace</li>
             <li>Engage in spam, harassment, or unsolicited messaging at scale</li>
+            <li>Use Brace&apos;s email-sending features to send spam, bulk unsolicited email, deceptive or fraudulent messages, or any messages that violate anti-spam laws (such as the CAN-SPAM Act or GDPR/ePrivacy rules)</li>
             <li>Scrape, harvest, or collect data for purposes other than personal CRM use</li>
             <li>Sell, resell, or commercially exploit data obtained through Brace</li>
             <li>Impersonate any person or entity or misrepresent your affiliation</li>
@@ -167,11 +175,16 @@ export default function TermsAndConditionsPage() {
 
           <h3>8.2 Google API Services User Data Policy</h3>
           <p>
-            Our use of information received from Google APIs adheres to the{" "}
+            Brace&apos;s use and transfer to any other app of information received from Google APIs
+            (including Gmail and Google Calendar) will adhere to the{" "}
             <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer">
               Google API Services User Data Policy
             </a>
-            , including its Limited Use requirements.
+            , including its Limited Use requirements. In particular, Brace does not use Google user data
+            for advertising, does not sell it, does not allow humans to read it except in the limited
+            circumstances described in our Privacy Policy, and does not use it to train generalized or
+            non-personalized AI/ML models. See our{" "}
+            <a href="/privacy-policy">Privacy Policy</a> for full details.
           </p>
 
           <h3>8.3 Payment Processing</h3>

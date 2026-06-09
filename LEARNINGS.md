@@ -1,5 +1,13 @@
 # Learnings
 
+## 2026-06-09 — Privacy/Terms updated for Google OAuth verification (Gmail send + Calendar)
+
+- Goal: pass Google OAuth verification for `signal-407411` after adding `gmail.send` (restricted) + `calendar.events`/`calendar.readonly` (sensitive). Reviewers require the privacy policy to (a) disclose each requested scope's data use, (b) carry the **Google API Services User Data Policy** Limited Use disclosure verbatim (NOT the Chrome Web Store one).
+- Pages live at `src/app/privacy-policy/page.tsx` and `src/app/terms-and-conditions/page.tsx` (Next.js 16 App Router, hand-written JSX, no MDX). Support page (`src/app/support/page.tsx`) uses `kush@brace.so` — matches the OAuth consent screen support email.
+- **Bug fixed:** the old privacy policy's only Limited Use disclosure linked to the *Chrome Web Store* User Data Policy (`developer.chrome.com/.../limited-use`) — wrong for OAuth restricted-scope review. Now points to `developers.google.com/terms/api-services-user-data-policy` with the four verbatim "does not" affirmations. The Terms page (§8.2) already had the correct link.
+- Added a prominent unnumbered **"Google User Data: Gmail and Google Calendar"** section at the TOP of the privacy policy (scope table + access/store/use/share/retain/revoke + Limited Use box) rather than renumbering the 15 existing sections — lower risk, and top placement satisfies the "clear and prominent" requirement. Also added §1.5, tightened the "We Do NOT" box (no generalized-model training, removed the "without consent" loophole), and added a Google-data clause to the LLM section (§4.1) since Brace pipes content to Gemini/Claude/GPT.
+- JSX gotcha: this repo enforces `react/no-unescaped-entities`, so all apostrophes/quotes in text must be `&apos;`/`&ldquo;`/`&rdquo;`. Verify with a contraction grep + `<div>`/`<table>` open-vs-close balance counts; `node_modules` is usually NOT installed here so a real `next build` needs `npm install` first.
+
 ## 2026-03-19 — Build Verification
 
 - **`next build` warns about multiple lockfiles above this repo**: Next.js 16 inferred the workspace root from `/Users/kushthakker/package-lock.json` because this project also has its own `package-lock.json`. The app still built successfully, but if Turbopack root-sensitive behavior becomes confusing, set `turbopack.root` explicitly or remove the extra parent lockfile.

@@ -19,16 +19,119 @@ export default function PrivacyPolicyPage() {
             Back to Brace
           </a>
           <h1 className="text-4xl font-bold tracking-tight text-zinc-900">Privacy Policy</h1>
-          <p className="mt-2 text-sm text-zinc-500">Last Updated: January 30, 2026</p>
+          <p className="mt-2 text-sm text-zinc-500">Last Updated: June 9, 2026</p>
         </header>
 
         <article className="prose prose-zinc prose-lg max-w-none prose-headings:tracking-tight prose-a:text-zinc-900 prose-a:underline prose-a:decoration-zinc-300 hover:prose-a:decoration-zinc-500">
           <p>
-            Brace (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;) operates the Brace personal CRM platform and browser extension. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our services.
+            Brace (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;) operates the Brace personal CRM platform, including a web application, a browser extension, and optional integrations with your Google Account (Gmail and Google Calendar). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our services.
           </p>
           <p>
             By using Brace, you consent to the data practices described in this policy. If you do not agree with the terms of this Privacy Policy, please do not access or use our services.
           </p>
+
+          <div className="not-prose my-10 rounded-xl border border-zinc-200 bg-zinc-50 p-6">
+            <h2 className="text-2xl font-bold tracking-tight text-zinc-900 mt-0 mb-3">Google User Data: Gmail and Google Calendar</h2>
+            <p className="text-zinc-700 text-[15px] mb-4">
+              If you choose to connect your Google Account, Brace uses Google APIs to power its
+              relationship features. This section describes exactly what Google data we access, how we
+              use, store, and share it, and how you can revoke access. It supplements the numbered
+              sections below, which also apply.
+            </p>
+
+            <p className="font-semibold text-zinc-900 mb-2">Google scopes we request and why</p>
+            <div className="overflow-hidden rounded-lg border border-zinc-200 mb-4">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-zinc-200 bg-white">
+                    <th className="px-4 py-3 text-left font-semibold text-zinc-900">Access</th>
+                    <th className="px-4 py-3 text-left font-semibold text-zinc-900">What it lets Brace do, and why</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-zinc-100 bg-white">
+                  <tr>
+                    <td className="px-4 py-2.5 text-zinc-700 align-top">Read your email<br /><span className="text-zinc-400 text-xs">gmail.readonly, gmail.metadata</span></td>
+                    <td className="px-4 py-2.5 text-zinc-600">Identify the people you communicate with and generate relationship insights — conversation recency, contacts you&apos;ve lost touch with, and suggested follow-ups — shown back to you in Brace.</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-2.5 text-zinc-700 align-top">Send email<br /><span className="text-zinc-400 text-xs">gmail.send</span></td>
+                    <td className="px-4 py-2.5 text-zinc-600">Send follow-up and outreach emails from your own account that you compose or explicitly approve in Brace. Brace does not send email autonomously or in bulk on your behalf.</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-2.5 text-zinc-700 align-top">Read, create, and update calendar events<br /><span className="text-zinc-400 text-xs">calendar.events</span></td>
+                    <td className="px-4 py-2.5 text-zinc-600">Detect meetings with your contacts to enrich relationship history and trigger timely follow-ups, and create or update events when you schedule a meeting or follow-up from within Brace.</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-2.5 text-zinc-700 align-top">List calendars and availability<br /><span className="text-zinc-400 text-xs">calendar.readonly</span></td>
+                    <td className="px-4 py-2.5 text-zinc-600">Choose the correct calendar to write to and suggest meeting times for scheduling features you initiate.</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-2.5 text-zinc-700 align-top">Identify your account<br /><span className="text-zinc-400 text-xs">openid, userinfo.email</span></td>
+                    <td className="px-4 py-2.5 text-zinc-600">Associate the connected Google account with your Brace account and display the connected address.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p className="font-semibold text-zinc-900 mb-1">How we access it</p>
+            <p className="text-zinc-700 text-[15px] mb-4">
+              We access your Google data only after you explicitly connect your account through
+              Google&apos;s OAuth consent screen, and only for the scopes you grant. You can disconnect
+              at any time (see below).
+            </p>
+
+            <p className="font-semibold text-zinc-900 mb-1">How we store and protect it</p>
+            <p className="text-zinc-700 text-[15px] mb-4">
+              Your Google OAuth refresh token is encrypted at rest and used only to perform the actions
+              above. We process the content and metadata of your messages and calendar events to
+              generate the insights and features described, and store the derived data (and the
+              message/event content necessary to provide those features) on our secure servers. All
+              data is transmitted over HTTPS (TLS 1.2+) and access to production systems is restricted
+              and logged.
+            </p>
+
+            <p className="font-semibold text-zinc-900 mb-1">How we use and share it</p>
+            <p className="text-zinc-700 text-[15px] mb-4">
+              We use your Google data <strong>only</strong> to provide and improve the user-facing
+              features described above, and only for the account that granted access. We do not sell it
+              and do not use it for advertising. We share it only with sub-processors that help us
+              operate these features (for example, the large-language-model providers in Section 4.1),
+              strictly to deliver the features to you and under contractual data-protection terms.
+              <strong> We do not allow humans to read your Gmail or Calendar data</strong>, except
+              (a) with your explicit consent for specific items, (b) where necessary for security or to
+              comply with applicable law, or (c) where the data has been aggregated and anonymized for
+              internal operations. <strong>We do not use your Google data to develop, improve, or train
+              generalized or non-personalized artificial-intelligence or machine-learning models.</strong>
+            </p>
+
+            <p className="font-semibold text-zinc-900 mb-1">Retention and how to revoke access</p>
+            <p className="text-zinc-700 text-[15px] mb-4">
+              You can disconnect your Google Account at any time from your Brace settings, or revoke
+              Brace&apos;s access directly at{" "}
+              <a href="https://myaccount.google.com/permissions" className="text-zinc-900 underline decoration-zinc-300 hover:decoration-zinc-500" target="_blank" rel="noopener noreferrer">myaccount.google.com/permissions</a>.
+              When you disconnect, or when you delete your Brace account, we delete your stored Google
+              refresh token and the Google-derived data associated with your account within 30 days,
+              except where retention is required by law.
+            </p>
+
+            <div className="rounded-lg border border-blue-100 bg-blue-50/60 p-5">
+              <p className="font-semibold text-zinc-900 mb-2">Google API Services Limited Use Disclosure</p>
+              <p className="text-zinc-700 text-[15px]">
+                Brace&apos;s use and transfer to any other app of information received from Google APIs
+                will adhere to the{" "}
+                <a href="https://developers.google.com/terms/api-services-user-data-policy" className="text-zinc-900 underline decoration-zinc-300 hover:decoration-zinc-500" target="_blank" rel="noopener noreferrer">
+                  Google API Services User Data Policy
+                </a>
+                , including the Limited Use requirements. Specifically, Brace does not (i) use Google
+                user data for serving advertisements; (ii) transfer or sell Google user data to third
+                parties except as necessary to provide or improve the user-facing features, to comply
+                with applicable law, or as part of a merger or acquisition with notice to you;
+                (iii) allow humans to read Google user data except for the limited purposes stated
+                above; or (iv) use Google user data to develop, improve, or train generalized or
+                non-personalized AI/ML models.
+              </p>
+            </div>
+          </div>
 
           <h2>1. Information We Collect</h2>
 
@@ -67,6 +170,16 @@ export default function PrivacyPolicyPage() {
           </ul>
           <p>These recordings help us understand how users interact with our Service, identify usability issues, and improve user experience.</p>
 
+          <h3>1.5 Google Account Data (Gmail and Google Calendar)</h3>
+          <p>If you connect your Google Account, we collect and process the Google data you authorize, which may include:</p>
+          <ul>
+            <li><strong>Gmail messages and metadata:</strong> message content, headers, and labels, used to surface relationship insights and follow-ups</li>
+            <li><strong>Sent messages:</strong> emails you compose or approve in Brace and choose to send from your account</li>
+            <li><strong>Google Calendar events:</strong> event details (titles, times, attendees) we read, and events you create or update through Brace</li>
+            <li><strong>Google account identity:</strong> the email address of the connected account, and an encrypted OAuth refresh token used to perform the actions you authorize</li>
+          </ul>
+          <p>See the <strong>&ldquo;Google User Data&rdquo;</strong> section near the top of this policy for exactly how this data is accessed, used, stored, shared, retained, and revoked.</p>
+
           <h2>2. How We Use Your Information</h2>
           <p>We use the collected information for the following purposes:</p>
           <ul>
@@ -84,18 +197,21 @@ export default function PrivacyPolicyPage() {
               <li>Use your data for advertising purposes</li>
               <li>Share your data with third parties for their marketing purposes</li>
               <li>Use your data for creditworthiness determination or lending purposes</li>
-              <li>Train AI models on your personal content without explicit consent</li>
+              <li>Use Google user data, or your personal content, to develop, improve, or train generalized or non-personalized AI/ML models</li>
             </ul>
           </div>
 
           <div className="not-prose my-8 rounded-xl border border-blue-100 bg-blue-50/50 p-6">
             <p className="font-semibold text-zinc-900 mb-2">Google API Services Limited Use Disclosure:</p>
             <p className="text-zinc-700 text-[15px]">
-              The use of information received from Google APIs will adhere to the{" "}
-              <a href="https://developer.chrome.com/docs/webstore/program-policies/limited-use" className="text-zinc-900 underline decoration-zinc-300 hover:decoration-zinc-500" target="_blank" rel="noopener noreferrer">
-                Chrome Web Store User Data Policy
+              Brace&apos;s use and transfer to any other app of information received from Google APIs
+              will adhere to the{" "}
+              <a href="https://developers.google.com/terms/api-services-user-data-policy" className="text-zinc-900 underline decoration-zinc-300 hover:decoration-zinc-500" target="_blank" rel="noopener noreferrer">
+                Google API Services User Data Policy
               </a>
-              , including the Limited Use requirements.
+              , including the Limited Use requirements. The complete disclosure, including how this
+              applies to Gmail and Google Calendar data, appears in the{" "}
+              <strong>&ldquo;Google User Data&rdquo;</strong> section near the top of this policy.
             </p>
           </div>
 
@@ -142,6 +258,14 @@ export default function PrivacyPolicyPage() {
             <li>The data shared with LLM providers is subject to their respective privacy policies</li>
             <li>Our agreements with these providers include appropriate data protection provisions</li>
           </ul>
+          <p>
+            <strong>Google user data (Gmail and Calendar):</strong> Where content from your Gmail or
+            Google Calendar is processed by these LLM providers, it is used solely to provide the
+            user-facing Brace features you have enabled. Our agreements and configurations with these
+            providers prohibit them from using your Google user data to train or improve their models,
+            and this processing adheres to the Google API Services User Data Policy, including the
+            Limited Use requirements.
+          </p>
 
           <h4>Google (Gemini)</h4>
           <ul>
